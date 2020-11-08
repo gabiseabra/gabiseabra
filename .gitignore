@@ -1,0 +1,14 @@
+tmp
+logs
+*.log
+npm-debug.log*
+.DS_Store
+
+node_modules
+.spago
+build
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.npmrc
