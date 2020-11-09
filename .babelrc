@@ -1,12 +1,25 @@
 {
   "presets": [
-    "@babel/preset-env"
+    [
+      "@babel/preset-env",
+      {
+        "useBuiltIns": "entry",
+        "corejs": "3"
+      }
+    ],
+    "@babel/preset-react"
   ],
   "plugins": [
     "react-require",
     "transform-class-properties",
     "@babel/plugin-transform-react-inline-elements",
     "@babel/plugin-transform-react-constant-elements",
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        "regenerator": true
+      }
+    ],
     [
       "module-resolver",
       {

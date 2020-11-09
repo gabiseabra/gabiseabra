@@ -1,0 +1,51 @@
+@keyframes move0 {
+  from {
+    transform: rotate(90deg) translate(0.025px, 0.001px) rotate(-90deg);
+  }
+  to {
+    transform: rotate(450deg) translate(0.025px, 0.001px) rotate(-450deg);
+  }
+}
+
+.move0 {
+  animation: move0 30s infinite linear;
+}
+
+@keyframes move1 {
+  from {
+    transform: rotate(180deg) translate(0.1px, 0.01px) rotate(-180deg);
+  }
+  to {
+    transform: rotate(540deg) translate(0.1px, 0.01px) rotate(-540deg);
+  }
+}
+
+.move1 {
+  animation: move1 20s infinite linear;
+}
+
+@keyframes move2 {
+  from {
+    transform: rotate(90deg) translate(0.17px, 0.1px) rotate(-90deg);
+  }
+  to {
+    transform: rotate(450deg) translate(0.17px, 0.1px) rotate(-450deg);
+  }
+}
+
+.move2 {
+  animation: move2 30s infinite linear;
+}
+
+@keyframes move3 {
+  from {
+    transform: rotate(135deg) translate(-0.26px, 0.1px) rotate(-135deg);
+  }
+  to {
+    transform: rotate(495deg) translate(-0.26px, 0.1px) rotate(-495deg);
+  }
+}
+
+.move3 {
+  animation: move3 15s infinite linear;
+}

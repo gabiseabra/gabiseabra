@@ -17,7 +17,7 @@ const ROOT = path.resolve(__dirname, '..')
  * Razzle plugin to modify the client bundle's webpack config
  */
 module.exports = createConfig([
-  entryPoint('./src/index.ts'),
+  entryPoint('./src/index.tsx'),
   setOutput('./public/build/index.js'),
   resolve({
     modules: [path.join(ROOT, 'node_modules')]
