@@ -7,4 +7,5 @@ container :: JSX
 container =
   DOM.div
     { children: [ DOM.text "eyy", DOM.text "lmao" ]
+    , className: "lmao"
     }

@@ -7,6 +7,7 @@ const {
   setOutput,
   babel
 } = require('webpack-blocks')
+const css = require('./blocks/css')
 const typescript = require('./blocks/typescript')
 const purescript = require('./blocks/purescript')
 
@@ -24,6 +25,7 @@ module.exports = createConfig([
   /**
    * Module resolvers
    */
+  css(),
   babel(),
   typescript(),
   purescript(),
