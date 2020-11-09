@@ -10,7 +10,7 @@ module.exports = () => (_, {addLoader, merge}) =>
     }),
     addLoader({
       test: /\.purs$/,
-      include: [path.join(ROOT, 'src')],
+      include: [path.join(ROOT, 'src'), path.join(ROOT, '.spago')],
       use: [
         {
           loader: 'purs-loader',

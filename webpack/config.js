@@ -8,31 +8,30 @@ const {
   babel
 } = require('webpack-blocks')
 const typescript = require('./blocks/typescript')
+const purescript = require('./blocks/purescript')
 
 const ROOT = path.resolve(__dirname, '..')
 
 /**
  * Razzle plugin to modify the client bundle's webpack config
  */
-module.exports =
-  createConfig([
-    entryPoint('./src/index.ts'),
-    setOutput('./build/index.js'),
-    resolve({
-      modules: [
-        path.join(ROOT, 'node_modules')
-      ]
-    }),
-    /**
-     * Module resolvers
-     */
-    babel(),
-    typescript(),
-    /**
-     * Env vars
-     * Set default values for the output bundle's process.env here
-     */
-    setEnv({
-      // ...
-    })
-  ])
+module.exports = createConfig([
+  entryPoint('./src/index.ts'),
+  setOutput('./public/build/index.js'),
+  resolve({
+    modules: [path.join(ROOT, 'node_modules')]
+  }),
+  /**
+   * Module resolvers
+   */
+  babel(),
+  typescript(),
+  purescript(),
+  /**
+   * Env vars
+   * Set default values for the output bundle's process.env here
+   */
+  setEnv({
+    // ...
+  })
+])
