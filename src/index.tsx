@@ -3,6 +3,7 @@ import './styles/main.css'
 import ReactDOM from 'react-dom'
 
 import {Blob} from '@/components/Blob'
+import {Menu} from '@/components/Menu'
 
 function GooFilter() {
   return (
@@ -21,13 +22,15 @@ function GooFilter() {
 
 function Main(): JSX.Element {
   return (
-    <div>
+    <>
+      <Menu />
       <div className="eyy" style={{filter: 'url(#goo)'}}>
         <div className="lmao">
           <p>lmaooooo</p>
         </div>
       </div>
       <svg
+        className="defs"
         viewBox={`0 0 ${window.innerWidth} ${window.innerHeight}`}
         enableBackground={`new 0 0 ${window.innerWidth} ${window.innerHeight}`}
         width="0"
@@ -41,7 +44,7 @@ function Main(): JSX.Element {
           <GooFilter />
         </defs>
       </svg>
-    </div>
+    </>
   )
 }
 

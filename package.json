@@ -36,6 +36,7 @@
     "extract-loader": "^5.1.0",
     "postcss": "^8.1.6",
     "postcss-loader": "^4.0.4",
+    "postcss-nested": "^5.0.1",
     "prettier": "^2.1.2",
     "purescript": "^0.13.8",
     "purs-loader": "^3.7.2",

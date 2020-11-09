@@ -8,8 +8,31 @@ html, body {
 }
 
 :global #root {
+  position: relative;
   height: 100%;
-  background: var(--bg-color);
+  box-sizing: border-box;
+  background: radial-gradient(circle, rgba(128,35,230,1) 0%, rgba(56,31,150,1) 77%, rgba(0,18,77,1) 100%);
+}
+
+:global #frame {
+  --frame-padding: 10px;
+  --frame-border: 4px;
+  mix-blend-mode: difference;
+  pointer-events: none;
+  position: fixed;
+  top: var(--frame-padding);
+  left: var(--frame-padding);
+  right: var(--frame-padding);
+  bottom: var(--frame-padding);
+  border: var(--frame-border) solid var(--color-highlight);
+  z-index: 1;
+}
+
+:global svg.defs {
+  width: 0;
+  height: 0;
+  position: fixed;
+  z-index: -1;
 }
 
 :global .lmao {
