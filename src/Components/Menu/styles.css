@@ -21,6 +21,11 @@
 
   &.active {
     animation: shake 100ms infinite linear;
+
+    & svg text {
+      transform: scale(1) !important;
+      filter: url(#anaglyph);
+    }
   }
 
   &::before {
@@ -32,12 +37,16 @@
 
   &:first-child::before { display: none; }
 
-  & svg { height: var(--nav-height-lg); }
+  & svg {
+    height: var(--nav-height-lg);
+  }
 
   & text {
     font-family: 'Source Code Pro', monospace;
     font-size: var(--nav-font-size);
     fill: var(--color-highlight);
+    transform: scale(0.9);
+    transform-origin: center center 0;
   }
 }
 

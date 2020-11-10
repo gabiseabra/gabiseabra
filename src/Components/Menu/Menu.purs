@@ -3,6 +3,8 @@ module Hey.Components.Menu where
 import Prelude
 
 import Data.String (length)
+import Hey.Components.SVG.Definition (def)
+import Hey.Components.SVG.Filters (anaglyph)
 import Hey.Styles ((?&))
 import React.Basic (JSX)
 import React.Basic.DOM as DOM
@@ -22,6 +24,8 @@ type LinkProps =
   , href :: String
   , active :: Boolean
   }
+
+svgDefs = def 100 100 [ anaglyph 5 "anaglyph" ] :: JSX
 
 linkViewBox :: String -> String
 linkViewBox lbl =
@@ -55,5 +59,6 @@ menu =
       [ link { label: "HOME", href: "#", active: true }
       , link { label: "SKILLZ", href: "#", active: false }
       , link { label: "PROJECTS", href: "#", active: false }
+      , svgDefs
       ]
     }
