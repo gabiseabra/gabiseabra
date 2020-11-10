@@ -9,6 +9,7 @@ You can edit this file as you like.
   , "psci-support"
   , "react-basic"
   , "react-basic-dom"
+  , "react-basic-hooks"
   , "web-dom"
   , "web-html"
   ]
