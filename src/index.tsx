@@ -2,7 +2,7 @@
 import './styles/main.css'
 import ReactDOM from 'react-dom'
 
-import {Blob} from '@/components/Blob'
+import {Blob} from '@/components/SVG/Blob'
 import {Menu} from '@/components/Menu'
 
 function GooFilter() {

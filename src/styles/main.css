@@ -17,6 +17,7 @@ html, body {
 :global #frame {
   --frame-padding: 10px;
   --frame-border: 4px;
+
   mix-blend-mode: difference;
   pointer-events: none;
   position: fixed;
@@ -26,33 +27,4 @@ html, body {
   bottom: var(--frame-padding);
   border: var(--frame-border) solid var(--color-highlight);
   z-index: 1;
-}
-
-:global svg.defs {
-  width: 0;
-  height: 0;
-  position: fixed;
-  z-index: -1;
-}
-
-:global .lmao {
-  clip-path: url(#shape);
-  background: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100vw;
-  height: 100vh;
-}
-
-:global .eyy {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
- p {
-  font-size: 20px;
-  font-weight: bold;
 }
