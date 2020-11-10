@@ -1,0 +1,17 @@
+/* Min selection */
+@custom-media --screen-sm-min (min-width: 0);
+@custom-media --screen-md-min (min-width: 480px);
+@custom-media --screen-lg-min (min-width: 800px);
+@custom-media --screen-xl-min (min-width: 1024px);
+
+/* Max selection */
+@custom-media --screen-sm-max (max-width: 479px);
+@custom-media --screen-md-max (max-width: 799px);
+@custom-media --screen-lg-max (max-width: 1023px);
+@custom-media --screen-xl-max (min-width: 1024px);
+
+/* ... */
+@custom-media --screen-sm (--screen-sm-min) and (--screen-sm-max);
+@custom-media --screen-md (--screen-md-min) and (--screen-md-max);
+@custom-media --screen-lg (--screen-lg-min) and (--screen-lg-max);
+@custom-media --screen-xl (--screen-xl-min) and (--screen-xl-max);

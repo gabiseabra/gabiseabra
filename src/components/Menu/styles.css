@@ -1,33 +1,65 @@
 .nav {
+  --nav-font-size: 2em;
+  --nav-height-sm: 40px;
+  --nav-height-lg: 50px;
+
   position: fixed;
   top: 15px;
+  left: 15px;
   right: 15px;
   z-index: 1;
   display: flex;
   flex-direction: row;
+  justify-content: flex-end;
   mix-blend-mode: difference;
-  & > .link {
-    &::before {
-      display: block;
-      content: '•';
-      line-height: 55px;
-      font-size: 1.5em;
-    }
-    &:first-child::before {
-      display: none;
-    }
-  }
 }
-
 
 .link {
   display: flex;
   text-decoration: none;
   color: var(--color-highlight);
+
+  &.active {
+    animation: shake 100ms infinite linear;
+  }
+
+  &::before {
+    display: block;
+    content: '•';
+    line-height: calc(var(--nav-height-lg) * 0.9);
+    font-size: calc(var(--nav-font-size) * 0.75);
+  }
+
+  &:first-child::before { display: none; }
+
+  & svg { height: var(--nav-height-lg); }
+
   & text {
     font-family: 'Source Code Pro', monospace;
-    font-size: 2em;
+    font-size: var(--nav-font-size);
     fill: var(--color-highlight);
   }
 }
 
+@media (--screen-sm) {
+  .nav { justify-content: center; }
+
+  .link {
+    &::before {
+      line-height: calc(var(--nav-height-sm) * 0.9);
+    }
+
+    & svg {
+      height: var(--nav-height-sm);
+    }
+  }
+}
+
+@keyframes shake {
+  0% { transform: skewX(-15deg); }
+  5% { transform: skewX(15deg); }
+  10% { transform: skewX(-15deg); }
+  15% { transform: skewX(15deg); }
+  20% { transform: skewX(0deg); }
+  100% { transform: skewX(0deg); }
+}
