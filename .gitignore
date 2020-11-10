@@ -13,3 +13,4 @@ output
 .env.test.local
 .env.production.local
 .npmrc
+.psc-ide-port
