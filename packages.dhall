@@ -123,6 +123,32 @@ let upstream =
 
 let overrides = {=}
 
-let additions = {=}
+let additions =
+
+  { wire =
+      { dependencies =
+            [ "aff"
+            , "filterable"
+            , "refs"
+            , "unsafe-reference"
+            ]
+      , repo =
+            "https://github.com/robertdp/purescript-wire.git"
+      , version =
+            "v0.5.0"
+      }
+  , wire-react =
+      { dependencies =
+            [ "wire"
+            , "free"
+            , "freet"
+            , "react-basic-hooks"
+            ]
+      , repo =
+            "https://github.com/robertdp/purescript-wire-react.git"
+      , version =
+            "v0.0.1"
+      }
+  }
 
 in  upstream // overrides // additions

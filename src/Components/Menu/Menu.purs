@@ -5,10 +5,15 @@ import Prelude
 import Data.String (length)
 import Hey.Components.SVG.Definition (def)
 import Hey.Components.SVG.Filters (anaglyph)
+import Hey.Env (Env)
+import Hey.Router (Route(..), href)
 import Hey.Styles ((?&))
 import React.Basic (JSX)
 import React.Basic.DOM as DOM
 import React.Basic.DOM.SVG as SVG
+import React.Basic.Hooks (Component, component)
+import React.Basic.Hooks as React
+import Wire.React (useSignal)
 
 foreign import styles :: Styles
 
@@ -51,14 +56,17 @@ link { label, href, active } = DOM.a
     ]
   }
 
-menu :: JSX
-menu =
-  DOM.nav
+menu :: Route -> JSX
+menu route = DOM.nav
     { className: styles.nav
     , children:
-      [ link { label: "HOME", href: "#", active: true }
-      , link { label: "SKILLZ", href: "#", active: false }
-      , link { label: "PROJECTS", href: "#", active: false }
+      [ link { label: "HOME", href: href Home, active: Home == route }
+      , link { label: "ABOUT", href: href About, active: About == route }
       , svgDefs
       ]
     }
+
+mkMenu :: Component Env
+mkMenu = component "Menu" $ \env -> React.do
+  route <- useSignal env.router.signal
+  pure $ menu route

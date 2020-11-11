@@ -10,8 +10,11 @@ You can edit this file as you like.
   , "react-basic"
   , "react-basic-dom"
   , "react-basic-hooks"
+  , "routing"
   , "web-dom"
   , "web-html"
+  , "wire"
+  , "wire-react"
   ]
 , packages = ./packages.dhall
 , sources = [ "src/**/*.purs", "test/**/*.purs" ]

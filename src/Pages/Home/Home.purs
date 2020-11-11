@@ -31,7 +31,7 @@ svgDefs { width, height } = def width height
   , goo "goo"
   ]
 
-mkHomePage :: Component {}
+mkHomePage :: forall a . Component a
 mkHomePage = component "Home" \_ -> React.do
   viewport <- useViewportSize
   pure

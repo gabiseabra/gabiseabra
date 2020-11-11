@@ -3,24 +3,38 @@ module Hey where
 import Prelude
 
 import Data.Maybe (Maybe(..))
+import Data.Tuple.Nested ((/\))
 import Effect (Effect)
 import Effect.Exception (throw)
-import Hey.Components.Menu (menu)
+import Hey.Components.Menu (mkMenu)
+import Hey.Env (Env, mkEnv)
 import Hey.Pages.Home (mkHomePage)
 import React.Basic.DOM (render)
-import React.Basic.Hooks (Component, fragment)
+import React.Basic.Hooks (Component, JSX, component, fragment)
+import React.Basic.Hooks as React
 import Web.DOM.NonElementParentNode (getElementById)
 import Web.HTML (window)
 import Web.HTML.HTMLDocument (toNonElementParentNode)
 import Web.HTML.Window (document)
+import Wire.React (useSignal)
 
-mkApp :: Component {}
-mkApp = do
+mkRouter :: Component Env
+mkRouter = do
   home <- mkHomePage
-  pure $ \_ ->
-    fragment
-    [ menu
-    , home {}
+  component "Router" \env -> React.do
+    route <- useSignal env.router.signal
+    case route of
+      _ -> pure $ home env
+
+mkApp :: Effect JSX
+mkApp = do
+  eff /\ env <- mkEnv
+  menu <- mkMenu
+  router <- mkRouter
+  pure $ fragment
+    [ eff
+    , menu env
+    , router env
     ]
 
 main :: Effect Unit
@@ -29,4 +43,4 @@ main = do
   root <- getElementById "root" =<< (map toNonElementParentNode $ document =<< window)
   case root of
     Nothing -> throw "Container element not found."
-    Just x  -> render (app {}) x
+    Just x  -> render app x
