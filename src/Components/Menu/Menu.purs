@@ -7,7 +7,7 @@ import Hey.Components.SVG.Definition (def)
 import Hey.Components.SVG.Filters (anaglyph)
 import Hey.Env (Env)
 import Hey.Router (Route(..), href)
-import Hey.Styles ((?&))
+import Hey.Styles ((.&), (?&))
 import React.Basic (JSX)
 import React.Basic.DOM as DOM
 import React.Basic.DOM.SVG as SVG
@@ -39,7 +39,7 @@ linkViewBox lbl =
 link :: LinkProps -> JSX
 link { label, href, active } = DOM.a
   { href
-  , className: styles.link <> active ?& styles.active
+  , className: styles.link .& active ?& styles.active
   , children:
     [ SVG.svg
       { viewBox: linkViewBox label
