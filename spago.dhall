@@ -5,6 +5,7 @@ You can edit this file as you like.
 { name = "my-project"
 , dependencies =
   [ "console"
+  , "debug"
   , "effect"
   , "psci-support"
   , "react-basic"
@@ -13,6 +14,7 @@ You can edit this file as you like.
   , "routing"
   , "web-dom"
   , "web-html"
+  , "web-intersection-observer"
   , "wire"
   , "wire-react"
   ]

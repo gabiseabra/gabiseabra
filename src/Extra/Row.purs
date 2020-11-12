@@ -14,7 +14,7 @@ import Type.Data.Row (RProxy(..))
 import Type.Data.RowList (RLProxy(..))
 import Type.RowList (class ListToRow) as RL
 
-class SubRowBuilder (rl :: RowList) (sr :: # Type) (r :: # Type) | rl -> sr r where
+class SubRowBuilder (rl :: RowList) (sr :: # Type) (r :: # Type) | rl -> sr, r -> sr where
   subRowBuilder :: RLProxy rl -> {|r} -> Builder {} {|sr}
 
 instance subRowBuilderNil :: SubRowBuilder RL.Nil () any where subRowBuilder _ _ = identity

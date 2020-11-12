@@ -124,31 +124,42 @@ let upstream =
 let overrides = {=}
 
 let additions =
-
-  { wire =
-      { dependencies =
+    { wire =
+        { dependencies =
             [ "aff"
             , "filterable"
             , "refs"
             , "unsafe-reference"
             ]
-      , repo =
+        , repo =
             "https://github.com/robertdp/purescript-wire.git"
-      , version =
+        , version =
             "v0.5.0"
-      }
-  , wire-react =
-      { dependencies =
+        }
+    , wire-react =
+        { dependencies =
             [ "wire"
             , "free"
             , "freet"
             , "react-basic-hooks"
             ]
-      , repo =
+        , repo =
             "https://github.com/robertdp/purescript-wire-react.git"
-      , version =
+        , version =
             "v0.0.1"
-      }
-  }
+        }
+    , web-intersection-observer =
+        { dependencies =
+            [ "console"
+            , "effect"
+            , "psci-support"
+            , "web-dom"
+            ]
+        , repo =
+            "https://github.com/gabiseabra/purescript-web-intersection-observer.git"
+        , version =
+            "1c3e8d3"
+        }
+    }
 
 in  upstream // overrides // additions

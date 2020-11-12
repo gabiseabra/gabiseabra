@@ -5,6 +5,8 @@
   "author": "Gabriela Seabra <gabriela.lima.se@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "repl": "spago repl",
+    "clean": "rm -rf output public/build node_modules/.cache",
     "build": "webpack -c webpack/config.js",
     "lint": "eslint . --ext '.js,.jsx,.ts,.tsx'"
   },
