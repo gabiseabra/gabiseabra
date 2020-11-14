@@ -4,12 +4,14 @@
   display: flex;
 
   &.xAxis {
+    scroll-snap-type: x mandatory;
     flex-direction: row;
     overflow-x: overlay;
     overflow-y: hidden;
   }
 
   &.yAxis {
+    scroll-snap-type: y mandatory;
     flex-direction: column;
     overflow-x: hidden;
     overflow-y: overlay;
@@ -17,6 +19,8 @@
 }
 
 .slide {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
   flex: 0 0 100%;
   color: white;
   display: flex;

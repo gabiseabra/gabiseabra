@@ -1,14 +1,23 @@
-module Hey.Components.Carousel where
+module Hey.Components.Carousel
+  ( Axis(..)
+  , SlideProps
+  , RequiredSlideProps
+  , OptionalSlideProps
+  , mkSlide
+  , CarouselProps
+  , RequiredCarouselProps
+  , OptionalCarouselProps
+  , mkCarousel
+  ) where
 
 import Prelude
 
 import Data.Maybe (Maybe)
 import Data.Nullable (Nullable)
 import Data.Tuple.Nested ((/\))
-import Effect.Unsafe (unsafePerformEffect)
 import Hey.Extra.Props (PropsRep(..), runProps)
 import Hey.Extra.Styles ((.&))
-import Hey.Hooks.Carousel.Controller (Axis(..), useCarouselSlide, usePartialCarouselContext)
+import Hey.Hooks.Carousel.Controller (useCarouselSlide)
 import Prim.Row as Row
 import React.Basic (JSX, Ref)
 import React.Basic.DOM (CSS)
@@ -19,6 +28,8 @@ import Web.DOM (Node)
 import Web.IntersectionObserverEntry (IntersectionObserverEntry)
 
 foreign import styles :: Styles
+
+data Axis = X | Y
 
 axisCls :: Axis -> String
 axisCls X = styles.xAxis
@@ -38,12 +49,13 @@ type RequiredSlideProps r =
   )
 
 type OptionalSlideProps =
-  ( style :: CSS
-  , className :: String
+  ( className :: String
+  , style :: CSS
   )
 
 type SlideProps r = Record (RequiredSlideProps r)
-sliderProps = DefProps
+
+slideProps = DefProps
   { className: ""
   , style: DOM.css {}
   } :: PropsRep (RequiredSlideProps ()) OptionalSlideProps
@@ -51,54 +63,44 @@ sliderProps = DefProps
 mkSlide :: forall opts opts'
   .  Row.Union opts opts' OptionalSlideProps
   => Component (SlideProps opts)
-mkSlide = component "Slide" $ runProps sliderProps >>>
-  \{ render, id } -> React.do
+mkSlide = component "Slide" $ runProps slideProps >>>
+  \{ render, id, className, style } -> React.do
     ref /\ entry <- useCarouselSlide
     pure $ DOM.div
       { ref
       , id
-      -- , style
-      , className: styles.slide
+      , style
+      , className: styles.slide .& className
       , children: render entry
       }
-
-slide :: forall opts opts'
-  .  Row.Union opts opts' OptionalSlideProps
-  => SlideProps opts
-  -> JSX
-slide = unsafePerformEffect mkSlide
 
 type RequiredCarouselProps r =
   ( ref :: Ref (Nullable Node)
   , children :: Array JSX
+  , axis :: Axis
   | r
   )
 
 type OptionalCarouselProps =
-  ( style :: CSS
+  ( className :: String
+  , style :: CSS
   )
 
 type CarouselProps r = Record (RequiredCarouselProps r) 
 
 carouselProps = DefProps
-  { style: DOM.css {}
+  { className: ""
+  , style: DOM.css {}
   } :: PropsRep (RequiredCarouselProps ()) OptionalCarouselProps
 
 mkCarousel :: forall opts opts'
   .  Row.Union opts opts' OptionalCarouselProps
   => Component (CarouselProps opts)
 mkCarousel = component "Carousel" $ runProps carouselProps >>>
-  \{ ref, children, style } -> React.do
-    { axis } <- usePartialCarouselContext { axis: X }
+  \{ axis, ref, children, className, style } -> React.do
     pure $ DOM.div
       { ref
       , style
-      , className: styles.carousel .& axisCls axis
+      , className: styles.carousel .& axisCls axis .& className
       , children
       }
-
-carousel :: forall opts opts'
-  .  Row.Union opts opts' OptionalCarouselProps
-  => CarouselProps opts
-  -> JSX
-carousel = unsafePerformEffect mkCarousel
