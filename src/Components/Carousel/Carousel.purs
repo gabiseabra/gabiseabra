@@ -1,4 +1,15 @@
-module Hey.Components.Carousel where
+module Hey.Components.Carousel
+  ( SlideProps
+  , RequiredSlideProps
+  , OptionalSlideProps
+  , mkSlide
+  , slide
+  , CarouselProps
+  , RequiredCarouselProps
+  , OptionalCarouselProps
+  , mkCarousel
+  , carousel
+  ) where
 
 import Prelude
 
@@ -38,8 +49,8 @@ type RequiredSlideProps r =
   )
 
 type OptionalSlideProps =
-  ( style :: CSS
-  , className :: String
+  ( className :: String
+  , style :: CSS
   )
 
 type SlideProps r = Record (RequiredSlideProps r)
@@ -52,13 +63,13 @@ mkSlide :: forall opts opts'
   .  Row.Union opts opts' OptionalSlideProps
   => Component (SlideProps opts)
 mkSlide = component "Slide" $ runProps sliderProps >>>
-  \{ render, id } -> React.do
+  \{ render, id, className, style } -> React.do
     ref /\ entry <- useCarouselSlide
     pure $ DOM.div
       { ref
       , id
-      -- , style
-      , className: styles.slide
+      , style
+      , className: styles.slide .& className
       , children: render entry
       }
 
@@ -75,25 +86,27 @@ type RequiredCarouselProps r =
   )
 
 type OptionalCarouselProps =
-  ( style :: CSS
+  ( className :: String
+  , style :: CSS
   )
 
 type CarouselProps r = Record (RequiredCarouselProps r) 
 
 carouselProps = DefProps
-  { style: DOM.css {}
+  { className: ""
+  , style: DOM.css {}
   } :: PropsRep (RequiredCarouselProps ()) OptionalCarouselProps
 
 mkCarousel :: forall opts opts'
   .  Row.Union opts opts' OptionalCarouselProps
   => Component (CarouselProps opts)
 mkCarousel = component "Carousel" $ runProps carouselProps >>>
-  \{ ref, children, style } -> React.do
+  \{ ref, children, className, style } -> React.do
     { axis } <- usePartialCarouselContext { axis: X }
     pure $ DOM.div
       { ref
       , style
-      , className: styles.carousel .& axisCls axis
+      , className: styles.carousel .& axisCls axis .& className
       , children
       }
 

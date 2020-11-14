@@ -1,36 +1,45 @@
-module Hey.Hooks.Carousel.Controller where
+module Hey.Hooks.Carousel.Controller
+  ( Axis(..)
+  , CarouselOptions
+  , CarouselController
+  , CarouselController'
+  , IntersectionObserverFn
+  , defCarouselOptions
+  , carouselProvider
+  , UseCarouselController
+  , useCarouselController
+  , UseCarouselSlide
+  , useCarouselSlide
+  , UseCarouselContext
+  , useCarouselContext
+  , usePartialCarouselContext
+  ) where
 
 import Prelude
 
 import Control.Applicative.Indexed (ipure)
 import Control.Bind.Indexed ((:>>=))
-import Data.Array (find)
 import Data.Bifunctor (rmap)
-import Data.Foldable (find, foldMap)
+import Data.Foldable (find)
 import Data.Maybe (Maybe(..), fromMaybe, maybe)
 import Data.Newtype (class Newtype)
-import Data.Nullable (Nullable, null, toMaybe)
-import Data.Tuple (Tuple(..), fst)
+import Data.Nullable (Nullable, null)
+import Data.Tuple (Tuple(..))
 import Data.Tuple.Nested ((/\), type (/\))
-import Debug.Trace as Debug
 import Effect (Effect)
 import Effect.Class (liftEffect)
-import Effect.Console (log)
 import Effect.Unsafe (unsafePerformEffect)
-import Hey.Extra.Row (class HasSubRow, class SubRow, maybeRow)
 import Prim.Row as Row
-import React.Basic.Hooks (Hook, JSX, ReactContext, Ref, UseContext, UseEffect, UseRef, UseState, coerceHook, component, contextProvider, createContext, element, readRef, readRefMaybe, useContext, useEffect, useEffectOnce, useRef, useState, writeRef, (/\))
+import Prim.RowList as RL
+import React.Basic.Hooks (Hook, JSX, ReactContext, Ref, UseContext, UseEffect, UseRef, UseState, coerceHook, component, contextProvider, createContext, element, readRefMaybe, useContext, useEffect, useEffectOnce, useRef, useState)
 import React.Basic.Hooks as React
 import React.Basic.Hooks.Aff (UseAff, useAff)
 import React.Basic.Hooks.ResetToken (ResetToken, UseResetToken, useResetToken)
-import Type.Equality (class TypeEquals)
+import Record.Extra (class Keys, pick)
 import Web.DOM (Element, Node)
 import Web.DOM.Element as Element
 import Web.DOM.Node (isEqualNode)
-import Web.DOM.Node as Node
-import Web.Event.Event (Event, EventType(..))
-import Web.Event.EventTarget (addEventListener, eventListener, removeEventListener)
-import Web.IntersectionObserver (IntersectionObserver, disconnect, observe, rootMargin, unobserve)
+import Web.IntersectionObserver (IntersectionObserver, disconnect, observe, unobserve)
 import Web.IntersectionObserver as Observer
 import Web.IntersectionObserverEntry (IntersectionObserverEntry)
 import Web.IntersectionObserverEntry as ObserverEntry
@@ -49,15 +58,15 @@ type CarouselController' =
 
 type CarouselController = {|CarouselController'}
 
-type Options =
+type CarouselOptions =
   { axis :: Axis
   , rootMargin :: String
   , threshold :: Array Number
   , onChange :: Maybe (Array IntersectionObserverEntry -> IntersectionObserver -> Effect Unit)
   }
 
-defOptions :: Options
-defOptions =
+defCarouselOptions :: CarouselOptions
+defCarouselOptions =
   { axis: X
   , rootMargin: "0px"
   , threshold: [0.0]
@@ -68,7 +77,7 @@ slideTo :: Element -> Axis -> String -> Effect Unit
 slideTo el axis id = do
   pure unit
 
-mkController :: Options -> ResetToken -> Ref (Nullable Node) -> Effect (Maybe CarouselController)
+mkController :: CarouselOptions -> ResetToken -> Ref (Nullable Node) -> Effect (Maybe CarouselController)
 mkController opts token ref =
   readRefMaybe ref >>= ((=<<) Element.fromNode) >>> case _ of
     Nothing -> pure Nothing
@@ -91,16 +100,16 @@ mkController opts token ref =
 ctx :: ReactContext (Maybe CarouselController)
 ctx = unsafePerformEffect $ createContext Nothing
 
-carouselProvider :: { children :: Array JSX, value :: Maybe CarouselController } -> JSX
-carouselProvider = element $ contextProvider ctx
+carouselProvider' :: { children :: Array JSX, value :: Maybe CarouselController } -> JSX
+carouselProvider' = element $ contextProvider ctx
 
-carouselProvider_ :: Options -> (Ref (Nullable Node) -> Maybe CarouselController -> Array JSX) -> JSX
-carouselProvider_ opts =
+carouselProvider :: CarouselOptions -> (Ref (Nullable Node) -> Maybe CarouselController -> Array JSX) -> JSX
+carouselProvider opts =
     unsafePerformEffect
   $ component "CarouselController"
   $ \mkChildren -> React.do
     ref /\ value <- useCarouselController opts
-    pure $ carouselProvider
+    pure $ carouselProvider'
       { value
       , children: mkChildren ref value
       }
@@ -110,11 +119,13 @@ type UseCarouselContext = UseContext (Maybe CarouselController)
 useCarouselContext :: Hook UseCarouselContext (Maybe CarouselController)
 useCarouselContext = useContext ctx
 
-usePartialCarouselContext :: forall sr
-  .  HasSubRow sr CarouselController'
+usePartialCarouselContext :: forall sr any rl
+  .  Row.Union sr any CarouselController'
+  => RL.RowToList sr rl
+  => Keys rl
   => {|sr}
   -> Hook UseCarouselContext {|sr}
-usePartialCarouselContext sr = useCarouselContext :>>= maybeRow sr >>> ipure
+usePartialCarouselContext sr = useCarouselContext :>>= maybe sr pick >>> ipure
 
 newtype UseCarouselController hooks
   = UseCarouselController
@@ -122,7 +133,7 @@ newtype UseCarouselController hooks
 
 derive instance newtypeUseCarouselController :: Newtype (UseCarouselController hooks) _
 
-useCarouselController :: Options -> Hook UseCarouselController (Ref (Nullable Node) /\ (Maybe CarouselController))
+useCarouselController :: CarouselOptions -> Hook UseCarouselController (Ref (Nullable Node) /\ (Maybe CarouselController))
 useCarouselController opts = coerceHook $ React.do
   nodeRef <- useRef null
   token /\ reset <- useResetToken
