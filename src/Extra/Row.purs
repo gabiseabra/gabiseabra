@@ -5,8 +5,8 @@ import Prelude
 import Data.Maybe (Maybe, maybe)
 import Data.Symbol (class IsSymbol, SProxy(..))
 import Prim.Row as Row
-import Prim.RowList (kind RowList)
 import Prim.RowList (class RowToList, Cons, Nil) as RL
+import Prim.RowList (kind RowList)
 import Record as Rec
 import Record.Builder (Builder)
 import Record.Builder as Builder
@@ -31,17 +31,20 @@ instance subRowBuilderCons ::
           sym = SProxy :: SProxy sym
           val = Rec.get sym r
 
-class SubRow (sr :: # Type) (r :: # Type) | r -> sr where
+class SubRow (sr :: # Type) (r :: # Type)
+instance subRowImpl :: ( Row.Union sr trash r ) => SubRow sr r
+
+class HasSubRow (sr :: # Type) (r :: # Type) | r -> sr where
   subRow :: RProxy sr -> {|r} -> {|sr}
 
-instance subRowImpl ::
+instance hasSubRowImpl ::
   ( SubRowBuilder rl sr r
-  , Row.Union sr trash r
+  , SubRow sr r
   , RL.RowToList sr rl
-  ) => SubRow sr r where
+  ) => HasSubRow sr r where
   subRow _ = subRowBuilder proxy >>> Builder.build >>> ((#) {})
     where proxy = RLProxy :: RLProxy rl
 
-maybeRow :: forall sr r . SubRow sr r => {|sr} -> Maybe {|r} -> {|sr}
+maybeRow :: forall sr r . HasSubRow sr r => {|sr} -> Maybe {|r} -> {|sr}
 maybeRow def = maybe def $ subRow proxy
   where proxy = RProxy :: RProxy sr

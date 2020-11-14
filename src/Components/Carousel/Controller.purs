@@ -17,7 +17,7 @@ import Effect (Effect)
 import Effect.Class (liftEffect)
 import Effect.Console (log)
 import Effect.Unsafe (unsafePerformEffect)
-import Hey.Extra.Row (class SubRow, maybeRow)
+import Hey.Extra.Row (class HasSubRow, class SubRow, maybeRow)
 import Prim.Row as Row
 import React.Basic.Hooks (Hook, JSX, ReactContext, Ref, UseContext, UseEffect, UseRef, UseState, coerceHook, component, contextProvider, createContext, element, readRef, readRefMaybe, useContext, useEffect, useEffectOnce, useRef, useState, writeRef, (/\))
 import React.Basic.Hooks as React
@@ -111,7 +111,7 @@ useCarouselContext :: Hook UseCarouselContext (Maybe CarouselController)
 useCarouselContext = useContext ctx
 
 usePartialCarouselContext :: forall sr
-  .  SubRow sr CarouselController'
+  .  HasSubRow sr CarouselController'
   => {|sr}
   -> Hook UseCarouselContext {|sr}
 usePartialCarouselContext sr = useCarouselContext :>>= maybeRow sr >>> ipure

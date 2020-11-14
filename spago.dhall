@@ -11,6 +11,7 @@ You can edit this file as you like.
   , "react-basic"
   , "react-basic-dom"
   , "react-basic-hooks"
+  , "record-extra"
   , "routing"
   , "web-dom"
   , "web-html"
