@@ -10,7 +10,7 @@ import Record.Unsafe.Union (unsafeUnion)
 data PropsRep (required :: # Type) (optional :: # Type) = DefProps (Record optional)
 
 runProps :: forall props required optional opts any out 
-  . Row.Union required optional out
+  .  Row.Union required optional out
   => Row.Union required opts props
   => Row.Union opts any optional
   => PropsRep required optional
