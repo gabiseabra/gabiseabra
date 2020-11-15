@@ -30,7 +30,7 @@ import Effect.Class (liftEffect)
 import Effect.Unsafe (unsafePerformEffect)
 import Prim.Row as Row
 import Prim.RowList as RL
-import React.Basic.Hooks (Hook, JSX, ReactContext, Ref, UseContext, UseEffect, UseRef, UseState, coerceHook, component, contextProvider, createContext, element, readRefMaybe, useContext, useEffect, useEffectOnce, useRef, useState)
+import React.Basic.Hooks (Hook, JSX, ReactContext, Ref, UseContext, UseEffect, UseRef, UseState, coerceHook, contextProvider, createContext, element, readRefMaybe, useContext, useEffect, useEffectOnce, useRef, useState)
 import React.Basic.Hooks as React
 import React.Basic.Hooks.Aff (UseAff, useAff)
 import React.Basic.Hooks.ResetToken (ResetToken, UseResetToken, useResetToken)
@@ -87,19 +87,8 @@ mkController opts token ref =
 ctx :: ReactContext (Maybe CarouselController)
 ctx = unsafePerformEffect $ createContext Nothing
 
-carouselProvider' :: { children :: Array JSX, value :: Maybe CarouselController } -> JSX
-carouselProvider' = element $ contextProvider ctx
-
-carouselProvider :: CarouselOptions -> (Ref (Nullable Node) -> Maybe CarouselController -> Array JSX) -> JSX
-carouselProvider opts =
-    unsafePerformEffect
-  $ component "CarouselController"
-  $ \mkChildren -> React.do
-    ref /\ value <- useCarouselController opts
-    pure $ carouselProvider'
-      { value
-      , children: mkChildren ref value
-      }
+carouselProvider :: { children :: Array JSX, value :: Maybe CarouselController } -> JSX
+carouselProvider = element $ contextProvider ctx
 
 type UseCarouselContext = UseContext (Maybe CarouselController)
 
