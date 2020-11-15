@@ -1,48 +1,76 @@
 module Hey.Pages.Home
   ( mkHomePage
-  ) where
+  ) 
+  where
 
 import Prelude
 
-import Hey.Components.SVG.Blob (blob)
-import Hey.Components.SVG.Definition (def)
-import Hey.Components.SVG.Filters (goo)
-import Hey.Hooks.UseViewportSize (ViewportSize, useViewportSize)
+import Data.Maybe (Maybe(..))
+import Effect (Effect)
+import Hey.Components.Carousel (Axis(..), mkCarousel, mkSlide)
+import Hey.Env (Env)
+import Hey.Hooks.Carousel.Controller (CarouselOptions, carouselProvider, defCarouselOptions)
+import Hey.Pages.Landing (mkLandingPage)
+import Hey.Router (Route(..))
 import React.Basic (JSX)
 import React.Basic.DOM as DOM
-import React.Basic.DOM.SVG as SVG
-import React.Basic.Hooks (Component, component)
+import React.Basic.Hooks (Component, component, useEffect)
 import React.Basic.Hooks as React
+import Record (disjointUnion)
+import Type.Row (type (+))
+import Web.IntersectionObserverEntry (IntersectionObserverEntry, intersectionRatio)
 
-foreign import styles :: Styles
+opts = defCarouselOptions { threshold = [0.9] } :: CarouselOptions
 
-type Styles =
-  { page :: String
-  , content :: String
-  }
+type EnvProps r = ( env :: Env | r )
+type RouteProps r = ( route :: Route , component :: Env -> JSX | r )
+type IntersectionEntryProps r = ( intersectionRatio :: Number | r )
+type PageProps = RouteProps + IntersectionEntryProps + EnvProps + ()
 
-svgDefs :: ViewportSize -> JSX
-svgDefs { width, height } = def width height
-  [ SVG.clipPath
-    { id: "big-blob"
-    , clipPathUnits: "objectBoundingBox"
-    , children: [ blob ]
-    }
-  , goo "goo"
-  ]
+mkPage :: Component {|PageProps}
+mkPage = component "Landing" $
+  \{ intersectionRatio, route, component, env } -> React.do
+    -- | update page hash whenever a page becomes visible
+    useEffect intersectionRatio $ do
+      if intersectionRatio >= 0.9
+      then env.router.replace route
+      else pure unit
+      pure mempty
+    pure $ component env
 
-mkHomePage :: forall a . Component a
-mkHomePage = component "Home" \_ -> React.do
-  viewport <- useViewportSize
-  pure
-    $ DOM.div
-    { className: styles.page
-    , children:
-      [ DOM.div
-        { className: styles.content
-        , children: [ DOM.text "lmaoo" ]
+mkRoutes :: Effect (Array {|RouteProps ()})
+mkRoutes = do
+  let aboutPage _ = DOM.text "lmaoo"
+  landingPage <- mkLandingPage
+  pure $
+    [ { route: Home, component: landingPage }
+    , { route: About, component: aboutPage }
+    ]
+
+intersectionEntryProps :: Maybe IntersectionObserverEntry -> {|IntersectionEntryProps ()}
+intersectionEntryProps Nothing = { intersectionRatio: 0.0 }
+intersectionEntryProps (Just entry) = { intersectionRatio: intersectionRatio entry }
+
+mkHomePage :: Component Env
+mkHomePage = do
+  carousel <- mkCarousel
+  slide <- mkSlide
+  routes <- mkRoutes
+  page <- mkPage
+  component "Home" $ \env ->
+    let routeID Home = "home"
+        routeID route = show route
+    in pure $ carouselProvider opts $ \ref x -> do
+      pure $ carousel
+        { ref
+        , axis: Y
+        , children: routes # map \{ route, component } ->
+            slide
+              { id: routeID route
+              , render:
+                  intersectionEntryProps
+                  >>> disjointUnion { route, component, env }
+                  >>> page
+                  >>> pure
+              }
         }
-      , svgDefs viewport
-      ]
-    }
-  

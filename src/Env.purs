@@ -6,7 +6,7 @@ import Data.Bifunctor (rmap)
 import Data.Tuple.Nested (type (/\))
 import Effect (Effect)
 import Hey.Router (Router, mkRouter)
-import React.Basic (JSX)
+import React.Basic.Hooks (JSX)
 
 type Env =
   { router :: Router
