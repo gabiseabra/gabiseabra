@@ -61,6 +61,7 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-spring": "^8.0.27",
-    "styled-components": "^5.2.1"
+    "styled-components": "^5.2.1",
+    "xhr2": "^0.2.0"
   }
 }
