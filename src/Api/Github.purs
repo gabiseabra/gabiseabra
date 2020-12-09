@@ -22,19 +22,24 @@ type Connection a
 type Connection' a
   = { nodes :: Array a }
 
-type Repos
+type Language
+  = { name :: String, color :: Maybe String }
+
+type Repo
+  = { name :: String
+    , description :: Maybe String
+    , isFork :: Boolean
+    , languages :: Connection' Language
+    }
+
+type ReposQuery
   = { viewer ::
         { repositories ::
-            Connection
-              { name :: String
-              , description :: Maybe String
-              , isFork :: Boolean
-              , languages :: Connection' { name :: String, color :: Maybe String }
-              }
+            Connection Repo
         }
     }
 
-fetchRepos :: Fetch { data :: Repos }
+fetchRepos :: Fetch { data :: ReposQuery }
 fetchRepos = Fetch "github/repos" req
   where
   req =
