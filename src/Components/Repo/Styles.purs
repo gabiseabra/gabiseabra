@@ -7,8 +7,10 @@ import Web.IntersectionObserverEntry (IntersectionObserverEntry, boundingClientR
 
 type Styles
   = { card :: String
+    , stats :: String
     , list :: String
     , item :: String
+    , languagesChart :: String
     , positionTop :: String
     , positionBottom :: String
     , positionCenter :: String

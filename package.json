@@ -54,6 +54,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.12.5",
+    "chart.js": "^2.9.4",
     "core-js": "3",
     "d3-ease": "^2.0.0",
     "flubber": "^0.4.2",

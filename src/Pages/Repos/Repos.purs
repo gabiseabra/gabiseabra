@@ -27,4 +27,4 @@ mkReposPage = do
       :>>= case _ of
           Nothing -> pure $ DOM.text "loading..."
           Just { data: res } -> do
-            pure $ repoList res.viewer.repositories.nodes
+            pure $ repoList res.viewer.repos.nodes

@@ -22,6 +22,9 @@ type Connection a
 type Connection' a
   = { nodes :: Array a }
 
+type Count
+  = { totalCount :: Int }
+
 type Language
   = { name :: String, color :: Maybe String }
 
@@ -29,13 +32,13 @@ type Repo
   = { name :: String
     , description :: Maybe String
     , isFork :: Boolean
-    , languages :: Connection' Language
+    , primaryLanguage :: Language
     }
 
 type ReposQuery
   = { viewer ::
-        { repositories ::
-            Connection Repo
+        { repos :: Connection Repo
+        , forks :: Count
         }
     }
 
@@ -55,16 +58,17 @@ fetchRepos = Fetch "github/repos" req
     """
     query {
       viewer {
-        repositories(first: 100) {
+        forks: repositories(isFork: true) {
+          totalCount
+        }
+        repos: repositories(first: 100, isFork: false) {
           nodes {
             name
             description
             isFork
-            languages(first: 3) {
-              nodes {
-                name
-                color
-              }
+            primaryLanguage {
+              name
+              color
             }
           }
           pageInfo {

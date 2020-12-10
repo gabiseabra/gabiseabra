@@ -3,6 +3,7 @@ module Hey.Components.Repo.Card (mkRepoCard) where
 import Prelude
 import Data.Foldable (foldl)
 import Data.Maybe (Maybe, maybe)
+import Data.Tuple.Nested (type (/\), (/\))
 import Hey.Api.Github (Repo)
 import Hey.Components.Repo.Styles (styles)
 import Hey.Components.Repo.Styles as Cls
@@ -11,15 +12,13 @@ import React.Basic.DOM as DOM
 import React.Basic.Hooks (Component, component)
 import Web.IntersectionObserverEntry (IntersectionObserverEntry)
 
-type RepoProps
-  = { intersectionEntry :: Maybe IntersectionObserverEntry
-    , data :: Repo
-    }
+type CardProps
+  = Repo /\ Maybe IntersectionObserverEntry
 
-mkRepoCard :: Component RepoProps
+mkRepoCard :: Component CardProps
 mkRepoCard =
   component "Repo"
-    $ \{ data: repo, intersectionEntry: entry } -> React.do
+    $ \(repo /\ entry) -> React.do
         pure
           $ DOM.div
               { className:
