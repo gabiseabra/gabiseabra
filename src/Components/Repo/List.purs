@@ -28,7 +28,6 @@ isFeatured =
 
 mkRepoList :: Component (Array Repo)
 mkRepoList = do
-  carousel <- mkCarousel
   slide <- mkSlide
   card <- mkRepoCard
   stats <- mkRepoStats
@@ -47,26 +46,16 @@ mkRepoList = do
                     , render: Tuple repo >>> card >>> pure
                     }
         pure
-          $ carouselProvider
-              { value
-              , children:
-                  pure
-                    $ carousel
-                        { ref
-                        , axis: Y
-                        , className: styles.list
-                        , children:
-                            [ slide
-                                { id: "repos-stats"
-                                , className: styles.item
-                                , render: Tuple repos >>> stats >>> pure
-                                }
-                            , fragment children
-                            , slide
-                                { id: "repos-footer"
-                                , className: styles.item
-                                , render: const $ pure $ DOM.text "lmao"
-                                }
-                            ]
-                        }
-              }
+          $ fragment
+              [ slide
+                  { id: "repos-stats"
+                  , className: styles.item
+                  , render: Tuple repos >>> stats >>> pure
+                  }
+              , fragment children
+              , slide
+                  { id: "repos-footer"
+                  , className: styles.item
+                  , render: const $ pure $ DOM.text "lmao"
+                  }
+              ]

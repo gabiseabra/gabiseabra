@@ -3,51 +3,46 @@ module Hey.Pages.Home
   ) where
 
 import Prelude
-import Data.Maybe (Maybe(..))
-import Data.Tuple.Nested ((/\))
+import Data.Maybe (maybe)
+import Data.Tuple.Nested (type (/\), (/\))
 import Effect (Effect)
-import Hey.Components.Carousel (Axis(..), mkCarousel, mkSlide)
+import Hey.Components.Carousel (Axis(..), mkCarousel)
 import Hey.Data.Env (Env)
 import Hey.Data.Route (Route(..))
-import Hey.Hooks.Carousel.Controller (CarouselOptions, carouselProvider, defCarouselOptions, useCarouselController)
+import Hey.Hooks.Carousel.Controller (CarouselOptions, carouselProvider, defCarouselOptions, useCarouselController, useCarouselSlide)
 import Hey.Pages.Landing (mkLandingPage)
 import Hey.Pages.Repos (mkReposPage)
-import React.Basic (JSX)
+import React.Basic (JSX, fragment)
+import React.Basic.DOM as DOM
 import React.Basic.Hooks (Component, component, useEffect, useMemo)
 import React.Basic.Hooks as React
-import Record (disjointUnion)
-import Type.Row (type (+))
-import Web.IntersectionObserverEntry (IntersectionObserverEntry, intersectionRatio)
+import Web.IntersectionObserverEntry (intersectionRatio)
 import Wire.React (useSignal)
 
-type EnvProps r
-  = ( env :: Env | r )
+foreign import styles :: Styles
 
-type RouteProps r
-  = ( route :: Route, component :: Env -> JSX | r )
+type Styles
+  = { threshold :: String
+    }
 
-type IntersectionEntryProps r
-  = ( intersectionRatio :: Number | r )
-
-type PageProps
-  = RouteProps + IntersectionEntryProps + EnvProps + ()
-
-mkPage :: Component { | PageProps }
-mkPage =
+mkThreshold :: Component (Env /\ Route)
+mkThreshold =
   component "Landing"
-    $ \{ intersectionRatio, route, component, env } -> React.do
-        -- | update page hash whenever a page becomes visible
+    $ \(env /\ route) -> React.do
+        ref /\ entry <- useCarouselSlide
         currentRoute <- useSignal env.router.signal
-        useEffect intersectionRatio
+        let
+          ratio = maybe 0.0 intersectionRatio entry
+        useEffect ratio
           $ do
-              if intersectionRatio >= 0.9 && route /= currentRoute then
+              if ratio == 1.0 && route /= currentRoute then
                 env.router.replace route
               else
                 pure unit
               pure mempty
-        pure $ component env
+        pure $ DOM.div { ref, className: styles.threshold }
 
-mkRoutes :: Effect (Array { | RouteProps () })
+mkRoutes :: Effect (Array { route :: Route, component :: Env -> JSX })
 mkRoutes = do
   reposPage <- mkReposPage
   landingPage <- mkLandingPage
@@ -56,34 +51,21 @@ mkRoutes = do
       , { route: About, component: reposPage }
       ]
 
-intersectionEntryProps :: Maybe IntersectionObserverEntry -> { | IntersectionEntryProps () }
-intersectionEntryProps Nothing = { intersectionRatio: 0.0 }
-
-intersectionEntryProps (Just entry) = { intersectionRatio: intersectionRatio entry }
-
 mkHomePage :: Component Env
 mkHomePage = do
   let
-    opts = defCarouselOptions { threshold = [ 0.9 ] } :: CarouselOptions
+    opts = defCarouselOptions { threshold = [ 0.0, 1.0 ] } :: CarouselOptions
   carousel <- mkCarousel
-  slide <- mkSlide
   routes <- mkRoutes
-  page <- mkPage
+  threshold <- mkThreshold
   component "Home"
     $ \env -> React.do
         ref /\ value <- useCarouselController opts
         children <-
           useMemo unit \_ ->
             routes
-              # map \{ route, component } ->
-                  slide
-                    { id: show route
-                    , render:
-                        intersectionEntryProps
-                          >>> disjointUnion { route, component, env }
-                          >>> page
-                          >>> pure
-                    }
+              # map \{ route, component: c } ->
+                  fragment [ threshold (env /\ route), c env ]
         pure
           $ carouselProvider
               { value

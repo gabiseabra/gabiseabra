@@ -1,0 +1,10 @@
+.threshold {
+  --height: 50px;
+
+  scroll-snap-stop: always;
+  scroll-snap-align: start;
+  min-height: var(--height);
+  width: 100%;
+  margin-bottom: calc(var(--height) * -1);
+  pointer-events: none;
+}

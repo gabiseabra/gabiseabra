@@ -5,7 +5,7 @@ import Data.Array (fromFoldable)
 import Data.Foldable (foldl, foldr)
 import Data.Map as Map
 import Data.Maybe (Maybe(..), maybe)
-import Data.Nullable (null)
+import Data.Nullable (notNull, null)
 import Data.String (toLower)
 import Data.Tuple.Nested (type (/\), (/\))
 import Debug.Trace as Debug
@@ -33,13 +33,12 @@ extension lang
 
 languagesChart :: Array Repo -> ChartOptions
 languagesChart repos =
-  Debug.spy "lang"
-    { type: Radar
-    , "data":
-        { labels
-        , datasets: [ { label: null, "data": values } ]
-        }
-    }
+  { type: Radar
+  , "data":
+      { labels
+      , datasets: [ { label: notNull "my repos", "data": values } ]
+      }
+  }
   where
   dataset = foldr (_.primaryLanguage >>> _.name >>> Map.alter (maybe 1 ((+) 1) >>> Just)) mempty repos
 
