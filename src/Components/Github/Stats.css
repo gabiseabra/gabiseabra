@@ -1,0 +1,6 @@
+.container {
+  flex: 0 0 75%;
+  scroll-snap-align: start;
+  scroll-snap-stop: normal;
+  box-sizing: content-box;
+}

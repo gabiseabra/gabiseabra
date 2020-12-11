@@ -1,14 +1,14 @@
-module Hey.Hooks.Carousel.Controller
-  ( CarouselOptions
+module Hey.Hooks.UseIntersectionObserver
+  ( IntersectionObserverOptions
   , IntersectionObserverFn
-  , defCarouselOptions
-  , carouselProvider
-  , UseCarouselController
-  , useCarouselController
-  , UseCarouselSlide
-  , useCarouselSlide
-  , UseCarouselContext
-  , useCarouselContext
+  , defOptions
+  , intersectionObserverProvider
+  , UseIntersectionObserver
+  , useIntersectionObserver
+  , UseIntersectionObserverEntry
+  , useIntersectionObserverEntry
+  , UseIntersectionObserverContext
+  , useIntersectionObserverContext
   ) where
 
 import Prelude
@@ -17,21 +17,22 @@ import Control.Bind.Indexed ((:>>=))
 import Data.Foldable (fold)
 import Data.Maybe (Maybe(..), fromMaybe, maybe)
 import Data.Newtype (class Newtype)
-import Data.Nullable (Nullable, null)
-import Data.Tuple.Nested ((/\), type (/\))
+import Data.Nullable (Nullable)
+import Data.Tuple.Nested ((/\))
 import Effect (Effect)
 import Effect.Unsafe (unsafePerformEffect)
+import Foreign (Foreign)
 import Hey.Extra.CustomEvent (customEvent, detail)
-import Hey.Extra.FFI (unsafeInstanceCoerce)
-import React.Basic.Hooks (Hook, JSX, ReactContext, Ref, UseContext, UseEffect, UseRef, UseState, coerceHook, contextProvider, createContext, element, readRefMaybe, useContext, useEffect, useEffectOnce, useRef, useState)
+import React.Basic.Hooks (Hook, JSX, ReactContext, Ref, UseContext, UseEffect, UseState, coerceHook, contextProvider, createContext, element, readRefMaybe, useContext, useEffect, useEffectOnce, useState)
 import React.Basic.Hooks as React
+import Unsafe.Coerce (unsafeCoerce)
 import Web.DOM (Element, Node)
 import Web.DOM.Element (toEventTarget)
 import Web.DOM.Element as Element
 import Web.Event.CustomEvent (fromEvent, toEvent)
 import Web.Event.Event (EventType(..))
 import Web.Event.EventTarget (addEventListener, dispatchEvent, eventListener, removeEventListener)
-import Web.IntersectionObserver (IntersectionObserver, disconnect, observe, unobserve)
+import Web.IntersectionObserver (IntersectionObserver, IntersectionObserverInitRoot(..), disconnect, observe, unobserve)
 import Web.IntersectionObserver as Observer
 import Web.IntersectionObserverEntry (IntersectionObserverEntry)
 import Web.IntersectionObserverEntry as ObserverEntry
@@ -39,18 +40,25 @@ import Web.IntersectionObserverEntry as ObserverEntry
 type IntersectionObserverFn
   = Function (Array IntersectionObserverEntry -> IntersectionObserver)
 
-type CarouselOptions
-  = { rootMargin :: String
+type IntersectionObserverOptions
+  = { root :: IntersectionObserverInitRoot
+    , rootMargin :: String
     , threshold :: Array Number
     , onChange :: Maybe (Array IntersectionObserverEntry -> IntersectionObserver -> Effect Unit)
     }
 
-defCarouselOptions :: CarouselOptions
-defCarouselOptions =
-  { rootMargin: "0px"
+defOptions :: IntersectionObserverOptions
+defOptions =
+  { root: None
+  , rootMargin: "0px"
   , threshold: [ 0.0 ]
   , onChange: Nothing
   }
+
+foreign import isIntersectionObserverEntry :: Foreign -> Boolean
+
+coerceIntersectionObserverEntry :: Foreign -> Maybe IntersectionObserverEntry
+coerceIntersectionObserverEntry a = if isIntersectionObserverEntry a then pure $ unsafeCoerce a else Nothing
 
 -- | Custom event which gets triggered on an intersection observer entry when it
 -- | reaches a threshold.
@@ -63,64 +71,57 @@ notifyIntersectionChange entry = void $ dispatchEvent event target
 
   event = toEvent $ customEvent intersectionChangeEvent entry
 
-mkController :: CarouselOptions -> Ref (Nullable Node) -> Effect (Maybe IntersectionObserver)
-mkController opts ref =
-  readRefMaybe ref >>= ((=<<) Element.fromNode)
-    >>> case _ of
-        Nothing -> pure Nothing
-        Just el -> do
-          let
-            { rootMargin, threshold } = opts
+mkObserver :: IntersectionObserverOptions -> Effect (Maybe IntersectionObserver)
+mkObserver opts@{ root, rootMargin, threshold } = do
+  let
+    notify entries _ = fold $ map notifyIntersectionChange entries
 
-            notify entries _ = fold $ map notifyIntersectionChange entries
-
-            onChange = fromMaybe (const $ const $ mempty) opts.onChange <> notify
-          observer <-
-            Observer.create onChange
-              { root: Observer.Element el
-              , rootMargin
-              , threshold
-              }
-          pure
-            $ Just observer
+    onChange = fromMaybe (const $ const $ mempty) opts.onChange <> notify
+  observer <-
+    Observer.create onChange
+      { root
+      , rootMargin
+      , threshold
+      }
+  pure $ Just observer
 
 ctx :: ReactContext (Maybe IntersectionObserver)
 ctx = unsafePerformEffect $ createContext Nothing
 
-carouselProvider :: { children :: Array JSX, value :: Maybe IntersectionObserver } -> JSX
-carouselProvider = element $ contextProvider ctx
+intersectionObserverProvider :: { children :: Array JSX, value :: Maybe IntersectionObserver } -> JSX
+intersectionObserverProvider = element $ contextProvider ctx
 
-type UseCarouselContext
+type UseIntersectionObserverContext
   = UseContext (Maybe IntersectionObserver)
 
-useCarouselContext :: Hook UseCarouselContext (Maybe IntersectionObserver)
-useCarouselContext = useContext ctx
+useIntersectionObserverContext :: Hook UseIntersectionObserverContext (Maybe IntersectionObserver)
+useIntersectionObserverContext = useContext ctx
 
-newtype UseCarouselController hooks
+newtype UseIntersectionObserver hooks
   = UseCarouselController
-  (UseEffect Unit (UseState (Maybe IntersectionObserver) (UseRef (Nullable Node) hooks)))
+  (UseEffect Unit (UseState (Maybe IntersectionObserver) hooks))
 
-derive instance newtypeUseCarouselController :: Newtype (UseCarouselController hooks) _
+derive instance newtypeUseIntersectionObserver :: Newtype (UseIntersectionObserver hooks) _
 
-useCarouselController :: CarouselOptions -> Hook UseCarouselController (Ref (Nullable Node) /\ (Maybe IntersectionObserver))
-useCarouselController opts =
+useIntersectionObserver :: Effect IntersectionObserverOptions -> Hook UseIntersectionObserver (Maybe IntersectionObserver)
+useIntersectionObserver opts =
   coerceHook
     $ React.do
-        nodeRef <- useRef null
         observer /\ setObserver <- useState Nothing
-        useEffectOnce $ mkController opts nodeRef
+        useEffectOnce $ opts
+          >>= mkObserver
           >>= case _ of
               Nothing -> pure mempty
               Just obs -> do
                 setObserver $ const $ Just obs
                 pure (disconnect obs)
-        pure $ nodeRef /\ observer
+        pure $ observer
 
-newtype UseCarouselSlide hooks
+newtype UseIntersectionObserverEntry hooks
   = UseCarouselSlide
-  (UseEffect Boolean (UseCarouselContext (UseState (Maybe IntersectionObserverEntry) (UseRef (Nullable Node) hooks))))
+  (UseEffect Boolean (UseIntersectionObserverContext (UseState (Maybe IntersectionObserverEntry) hooks)))
 
-derive instance newtypeUseCarouselSlide :: Newtype (UseCarouselSlide hooks) _
+derive instance newtypeUseIntersectionObserverEntry :: Newtype (UseIntersectionObserverEntry hooks) _
 
 attachEntry :: IntersectionObserver -> Element -> Effect (Effect Unit)
 attachEntry observer el = observe observer el *> pure (unobserve observer el)
@@ -131,16 +132,15 @@ attachIntersectionChangeListener fun el = do
     target = toEventTarget el
   listener <-
     eventListener
-      $ (fromEvent >=> detail >>> unsafeInstanceCoerce "IntersectionObserverEntry")
+      $ (fromEvent >=> detail >>> coerceIntersectionObserverEntry)
       >>> maybe (pure unit) fun
   addEventListener intersectionChangeEvent listener false target
   pure $ removeEventListener intersectionChangeEvent listener false target
 
-useCarouselSlide :: Hook UseCarouselSlide (Ref (Nullable Node) /\ Maybe IntersectionObserverEntry)
-useCarouselSlide =
+useIntersectionObserverEntry :: Ref (Nullable Node) -> Hook UseIntersectionObserverEntry (Maybe IntersectionObserverEntry)
+useIntersectionObserverEntry nodeRef =
   coerceHook
     $ React.do
-        nodeRef <- useRef null
         entry /\ setEntry <- useState Nothing
         let
           useObserverEntry Nothing = React.do
@@ -153,5 +153,5 @@ useCarouselSlide =
               $ readRefMaybe nodeRef
               >>= ((=<<) Element.fromNode)
               >>> maybe (pure mempty) attach
-        useCarouselContext :>>= useObserverEntry
-        ipure $ nodeRef /\ entry
+        useIntersectionObserverContext :>>= useObserverEntry
+        ipure $ entry

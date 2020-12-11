@@ -1,15 +1,15 @@
-module Hey.Pages.Repos
-  ( mkReposPage
+module Hey.Pages.Github
+  ( mkGithubPage
   ) where
 
 import Prelude
 import Control.Monad.Indexed ((:>>=))
 import Data.Maybe (Maybe(..))
 import Hey.Api.Github (fetchRepos)
-import Hey.Components.Repo.List (mkRepoList)
+import Hey.Components.Github as GH
 import Hey.Hooks.UseFetch (useFetch)
 import React.Basic.DOM as DOM
-import React.Basic.Hooks (Component, component)
+import React.Basic.Hooks (Component, component, fragment)
 import React.Basic.Hooks as React
 
 foreign import styles :: Styles
@@ -19,12 +19,19 @@ type Styles
     , content :: String
     }
 
-mkReposPage :: forall a. Component a
-mkReposPage = do
-  repoList <- mkRepoList
+mkGithubPage :: forall a. Component a
+mkGithubPage = do
+  stats <- GH.mkStats
+  repo <- GH.mkRepo
   component "Repos" \_ -> React.do
     useFetch fetchRepos
       :>>= case _ of
           Nothing -> pure $ DOM.text "loading..."
           Just { data: res } -> do
-            pure $ repoList res.viewer.repos.nodes
+            let
+              repos = res.viewer.repos.nodes
+            pure
+              $ fragment
+                  [ stats repos
+                  , fragment $ repos # map repo
+                  ]

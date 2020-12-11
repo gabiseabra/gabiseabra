@@ -1,39 +1,12 @@
-.list {
-  box-sizing: border-box;
-  padding: 0 60px;
-  height: 100vh;
-  width: 100vw;
-}
-
-.item {
+.container {
   flex: 0 0 50%;
   scroll-snap-align: center;
   scroll-snap-stop: normal;
   perspective: 100vw;
   box-sizing: border-box;
-
-  &:first-child {
-    flex: 0 0 75%;
-    padding-top: 60px;
-  }
-
-  &:last-child {
-    flex: 0 0 25%;
-    scroll-snap-align: end;
-  }
 }
 
-.stats {
-
-}
-
-.languagesChart {
-  width: 50vh;
-  height: 50vh;
-  background: white;
-}
-
-.card {
+.repo {
   box-sizing: border-box;
   margin: 30px;
   height: 100%;
