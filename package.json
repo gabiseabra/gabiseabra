@@ -8,7 +8,8 @@
     "repl": "spago repl",
     "clean": "rm -rf output public/build node_modules/.cache",
     "build": "webpack -c webpack/config.js",
-    "lint": "eslint . --ext '.js,.jsx,.ts,.tsx'"
+    "lint": "eslint . --ext '.js,.jsx,.ts,.tsx'",
+    "start": "http-server --gzip --proxy http://localhost:8080?"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",
@@ -53,12 +54,15 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.12.5",
+    "chart.js": "^2.9.4",
     "core-js": "3",
     "d3-ease": "^2.0.0",
     "flubber": "^0.4.2",
+    "http-server": "^0.12.3",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-spring": "^8.0.27",
-    "styled-components": "^5.2.1"
+    "styled-components": "^5.2.1",
+    "xhr2": "^0.2.0"
   }
 }

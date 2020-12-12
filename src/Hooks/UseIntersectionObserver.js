@@ -1,0 +1,1 @@
+exports.isIntersectionObserverEntry = (a) => a instanceof IntersectionObserverEntry

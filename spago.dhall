@@ -4,7 +4,9 @@ You can edit this file as you like.
 -}
 { name = "my-project"
 , dependencies =
-  [ "console"
+  [ "affjax"
+  , "argonaut"
+  , "console"
   , "debug"
   , "effect"
   , "psci-support"

@@ -6,14 +6,23 @@ body {
   padding: 0;
   width: 100%;
   height: 100%;
+  font-size: 100%;
   font-family: 'Raleway', sans-serif;
+  overflow: hidden;
 }
 
 :global #root {
   position: relative;
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
   box-sizing: border-box;
   background: radial-gradient(circle, rgba(128,35,230,1) 0%, rgba(56,31,150,1) 77%, rgba(0,18,77,1) 100%);
+  overflow-x: hidden;
+  overflow-y: overlay;
+  scroll-snap-type: y mandatory;
+  -webkit-overflow-scrolling: touch;
 }
 
 :global #frame {
