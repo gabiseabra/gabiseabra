@@ -22,7 +22,7 @@ type Styles
 mkGithubPage :: forall a. Component a
 mkGithubPage = do
   stats <- GH.mkStats
-  repo <- GH.mkRepo
+  repoList <- GH.mkRepoList
   component "Repos" \_ -> React.do
     useFetch fetchRepos
       :>>= case _ of
@@ -33,5 +33,5 @@ mkGithubPage = do
             pure
               $ fragment
                   [ stats repos
-                  , fragment $ repos # map repo
+                  , repoList repos
                   ]

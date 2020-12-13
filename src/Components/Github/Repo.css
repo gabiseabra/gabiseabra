@@ -8,26 +8,10 @@
 
 .repo {
   box-sizing: border-box;
-  margin: 30px;
   height: 100%;
   width: 100%;
   font-size: 1rem;
   transition: transform 200ms linear;
-  background: black;
-
-  &.positionTop {
-    transform: scale(0.9) rotateX(15deg);
-
-    &.visibilityNone {
-      transform: scale(0.8) rotateX(45deg);
-    }
-  }
-
-  &.positionBottom {
-    transform: scale(0.9) rotateX(-15deg);
-
-    &.visibilityNone {
-      transform: scale(0.8) rotateX(-45deg);
-    }
-  }
+  background: thistle;
+  box-shadow: 0 0 0 10px black;
 }

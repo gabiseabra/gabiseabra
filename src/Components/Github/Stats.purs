@@ -20,13 +20,10 @@ import Type.Row (type (+))
 foreign import styles :: Styles
 
 type Styles
-  = Record
-      ( VisibilityStyles
-          + ( container :: String
-          , stats :: String
-          , languages :: String
-          )
-      )
+  = { container :: String
+    , stats :: String
+    , languages :: String
+    }
 
 extension :: String -> String
 extension lang
@@ -67,16 +64,11 @@ mkStats = do
               , children:
                   pure
                     $ DOM.div
-                        { className:
-                            foldl (.&)
-                              mempty
-                              [ styles.stats
-                              , maybe mempty (Cls.visibility styles) entry
-                              ]
+                        { className: styles.stats
                         , children:
                             [ DOM.div
                                 { className: styles.languages
-                                , children: [ chart { width: "100%", height: "100%", options: languagesChart repos } ]
+                                , children: [ chart { width: "500px", height: "500px", options: languagesChart repos } ]
                                 }
                             ]
                         }

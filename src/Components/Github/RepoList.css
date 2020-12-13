@@ -1,0 +1,31 @@
+.container {
+  height: 425vh;
+  width: 100vw;
+}
+
+.scene {
+  position: relative;
+  perspective: 100vh;
+  perspective-origin: center;
+  height: 50vh;
+  width: 100vw;
+}
+
+.list {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  transform-style: preserve-3d;
+  height: 50vh;
+  width: 100vw;
+}
+
+.item {
+  position: absolute;
+  height: 50vh;
+  width: 100vw;
+  padding: 30px;
+  box-sizing: border-box;
+  opacity: 0.5;
+}
