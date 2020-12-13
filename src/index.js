@@ -1,7 +1,8 @@
-import {Chart} from 'chart.js'
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Main from './Main'
 import './styles/main.css'
 
-// Chart.defaults.global.
+gsap.registerPlugin(ScrollTrigger);
 
 Main.main()

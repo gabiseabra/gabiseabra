@@ -8,21 +8,18 @@ body {
   height: 100%;
   font-size: 100%;
   font-family: 'Raleway', sans-serif;
-  overflow: hidden;
+}
+
+body {
+  -webkit-overflow-scrolling: touch;
+  background: radial-gradient(circle, rgba(128,35,230,1) 0%, rgba(56,31,150,1) 77%, rgba(0,18,77,1) 100%);
 }
 
 :global #root {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  width: 100vw;
+  height: auto;
   box-sizing: border-box;
-  background: radial-gradient(circle, rgba(128,35,230,1) 0%, rgba(56,31,150,1) 77%, rgba(0,18,77,1) 100%);
-  overflow-x: hidden;
-  overflow-y: overlay;
-  scroll-snap-type: y mandatory;
-  -webkit-overflow-scrolling: touch;
+  width: 100vw;
 }
 
 :global #frame {
