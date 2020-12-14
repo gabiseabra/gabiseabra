@@ -35,8 +35,8 @@ type ChartProps r
 
 chartProps =
   DefProps
-    { width: ""
-    , height: ""
+    { width: "100%"
+    , height: "100%"
     , className: ""
     } ::
     PropsRep (RequiredChartProps ()) OptionalChartProps

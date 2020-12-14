@@ -29,9 +29,9 @@ mkGithubPage = do
           Nothing -> pure $ DOM.text "loading..."
           Just { data: res } -> do
             let
-              repos = res.viewer.repos.nodes
+              repos = res.viewer.repositories.nodes
             pure
               $ fragment
-                  [ stats repos
+                  [ stats res.viewer
                   , repoList repos
                   ]

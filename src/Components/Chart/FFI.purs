@@ -1,6 +1,7 @@
 module Hey.Components.Chart.FFI
   ( Chart
   , ChartType(..)
+  , DataSet
   , ChartData
   , ChartOptions
   , create
@@ -30,13 +31,14 @@ instance showChartType :: Show ChartType where
 
 data Chart
 
+type DataSet =
+  { label :: Nullable String
+  , data :: Array Int
+  }
+
 type ChartData
   = { labels :: Array String
-    , datasets ::
-        Array
-          { label :: Nullable String
-          , data :: Array Int
-          }
+    , datasets :: Array DataSet
     }
 
 type ChartOptions_

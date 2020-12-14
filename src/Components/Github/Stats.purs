@@ -1,21 +1,22 @@
-module Hey.Components.Github.Stats (mkStats) where
+module Hey.Components.Github.Stats  where
 
 import Prelude
-import Data.Array (fromFoldable)
-import Data.Foldable (foldl, foldr)
+
+import Data.Array (elem, fold, fromFoldable)
+import Data.Bifunctor (rmap)
+import Data.Foldable (class Foldable, foldl, foldr)
+import Data.Map (Map)
 import Data.Map as Map
-import Data.Maybe (Maybe(..), maybe)
+import Data.Maybe (Maybe(..), fromMaybe, maybe)
 import Data.Nullable (notNull, null)
-import Data.String (toLower)
-import Hey.Api.Github (Repo)
-import Hey.Components.Chart (ChartOptions, ChartType(..), mkChart)
+import Data.Tuple (snd)
+import Data.Tuple.Nested (type (/\), (/\))
+import Hey.Api.Github (User, Repo)
+import Hey.Components.Chart (ChartData, ChartType(..), mkChart)
 import Hey.Hooks.UseIntersectionObserver (useIntersectionObserverEntry)
-import Hey.Styles (VisibilityStyles, (.&))
-import Hey.Styles as Cls
 import React.Basic.DOM as DOM
 import React.Basic.Hooks (Component, component, useRef)
 import React.Basic.Hooks as React
-import Type.Row (type (+))
 
 foreign import styles :: Styles
 
@@ -35,26 +36,33 @@ extension lang
   | lang == "elixir" = ".ex"
   | otherwise = "." <> lang
 
-languagesChart :: Array Repo -> ChartOptions
-languagesChart repos =
-  { type: Radar
-  , "data":
-      { labels
-      , datasets: [ { label: notNull "my repos", "data": values } ]
-      }
-  }
-  where
-  dataset = foldr (_.primaryLanguage >>> _.name >>> Map.alter (maybe 1 ((+) 1) >>> Just)) mempty repos
+collectData :: Array Repo -> Map String Int
+collectData = foldr (_.primaryLanguage >>> _.name >>> Map.alter (maybe 1 ((+) 1) >>> Just)) mempty
 
-  labels = map (toLower >>> extension) $ fromFoldable $ Map.keys dataset
+uniq :: forall f a . Eq a => Foldable f => Monoid (f a) => Applicative f => f a -> f a
+uniq = foldl (\as a ->
+    if a `elem` as
+    then as
+    else pure a <> as 
+  ) mempty
 
-  values = fromFoldable $ Map.values dataset
+languagesChart :: Array (String /\ Array Repo) -> ChartData
+languagesChart = map (rmap collectData) >>> \x ->
+    let labels = (map (snd >>> Map.keys) >>> fold >>> fromFoldable >>> uniq) x
+        datasets = x # map \(label /\ data') ->
+          { label: notNull label
+          , "data": labels # map ((flip Map.lookup) data' >>> fromMaybe 0)
+          }
+    in { labels: map extension labels, datasets: datasets }
 
-mkStats :: Component (Array Repo)
+mkStats :: Component User
 mkStats = do
   chart <- mkChart
   component "Repo"
-    $ \repos -> React.do
+    $ \user -> React.do
+        let data' = [ "my repositories" /\ user.repositories.nodes
+                    , "open source contributions" /\ user.contributions.nodes
+                    ]
         ref <- useRef null
         entry <- useIntersectionObserverEntry ref
         pure
@@ -62,14 +70,11 @@ mkStats = do
               { ref
               , className: styles.container
               , children:
-                  pure
-                    $ DOM.div
-                        { className: styles.stats
-                        , children:
-                            [ DOM.div
-                                { className: styles.languages
-                                , children: [ chart { width: "500px", height: "500px", options: languagesChart repos } ]
-                                }
-                            ]
-                        }
+                  [ DOM.div
+                      { className: styles.languages
+                      , children:
+                          [ chart { options: { "type": Radar, "data": languagesChart data'} }
+                          ]
+                      }
+                  ]
               }

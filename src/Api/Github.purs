@@ -12,14 +12,6 @@ import Data.Maybe (Maybe(..))
 import Hey.Hooks.UseFetch (Fetch(..))
 
 type Connection a
-  = { pageInfo ::
-        { hasNextPage :: Boolean
-        , endCursor :: String
-        }
-    , nodes :: Array a
-    }
-
-type Connection' a
   = { nodes :: Array a }
 
 type Count
@@ -30,16 +22,17 @@ type Language
 
 type Repo
   = { name :: String
-    , description :: Maybe String
-    , isFork :: Boolean
     , primaryLanguage :: Language
     }
 
+type User =
+  { repositories :: Connection Repo
+  , contributions :: Connection Repo
+  , forks :: Count
+  }
+
 type ReposQuery
-  = { viewer ::
-        { repos :: Connection Repo
-        , forks :: Count
-        }
+  = { viewer :: User
     }
 
 fetchRepos :: Fetch { data :: ReposQuery }
@@ -61,20 +54,23 @@ fetchRepos = Fetch "github/repos" req
         forks: repositories(isFork: true) {
           totalCount
         }
-        repos: repositories(first: 100, isFork: false) {
-          nodes {
-            name
-            description
-            isFork
-            primaryLanguage {
-              name
-              color
-            }
-          }
-          pageInfo {
-            hasNextPage
-            endCursor
-          }
+        repositories: repositories(first: 100, isFork: false) {
+          ...Repo
+        }
+        contributions: repositoriesContributedTo(first: 100) {
+          ...Repo
+        }
+      }
+    }
+
+    fragment Repo on RepositoryConnection {
+      nodes {
+        name
+        description
+        isFork
+        primaryLanguage {
+          name
+          color
         }
       }
     }
