@@ -4,9 +4,7 @@ module Hey.Pages.Landing
 
 import Prelude
 
-import Hey.Components.SVG.Blob (blob)
-import Hey.Components.SVG.Definition (def)
-import Hey.Components.SVG.Filters (goo)
+import Hey.Components.Hole (hole)
 import Hey.Hooks.UseViewportSize (ViewportSize, useViewportSize)
 import React.Basic (JSX)
 import React.Basic.DOM as DOM
@@ -18,18 +16,8 @@ foreign import styles :: Styles
 
 type Styles =
   { page :: String
-  , content :: String
   }
 
-svgDefs :: ViewportSize -> JSX
-svgDefs { width, height } = def width height
-  [ SVG.clipPath
-    { id: "big-blob"
-    , clipPathUnits: "objectBoundingBox"
-    , children: [ blob ]
-    }
-  , goo "goo"
-  ]
 
 mkLandingPage :: forall a . Component a
 mkLandingPage = component "Landing" \_ -> React.do
@@ -37,12 +25,6 @@ mkLandingPage = component "Landing" \_ -> React.do
   pure
     $ DOM.div
     { className: styles.page
-    , children:
-      [ DOM.div
-        { className: styles.content
-        , children: [ DOM.text "lmaoo" ]
-        }
-      , svgDefs viewport
-      ]
+    , children: [ hole ]
     }
   

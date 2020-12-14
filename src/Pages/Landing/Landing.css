@@ -1,0 +1,13 @@
+.page {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle, rgba(128,35,230,1) 0%, rgba(56,31,150,1) 77%, rgba(0,18,77,1) 100%);
+}
+
+.hole {
+  mix-blend-mode: color-dodge;
+}
