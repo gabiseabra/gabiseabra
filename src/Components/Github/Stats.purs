@@ -9,10 +9,12 @@ import Data.Map (Map)
 import Data.Map as Map
 import Data.Maybe (Maybe(..), fromMaybe, maybe)
 import Data.Nullable (notNull, null)
+import Data.String (toLower)
 import Data.Tuple (snd)
 import Data.Tuple.Nested (type (/\), (/\))
 import Hey.Api.Github (User, Repo)
 import Hey.Components.Chart (ChartData, ChartType(..), mkChart)
+import Hey.Components.Chart.FFI (RGB)
 import Hey.Hooks.UseIntersectionObserver (useIntersectionObserverEntry)
 import React.Basic.DOM as DOM
 import React.Basic.Hooks (Component, component, useRef)
@@ -46,22 +48,23 @@ uniq = foldl (\as a ->
     else pure a <> as 
   ) mempty
 
-languagesChart :: Array (String /\ Array Repo) -> ChartData
+languagesChart :: Array ({label :: String, color :: RGB } /\ Array Repo) -> ChartData
 languagesChart = map (rmap collectData) >>> \x ->
     let labels = (map (snd >>> Map.keys) >>> fold >>> fromFoldable >>> uniq) x
-        datasets = x # map \(label /\ data') ->
-          { label: notNull label
+        datasets = x # map \({ label, color } /\ data') ->
+          { color: notNull color
+          , label: notNull label
           , "data": labels # map ((flip Map.lookup) data' >>> fromMaybe 0)
           }
-    in { labels: map extension labels, datasets: datasets }
+    in { labels: map (toLower >>> extension) labels, datasets: datasets }
 
 mkStats :: Component User
 mkStats = do
   chart <- mkChart
   component "Repo"
     $ \user -> React.do
-        let data' = [ "my repositories" /\ user.repositories.nodes
-                    , "open source contributions" /\ user.contributions.nodes
+        let data' = [ { label: "my repositories", color: [247, 99, 153] } /\ user.repositories.nodes
+                    , { label: "open source contributions", color: [52, 217, 165] } /\ user.contributions.nodes
                     ]
         ref <- useRef null
         entry <- useIntersectionObserverEntry ref

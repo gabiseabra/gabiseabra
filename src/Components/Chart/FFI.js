@@ -2,8 +2,27 @@
 
 const {Chart} = require('chart.js')
 
-exports.create_ = (opts) => (element) => () =>
-  new Chart(element.getContext('2d'), opts)
+const rgba = (rgb, a) => `rgb(${rgb.join(',')},${a})`
+
+const parseData = {
+  radar: ({labels, color, datasets}) => ({
+    labels,
+    datasets: datasets.map(({ label, color, data }) => ({
+      label,
+      data,
+      backgroundColor: rgba(color, 0.2),
+      borderColor: rgba(color, 1),
+      borderWidth: 1,
+      pointBackgroundColor: 'transparent',
+      pointHoverBackgroundColor: 'transparent',
+      pointBorderColor: 'transparent',
+      pointHoverBorderColor: 'transparent'
+    }))
+  })
+}
+
+exports.create_ = ({type, data}) => (element) => () =>
+  new Chart(element.getContext('2d'), {type, data: parseData[type](data)})
 
 exports.destroy = (chart) => () => chart.destroy()
 

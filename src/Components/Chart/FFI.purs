@@ -1,6 +1,7 @@
 module Hey.Components.Chart.FFI
   ( Chart
   , ChartType(..)
+  , RGB
   , DataSet
   , ChartData
   , ChartOptions
@@ -31,8 +32,11 @@ instance showChartType :: Show ChartType where
 
 data Chart
 
+type RGB = Array Int
+
 type DataSet =
   { label :: Nullable String
+  , color :: Nullable RGB
   , data :: Array Int
   }
 
