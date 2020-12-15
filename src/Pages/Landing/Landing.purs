@@ -43,15 +43,12 @@ mkLandingPage = do
             ]
           }
         , DOM.div
-          { className: styles.content
-          , children: pure $ DOM.div
-              { className: styles.text
-              , children: pure $ perspectiveText
-                  { targetRef: Just ref
-                  , before: Just "Hi, I'm"
-                  , text: "Gabi Seabra"
-                  , after: Just ", software developer"
-                  }
+          { className: styles.text
+          , children: pure $ perspectiveText
+              { targetRef: Just ref
+              , before: Just "Hi, I'm"
+              , text: "Gabi Seabra"
+              , after: Just ", software developer"
               }
           }
         ]
