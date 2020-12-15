@@ -1,0 +1,69 @@
+$layers: 15;
+$step-z: 5px;
+$size: 8vh;
+
+.container {
+  position: relative;
+  font-size: $size;
+  line-height: 0.75em;
+  max-width: 90vw;
+  width: max-content;
+  perspective: 100px;
+  perspective-origin: center;
+  font-family: 'Source Code Pro', monospace;
+  text-transform: uppercase;
+
+  & > .placeholder {
+    pointer-events: none;
+    visibility: hidden;
+    height: 0.75em;
+    display: block;
+  }
+
+  & > svg {
+    z-index: -100;
+    pointer-events: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+  }
+}
+
+.layers {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  transform: translateZ(calc(($(layers) - 2) * -1 * $(step-z)));
+  transform-style: preserve-3d;
+
+  & > span {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    transform-style: preserve-3d;
+    font-weight: bold;
+    color: black;
+    text-shadow:
+      -1px -1px 0 white,
+      1px -1px 0 white,
+      -1px 1px 0 white,
+      1px 1px 0 white;
+    will-change: transform;
+  }
+}
+
+@supports -webkit-text-stroke {
+  .layers > span {
+    -webkit-text-stroke: 2px white;
+    text-shadow: none;
+  }
+}
+
+@for $i from 1 to $layers {
+  .layers > span:nth-child($i) {
+    transform: translateZ(calc(($(i) - 1) * $(step-z)));
+    opacity: calc($(i) / $(layers));
+  }
+}
