@@ -9,11 +9,11 @@ module.exports = {
   plugins: [
     stylelint(),
     precss(),
-    calc(),
     random(),
     customMedia({
       importFrom: ['./src/styles/media.css']
     }),
+    calc(),
     autoprefixer()
   ]
 }

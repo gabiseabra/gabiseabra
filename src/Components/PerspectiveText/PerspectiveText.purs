@@ -18,6 +18,8 @@ foreign import styles :: Styles
 type Styles =
   { container :: String
   , layers :: String
+  , before :: String
+  , after :: String
   , placeholder :: String
   }
 
@@ -30,8 +32,8 @@ type RequiredPerspectiveTextProps r
 
 type OptionalPerspectiveTextProps
   = ( targetRef :: Maybe (Ref (Nullable Node))
-    , before :: JSX
-    , after :: JSX
+    , before :: Maybe String
+    , after :: Maybe String
     )
 
 type PerspectiveTextProps r = Record (RequiredPerspectiveTextProps r)
@@ -39,16 +41,28 @@ type PerspectiveTextProps r = Record (RequiredPerspectiveTextProps r)
 perspectiveTextProps =
   DefProps
     { targetRef: Nothing
-    , before: mempty :: JSX
-    , after: mempty :: JSX
+    , before: Nothing
+    , after: Nothing
     } ::
     PropsRep (RequiredPerspectiveTextProps ()) OptionalPerspectiveTextProps
+
+before :: String -> JSX
+before text = DOM.div
+  { className: styles.before
+  , children: [ DOM.span_ [ DOM.text text ] ]
+  }
+
+after :: String -> JSX
+after text = DOM.div
+  { className: styles.after
+  , children: [ DOM.span_ [ DOM.text text ] ]
+  }
 
 mkPerspectiveText :: forall opts opts'. Row.Union opts opts' OptionalPerspectiveTextProps => Component (PerspectiveTextProps opts)
 mkPerspectiveText =
   component "PerspectiveText"
   $ runProps perspectiveTextProps
-  >>> \{ targetRef, text, before, after } -> React.do
+  >>> \{ targetRef, text, before: beforeText, after: afterText } -> React.do
     useEffectOnce
       $ maybe (pure Nothing) readRefMaybe targetRef
       >>= case _ of 
@@ -59,13 +73,15 @@ mkPerspectiveText =
     pure $ DOM.div
       { className: styles.container
       , children:
-          [ DOM.div
-            { className: styles.layers
-            , children: replicate 15 $ DOM.span_ $ [ DOM.text text ]
-            }
-          , DOM.span
+          [ DOM.span
             { className: styles.placeholder
             , children: [ DOM.text text ]
             }
+          , maybe mempty after afterText
+          , DOM.div
+            { className: styles.layers
+            , children: replicate 15 $ DOM.span_ $ [ DOM.text text ]
+            }
+          , maybe mempty before beforeText
           ]
       }

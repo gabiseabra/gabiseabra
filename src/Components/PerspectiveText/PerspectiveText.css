@@ -10,13 +10,12 @@ $size: 8vh;
   width: max-content;
   perspective: 100px;
   perspective-origin: center;
-  font-family: 'Source Code Pro', monospace;
-  text-transform: uppercase;
 
   & > .placeholder {
+    font-family: 'Source Code Pro', monospace;
+    text-transform: uppercase;
     pointer-events: none;
     visibility: hidden;
-    height: 0.75em;
     display: block;
   }
 
@@ -37,6 +36,8 @@ $size: 8vh;
   left: 0;
   transform: translateZ(calc(($(layers) - 2) * -1 * $(step-z)));
   transform-style: preserve-3d;
+  font-family: 'Source Code Pro', monospace;
+  text-transform: uppercase;
 
   & > span {
     width: 100%;
@@ -51,6 +52,12 @@ $size: 8vh;
       -1px 1px 0 white,
       1px 1px 0 white;
     will-change: transform;
+    text-align: center;
+    user-select: none;
+
+    &:last-child {
+      user-select: all;
+    }
   }
 }
 
@@ -65,5 +72,56 @@ $size: 8vh;
   .layers > span:nth-child($i) {
     transform: translateZ(calc(($(i) - 1) * $(step-z)));
     opacity: calc($(i) / $(layers));
+  }
+}
+
+.before,
+.after {
+  z-index: 1;
+  position: absolute;
+  font-family: 'Audiowide';
+  color: white;
+  transform: translateZ(calc($(layers) * -1 * $(step-z)));
+  transform-style: preserve-3d;
+
+  & > span {
+    position: absolute;
+    transform-style: preserve-3d;
+    transform: translateZ(calc($(layers) * $(step-z)));
+    white-space: nowrap;
+    text-shadow:
+      0 0 20px white,
+      0 0 15px white;
+  }
+}
+
+.before {
+  font-size: 3.5vh;
+  top: -100%;
+  display: flex;
+  justify-content: flex-start;
+  left: 0;
+}
+
+@media (--screen-sm-max) {
+  .before {
+    top: -50%;
+    left: 25%;
+  }
+}
+
+.after {
+  font-size: 2.5vh;
+  bottom: 0;
+  display: flex;
+  justify-content: flex-end;
+  right: 0;
+
+  &::before {
+    position: absolution;
+    display: block;
+    content: ' ';
+    background: red;
+    clip-path: polygon(0 20%, 100% 0, 100% 100%, 0 83%);
   }
 }

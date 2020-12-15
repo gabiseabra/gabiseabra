@@ -6,9 +6,7 @@ const styles = require('./RepoList.css')
 
 const rad = 135
 
-const invert = (fun) => (idx, el, items) => {
-  return fun((items.length - 1) - idx, el, items)
-}
+const invert = (fun) => (idx, el, items) => fun((items.length - 1) - idx, el, items)
 
 const opacity = (idx, el, items) => {
   const length = items.length - 1
@@ -47,7 +45,7 @@ exports.animate = (container) => {
     z
   })
   gsap.set(list, { z: -1 * z })
-  // Rotate carousel
+  // Rotate carousel on scroll
   gsap.to(list, {
     rotateX: rad,
     scrollTrigger: {
