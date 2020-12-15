@@ -2,119 +2,14 @@ $size: 70vh;
 $blob-color: #0b005f;
 $blob-shadow: #6e00ff;
 
-.blob {
-  position: absolute;
-  width: $size;
-  height: $size;
-  top: 50%;
-  left: 50%;
-  margin-top: calc($size / -2);
-  margin-left: calc($size / -2);
-  border-radius: 50%;
-  overflow: hidden;
-  mix-blend-mode: multiply;
+.container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  mix-blend-mode: color-dodge;
 
-  & > div {
-    position: absolute;
-    border-radius: 50%;
-    width: 95%;
-    height: 97%;
-    top: 1.5%;
-    left: 2.5%;
-    background: $blob-color;
-    opacity: 0.3333;
-    will-change: transform;
-  }
-}
-
-@keyframes blob0 {
-  0% {
-    transform:
-      rotate(0deg)
-      scale(1)
-      translateY(0);
-    box-shadow: 0 0 10vh 0 inset $blob-shadow;
-  }
-
-  50% {
-    transform:
-      rotate(180deg)
-      scale(1.04)
-      translateY(10px);
-    box-shadow: 0 0 30vh 0 inset $blob-shadow;
-  }
-
-  100% {
-    transform:
-      rotate(360deg)
-      scale(1)
-      translateY(0);
-    box-shadow: 0 0 10vh 0 inset $blob-shadow;
-  }
-}
-
-.blob div:nth-child(1) {
-  animation: blob0 linear 5s infinite;
-}
-
-@keyframes blob1 {
-  0% {
-    transform:
-      rotate(0deg)
-      scale(1.05)
-      translateY(0);
-    box-shadow: 0 0 15vh 0 inset $blob-shadow;
-  }
-
-  50% {
-    transform:
-      rotate(180deg)
-      scale(1)
-      translateY(10px);
-    box-shadow: 0 0 10vh 0 inset $blob-shadow;
-  }
-
-  100% {
-    transform:
-      rotate(360deg)
-      scale(1.05)
-      translateY(0);
-    box-shadow: 0 0 15vh 0 inset $blob-shadow;
-  }
-}
-
-.blob div:nth-child(2) {
-  animation: blob1 linear 4s infinite;
-}
-
-@keyframes blob2 {
-  0% {
-    transform:
-      rotate(0deg)
-      scale(1)
-      translateY(-10px);
-    box-shadow: 0 0 10vh 0 inset $blob-shadow;
-  }
-
-  50% {
-    transform:
-      rotate(180deg)
-      scale(1.02)
-      translateY(0);
-    box-shadow: 0 0 20vh 0 inset $blob-shadow;
-  }
-
-  100% {
-    transform:
-      rotate(360deg)
-      scale(1)
-      translateY(-10px);
-    box-shadow: 0 0 10vh 0 inset $blob-shadow;
-  }
-}
-
-.blob div:nth-child(3) {
-  animation: blob2 linear 3s infinite;
+  &,
+  & * { will-change: transform; }
 }
 
 .glow {
@@ -126,32 +21,32 @@ $blob-shadow: #6e00ff;
   margin-top: calc(($size * 1.1) / -2);
   margin-left: calc(($size * 1.1) / -2);
   filter: blur(50px);
-  mix-blend-mode: color-dodge;
+  pointer-events: none;
 
   & > div {
     position: absolute;
     width: 90%;
     height: 100%;
     border-radius: 50%;
-    will-change: transform;
   }
 }
 
 @keyframes glow0 {
-  from { transform: rotate(90deg) translate(1vh, 5vh) rotate(-90deg); }
-  to { transform: rotate(450deg) translate(1vh, 5vh) rotate(-450deg); }
+  from { transform: rotate(90deg) translate3d(1vh, 5vh, 0) rotate(-90deg); }
+  to { transform: rotate(450deg) translate3d(1vh, 5vh, 0) rotate(-450deg); }
 }
 
 .glow > div:nth-child(1) {
   background: pink;
   width: 100%;
   left: 0;
-  animation: glow0 linear 5s infinite;
+  animation: glow0 cubic-bezier(0.85, 0, 0.15, 1) 5s infinite;
+  animation-direction: alternate;
 }
 
 @keyframes glow1 {
-  from { transform: rotate(90deg) translate(-1vh, -5vh) rotate(-90deg); }
-  to { transform: rotate(450deg) translate(-1vh, -5vh) rotate(-450deg); }
+  from { transform: rotate(90deg) translate3d(-1vh, -5vh, 0) rotate(-90deg); }
+  to { transform: rotate(450deg) translate3d(-1vh, -5vh, 0) rotate(-450deg); }
 }
 
 .glow > div:nth-child(2) {
@@ -160,9 +55,28 @@ $blob-shadow: #6e00ff;
   animation: glow1 linear 7s infinite;
 }
 
+/*
+
+@keyframes glow3 {
+  from { transform: rotate(90deg) translate3d(-5px, -5px, 0) rotate(-90deg); }
+  to { transform: rotate(450deg) translate3d(-5px, -5px, 0) rotate(-450deg); }
+}
+
+.glow > div:nth-child(3) {
+  width: 60%;
+  height: 65%;
+  top: 17.5%;
+  left: 20%;
+  background: black;
+  right: 0;
+  animation: glow3 linear 2s infinite;
+}
+
+*/
+
 @keyframes ring {
-  0% { transform: rotate(90deg) translate(-2px, 2px) rotate(-90deg); }
-  100% { transform: rotate(450deg) translate(-2px, 2px) rotate(-450deg); }
+  0% { transform: rotate(90deg) translate3d(-2px, 2px, 0) rotate(-90deg); }
+  100% { transform: rotate(450deg) translate3d(-2px, 2px, 0) rotate(-450deg); }
 }
 
 .ring {
@@ -173,7 +87,7 @@ $blob-shadow: #6e00ff;
   left: 50%;
   margin-top: calc($size / -2);
   margin-left: calc($size / -2);
-  mix-blend-mode: screen;
+  pointer-events: none;
 
   & > div {
     border-radius: 50%;
@@ -186,10 +100,9 @@ $blob-shadow: #6e00ff;
     background: $blob-shadow;
     filter: blur(15px);
     animation: ring linear 2s infinite;
-    will-change: transform;
   }
 
   & > div:nth-child(2) {
-    background: black;
+    background: rgb(73, 57, 89);
   }
 }

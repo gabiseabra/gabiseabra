@@ -9,6 +9,9 @@
   perspective-origin: center;
   height: 50vh;
   width: 100vw;
+
+  &,
+  & * { will-change: transform; }
 }
 
 .list {
