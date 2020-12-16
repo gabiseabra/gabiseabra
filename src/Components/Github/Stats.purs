@@ -1,7 +1,6 @@
-module Hey.Components.Github.Stats  where
+module Hey.Components.Github.Stats where
 
 import Prelude
-
 import Data.Array (elem, fold, fromFoldable)
 import Data.Bifunctor (rmap)
 import Data.Foldable (class Foldable, foldl, foldr)
@@ -41,31 +40,44 @@ extension lang
 collectData :: Array RepoInfo -> Map String Int
 collectData = foldr (_.primaryLanguage >>> _.name >>> Map.alter (maybe 1 ((+) 1) >>> Just)) mempty
 
-uniq :: forall f a . Eq a => Foldable f => Monoid (f a) => Applicative f => f a -> f a
-uniq = foldl (\as a ->
-    if a `elem` as
-    then as
-    else pure a <> as 
-  ) mempty
+uniq :: forall f a. Eq a => Foldable f => Monoid (f a) => Applicative f => f a -> f a
+uniq =
+  foldl
+    ( \as a ->
+        if a `elem` as then
+          as
+        else
+          pure a <> as
+    )
+    mempty
 
-languagesChart :: Array ({label :: String, color :: RGB } /\ Array RepoInfo) -> ChartData
-languagesChart = map (rmap collectData) >>> \x ->
-    let labels = (map (snd >>> Map.keys) >>> fold >>> fromFoldable >>> uniq) x
-        datasets = x # map \({ label, color } /\ data') ->
-          { color: notNull color
-          , label: notNull label
-          , "data": labels # map ((flip Map.lookup) data' >>> fromMaybe 0)
-          }
-    in { labels: map (toLower >>> extension) labels, datasets: datasets }
+languagesChart :: Array ({ label :: String, color :: RGB } /\ Array RepoInfo) -> ChartData
+languagesChart =
+  map (rmap collectData)
+    >>> \x ->
+        let
+          labels = (map (snd >>> Map.keys) >>> fold >>> fromFoldable >>> uniq) x
+
+          datasets =
+            x
+              # map \({ label, color } /\ data') ->
+                  { color: notNull color
+                  , label: notNull label
+                  , "data": labels # map ((flip Map.lookup) data' >>> fromMaybe 0)
+                  }
+        in
+          { labels: map (toLower >>> extension) labels, datasets: datasets }
 
 mkStats :: Component User
 mkStats = do
   chart <- mkChart
   component "Repo"
     $ \user -> React.do
-        let data' = [ { label: "my repositories", color: [247, 99, 153] } /\ user.repositories.nodes
-                    , { label: "open source contributions", color: [52, 217, 165] } /\ user.contributions.nodes
-                    ]
+        let
+          data' =
+            [ { label: "my repositories", color: [ 247, 99, 153 ] } /\ user.repositories.nodes
+            , { label: "open source contributions", color: [ 52, 217, 165 ] } /\ user.contributions.nodes
+            ]
         ref <- useRef null
         entry <- useIntersectionObserverEntry ref
         pure
@@ -76,7 +88,7 @@ mkStats = do
                   [ DOM.div
                       { className: styles.languages
                       , children:
-                          [ chart { options: { "type": Radar, "data": languagesChart data'} }
+                          [ chart { options: { "type": Radar, "data": languagesChart data' } }
                           ]
                       }
                   ]

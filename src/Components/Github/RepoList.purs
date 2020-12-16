@@ -46,6 +46,7 @@ carousel children =
                 }
     }
 
+-- | Calculate snap points centered at each slide, relative to the container element
 snapPoints :: Int -> HTMLElement -> Effect (Array Number)
 snapPoints count el = do
   vh <- window >>= Window.innerHeight >>= toNumber >>> pure

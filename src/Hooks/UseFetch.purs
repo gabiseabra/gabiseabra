@@ -42,7 +42,7 @@ newtype UseFetch a hooks
   = UseFetch
   (UseAff Hash a (UseContext FetchContext hooks))
 
-derive instance newtypeUseRouter :: Newtype (UseFetch a hooks) _
+derive instance newtypeUseFetch :: Newtype (UseFetch a hooks) _
 
 ctx :: ReactContext FetchContext
 ctx = unsafePerformEffect $ createContext $ Map.empty /\ (\_ _ -> throw "useFetch: Tried to modify uninitialized fetch cache.")
@@ -52,7 +52,7 @@ fetchProvider = element $ contextProvider ctx
 
 mkFetchProvider :: Component (Array JSX)
 mkFetchProvider =
-  component "Carousel"
+  component "FetchProvider"
     $ \children -> React.do
         cache /\ setCache <- useState Map.empty
         pure $ fetchProvider { children, value: cache /\ \k v -> setCache $ Map.insert k v }
