@@ -1,6 +1,7 @@
 module Hey.Components.Github.Repo (mkRepo) where
 
 import Prelude
+
 import Data.Foldable (foldl)
 import Data.Maybe (maybe)
 import Data.Nullable (null)
@@ -28,11 +29,19 @@ type Styles
 mkRepo :: Component Repo
 mkRepo =
   component "GithubRepo"
-    $ \repo -> React.do
+    $ \{ name, description, languages } -> React.do
         pure
           $ DOM.div
-              { className: styles.repo
-              , children:
-                  [ DOM.text repo.name
-                  ]
+              { className: styles.container
+              , children: pure
+                  $ DOM.article
+                    { className: styles.repo
+                    , children:
+                      [ DOM.h2_ [ DOM.text name ]
+                      , DOM.p_ [ maybe mempty DOM.text description ]
+                      , DOM.footer_
+                          $ languages.nodes
+                          <#> \lang -> DOM.span_ [ DOM.text lang.name ]
+                      ]
+                    }
               }

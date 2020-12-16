@@ -12,7 +12,7 @@ import Data.Nullable (notNull, null)
 import Data.String (toLower)
 import Data.Tuple (snd)
 import Data.Tuple.Nested (type (/\), (/\))
-import Hey.Api.Github (User, Repo)
+import Hey.Api.Github (User, RepoInfo)
 import Hey.Components.Chart (ChartData, ChartType(..), mkChart)
 import Hey.Components.Chart.FFI (RGB)
 import Hey.Hooks.UseIntersectionObserver (useIntersectionObserverEntry)
@@ -38,7 +38,7 @@ extension lang
   | lang == "elixir" = ".ex"
   | otherwise = "." <> lang
 
-collectData :: Array Repo -> Map String Int
+collectData :: Array RepoInfo -> Map String Int
 collectData = foldr (_.primaryLanguage >>> _.name >>> Map.alter (maybe 1 ((+) 1) >>> Just)) mempty
 
 uniq :: forall f a . Eq a => Foldable f => Monoid (f a) => Applicative f => f a -> f a
@@ -48,7 +48,7 @@ uniq = foldl (\as a ->
     else pure a <> as 
   ) mempty
 
-languagesChart :: Array ({label :: String, color :: RGB } /\ Array Repo) -> ChartData
+languagesChart :: Array ({label :: String, color :: RGB } /\ Array RepoInfo) -> ChartData
 languagesChart = map (rmap collectData) >>> \x ->
     let labels = (map (snd >>> Map.keys) >>> fold >>> fromFoldable >>> uniq) x
         datasets = x # map \({ label, color } /\ data') ->

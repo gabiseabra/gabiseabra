@@ -1,6 +1,7 @@
 module Hey.Api.Github where
 
 import Prelude
+
 import Affjax as AX
 import Affjax.RequestBody as Req
 import Affjax.RequestHeader (RequestHeader(..))
@@ -9,6 +10,7 @@ import Data.Argonaut (encodeJson)
 import Data.Either (Either(..))
 import Data.HTTP.Method (Method(..))
 import Data.Maybe (Maybe(..))
+import Hey.Data.JSON (JDateTime)
 import Hey.Hooks.UseFetch (Fetch(..))
 
 type Connection a
@@ -20,23 +22,32 @@ type Count
 type Language
   = { name :: String, color :: Maybe String }
 
-type Repo
+type RepoInfo
   = { name :: String
     , primaryLanguage :: Language
     }
 
+type Repo
+  = { name :: String
+    , description :: Maybe String
+    , isFork :: Boolean
+    , createdAt :: JDateTime
+    , languages :: Connection Language
+    }
+
 type User =
-  { repositories :: Connection Repo
-  , contributions :: Connection Repo
+  { repositories :: Connection RepoInfo
+  , contributions :: Connection RepoInfo
+  , featured :: Connection Repo
   , forks :: Count
   }
 
-type ReposQuery
+type ViewerQuery
   = { viewer :: User
     }
 
-fetchRepos :: Fetch { data :: ReposQuery }
-fetchRepos = Fetch "github/repos" req
+fetchViewer :: Fetch { data :: ViewerQuery }
+fetchViewer = Fetch "github/viewer" req
   where
   req =
     AX.defaultRequest
@@ -55,23 +66,36 @@ fetchRepos = Fetch "github/repos" req
           totalCount
         }
         repositories: repositories(first: 100, isFork: false) {
-          ...Repo
+          nodes { ...RepoInfo }
         }
         contributions: repositoriesContributedTo(first: 100) {
-          ...Repo
+          nodes { ...RepoInfo }
+        }
+        featured: pinnedItems(first: 6, types: [REPOSITORY]) {
+          nodes {
+            ... on Repository { ...Repo }
+          }
         }
       }
     }
 
-    fragment Repo on RepositoryConnection {
-      nodes {
-        name
-        description
-        isFork
-        primaryLanguage {
-          name
-          color
-        }
+    fragment Language on Language {
+      name
+      color
+    }
+
+    fragment RepoInfo on Repository {
+      name
+      primaryLanguage { ...Language }
+    }
+  
+    fragment Repo on Repository {
+      name
+      description
+      isFork
+      createdAt
+      languages(first: 3) {
+        nodes { ...Language }
       }
     }
     """
