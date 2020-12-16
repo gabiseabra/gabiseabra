@@ -4,7 +4,9 @@ const {gsap} = require('gsap')
 
 const styles = require('./RepoList.css')
 
-const rad = 135
+const rad = 135.0
+
+const easing = 'linear'
 
 const invert = (fun) => (idx, el, items) => fun((items.length - 1) - idx, el, items)
 
@@ -32,8 +34,9 @@ exports.animate = (container) => {
   const items = container.querySelectorAll("." + styles.item)
   const length = items.length - 1
 
+  // Starts when the first slide (50vh tall) is at the center of the viewport
   const start = () =>  container.offsetTop - window.innerHeight * 0.25
-  const end = () => '+=' + container.offsetHeight
+  const end = () => '+=' + (container.offsetHeight)
 
   const z = translateZ(window.innerHeight * 0.5, length * (360 / rad))
 
@@ -45,9 +48,11 @@ exports.animate = (container) => {
     z
   })
   gsap.set(list, { z: -1 * z })
+
   // Rotate carousel on scroll
-  gsap.to(list, {
+  const tween = gsap.to(list, {
     rotateX: rad,
+    ease: easing,
     scrollTrigger: {
       target: container,
       pin: scene,
@@ -57,8 +62,10 @@ exports.animate = (container) => {
       end
     }
   })
+
   // Animate opacity of carousel items
   const timeline = gsap.timeline({
+    ease: easing,
     scrollTrigger: {
       target: container,
       scrub: true,
@@ -71,6 +78,11 @@ exports.animate = (container) => {
       .to(it, { opacity: 1 }, idx / items)
       .to(it, { opacity: invert(opacity)(idx, it, items) }, 1)
   })
+
+  return () => {
+    tween.kill()
+    timeline.kill()
+  }
 }
 
 exports.styles = styles

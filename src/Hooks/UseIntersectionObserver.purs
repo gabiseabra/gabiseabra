@@ -2,9 +2,7 @@ module Hey.Hooks.UseIntersectionObserver
   ( IntersectionObserverOptions
   , IntersectionObserverFn
   , defOptions
-  , intersectionObserverProvider
-  , UseIntersectionObserver
-  , useIntersectionObserver
+  , mkIntersectionObserverProvider
   , UseIntersectionObserverEntry
   , useIntersectionObserverEntry
   , UseIntersectionObserverContext
@@ -23,7 +21,7 @@ import Effect (Effect)
 import Effect.Unsafe (unsafePerformEffect)
 import Foreign (Foreign)
 import Hey.Extra.CustomEvent (customEvent, detail)
-import React.Basic.Hooks (Hook, JSX, ReactContext, Ref, UseContext, UseEffect, UseState, coerceHook, contextProvider, createContext, element, readRefMaybe, useContext, useEffect, useEffectOnce, useState)
+import React.Basic.Hooks (Component, Hook, JSX, ReactContext, Ref, UseContext, UseEffect, UseState, coerceHook, component, contextProvider, createContext, element, readRefMaybe, useContext, useEffect, useEffectOnce, useState)
 import React.Basic.Hooks as React
 import Unsafe.Coerce (unsafeCoerce)
 import Web.DOM (Element, Node)
@@ -91,6 +89,13 @@ ctx = unsafePerformEffect $ createContext Nothing
 intersectionObserverProvider :: { children :: Array JSX, value :: Maybe IntersectionObserver } -> JSX
 intersectionObserverProvider = element $ contextProvider ctx
 
+mkIntersectionObserverProvider :: IntersectionObserverOptions -> Component (Array JSX)
+mkIntersectionObserverProvider opts =
+  component "IntersectionObserverProvider"
+    $ \children -> React.do
+        observer <- useIntersectionObserver opts
+        pure $ intersectionObserverProvider { children, value: observer }
+
 type UseIntersectionObserverContext
   = UseContext (Maybe IntersectionObserver)
 
@@ -103,13 +108,13 @@ newtype UseIntersectionObserver hooks
 
 derive instance newtypeUseIntersectionObserver :: Newtype (UseIntersectionObserver hooks) _
 
-useIntersectionObserver :: Effect IntersectionObserverOptions -> Hook UseIntersectionObserver (Maybe IntersectionObserver)
+useIntersectionObserver :: IntersectionObserverOptions -> Hook UseIntersectionObserver (Maybe IntersectionObserver)
 useIntersectionObserver opts =
   coerceHook
     $ React.do
         observer /\ setObserver <- useState Nothing
-        useEffectOnce $ opts
-          >>= mkObserver
+        useEffectOnce
+          $ mkObserver opts
           >>= case _ of
               Nothing -> pure mempty
               Just obs -> do

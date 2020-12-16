@@ -1,4 +1,8 @@
 .container {
+  margin-bottom: 50vh;
+}
+
+.scroller {
   height: 425vh;
   width: 100vw;
 }
@@ -31,4 +35,5 @@
   padding: 30px;
   box-sizing: border-box;
   opacity: 0.5;
+  outline: 3px solid red;
 }

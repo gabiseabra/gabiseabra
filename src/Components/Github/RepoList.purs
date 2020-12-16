@@ -1,27 +1,36 @@
 module Hey.Components.Github.RepoList (mkRepoList) where
 
 import Prelude
-import Data.Array (take)
-import Data.Maybe (Maybe(..))
+import Data.Array (length)
+import Data.Int (toNumber)
+import Data.Maybe (Maybe(..), maybe)
 import Data.Nullable (null)
+import Data.Tuple.Nested ((/\))
+import Data.Unfoldable (unfoldr)
+import Effect (Effect)
 import Effect.Exception (throw)
 import Effect.Uncurried (EffectFn1, runEffectFn1)
 import Hey.Api.Github (Repo)
 import Hey.Components.Github.Repo (mkRepo)
+import Hey.Hooks.UseSnapPoints (useSnapPoint)
 import React.Basic.DOM as DOM
 import React.Basic.Hooks (Component, JSX, component, readRefMaybe, useEffectOnce, useRef)
 import React.Basic.Hooks as React
 import Web.DOM (Node)
+import Web.HTML (HTMLElement, window)
+import Web.HTML.HTMLElement as HTMLElement
+import Web.HTML.Window as Window
 
 foreign import styles :: Styles
 
-foreign import animate :: EffectFn1 Node Unit
+foreign import animate :: EffectFn1 Node (Effect Unit)
 
 type Styles
-  = { list :: String
-    , item :: String
+  = { container :: String
+    , scroller :: String
     , scene :: String
-    , container :: String
+    , list :: String
+    , item :: String
     }
 
 carousel :: Array JSX -> JSX
@@ -37,31 +46,47 @@ carousel children =
                 }
     }
 
+snapPoints :: Int -> HTMLElement -> Effect (Array Number)
+snapPoints count el = do
+  vh <- window >>= Window.innerHeight >>= toNumber >>> pure
+  y <- HTMLElement.offsetTop el
+  h <- HTMLElement.offsetHeight el
+  let
+    x0 = y - vh * 0.25
+
+    xh = h `div` toNumber (count - 1)
+
+    foldx n
+      | n == -1 = Nothing
+      | otherwise = Just ((x0 + (xh * toNumber n)) /\ (n - 1))
+  pure $ unfoldr foldx (count - 1)
+
 mkRepoList :: Component (Array Repo)
 mkRepoList = do
   repo <- mkRepo
   component "GithubRepoList"
     $ \repos -> React.do
-        let
-          repos' = take 6 repos
-        containerRef <- useRef null
-        sceneRef <- useRef null
+        scrollerRef <- useRef null
         useEffectOnce
-          $ readRefMaybe containerRef
-          >>= case _ of
-              Nothing -> throw "No container ref"
-              Just node -> do
-                runEffectFn1 animate node
-                pure mempty
+          $ readRefMaybe scrollerRef
+          >>= maybe (throw "No container ref") (runEffectFn1 animate)
+        useSnapPoint "github/repos"
+          $ readRefMaybe scrollerRef
+          >>= ((=<<) HTMLElement.fromNode)
+          >>> maybe (throw "No container ref") (snapPoints $ length repos)
         pure
           $ DOM.div
-              { ref: containerRef
-              , className: styles.container
+              { className: styles.container
               , children:
-                  pure
-                    $ DOM.div
-                        { className:
-                            styles.scene
-                        , children: pure $ carousel $ map repo repos'
-                        }
+                  [ DOM.div
+                      { ref: scrollerRef
+                      , className: styles.scroller
+                      , children:
+                          pure
+                            $ DOM.div
+                                { className: styles.scene
+                                , children: pure $ carousel $ map repo repos
+                                }
+                      }
+                  ]
               }
