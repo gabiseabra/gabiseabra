@@ -1,0 +1,10 @@
+@use 'sass:map';
+
+@import '~@styles/variables';
+
+.heading {
+  color: map.get($color-aqua, 'medium');
+  font-family: map.get($font-family, 'monospace');
+  text-shadow: 2.5px 2.5px 0 map.get($color-pink, 'light');
+  text-transform: uppercase;
+}

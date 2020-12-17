@@ -1,19 +1,21 @@
+@use '~@styles/breakpoint';
+
 .container {
-  position: relative;
-  height: 75vh;
-  max-width: 800px;
-  margin: 0 auto;
-  padding-top: 60px;
   box-sizing: border-box;
+  height: 75vh;
+  margin: 0 auto;
+  max-width: 800px;
+  padding-top: 60px;
+  position: relative;
 }
 
 .languages {
-  position: relative;
   height: 50vh;
+  position: relative;
   width: 50vh;
 }
 
-@media (--screen-md-max) {
+@include breakpoint.down('tablet') {
   .container {
     padding-left: 40px;
     padding-right: 40px;

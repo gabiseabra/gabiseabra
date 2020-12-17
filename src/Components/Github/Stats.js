@@ -1,3 +1,3 @@
 "use strict"
 
-exports.styles = require('./Stats.css')
+exports.styles = require('./Stats.scss')

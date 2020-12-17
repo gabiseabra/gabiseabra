@@ -1,0 +1,41 @@
+@use 'sass:map';
+
+@import '~@styles/variables';
+
+html,
+body {
+  font-family: map.get($font-family, 'paragraph');
+  font-size: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+body {
+  background: map.get($color-purple, 'dark');
+  -webkit-overflow-scrolling: touch;
+}
+
+:global(#root) {
+  box-sizing: border-box;
+  height: auto;
+  position: relative;
+  width: 100vw;
+}
+
+:global(#frame) {
+  $frame-padding: 10px;
+  $frame-border: 4px;
+
+  border: $frame-border solid $color-highlight;
+  bottom: $frame-padding;
+  left: $frame-padding;
+
+  mix-blend-mode: difference;
+  pointer-events: none;
+  position: fixed;
+  right: $frame-padding;
+  top: $frame-padding;
+  z-index: 1;
+}

@@ -1,3 +1,3 @@
 "use strict"
 
-exports.styles = require('./Home.css')
+exports.styles = require('./Home.scss')

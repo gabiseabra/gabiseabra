@@ -2,7 +2,7 @@
 
 const {gsap} = require('gsap')
 
-const styles = require('./RepoList.css')
+const styles = require('./RepoList.scss')
 
 const rad = 135.0
 

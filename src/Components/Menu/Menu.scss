@@ -1,65 +1,70 @@
-.nav {
-  --nav-font-size: 2rem;
-  --nav-height-sm: 40px;
-  --nav-height-lg: 50px;
+@use 'sass:map';
+@use '~@styles/breakpoint';
 
-  position: fixed;
-  top: 15px;
-  left: 15px;
-  right: 15px;
-  z-index: 1;
+@import '~@styles/variables';
+
+$font-size: 2rem;
+$height-sm: 40px;
+$height-lg: 50px;
+
+.nav {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+  left: 15px;
   mix-blend-mode: difference;
+  position: fixed;
+  right: 15px;
+  top: 15px;
+  z-index: 1;
 }
 
 .link {
+  color: $color-highlight;
   display: flex;
   text-decoration: none;
-  color: var(--color-highlight);
 
   &.active {
     animation: shake 100ms infinite linear;
 
-    & svg text {
+    svg text {
+      filter: url('#anaglyph');
       transform: scale(1) !important;
-      filter: url(#anaglyph);
     }
   }
 
   &::before {
-    display: block;
     content: '•';
-    line-height: calc(var(--nav-height-lg) * 0.9);
-    font-size: calc(var(--nav-font-size) * 0.75);
+    display: block;
+    font-size: #{$font-size * 0.75};
+    line-height: #{$height-lg * 0.9};
   }
 
   &:first-child::before { display: none; }
 
-  & svg {
-    height: var(--nav-height-lg);
+  svg {
+    height: $height-lg;
   }
 
-  & text {
-    font-family: 'Source Code Pro', monospace;
-    font-size: var(--nav-font-size);
-    fill: var(--color-highlight);
+  text {
+    fill: $color-highlight;
+    font-family: map.get($font-family, 'monospace');
+    font-size: $font-size;
     transform: scale(0.9);
     transform-origin: center center 0;
   }
 }
 
-@media (--screen-sm) {
+@include breakpoint.down('phone') {
   .nav { justify-content: center; }
 
   .link {
     &::before {
-      line-height: calc(var(--nav-height-sm) * 0.9);
+      line-height: #{$height-sm * 0.9};
     }
 
-    & svg {
-      height: var(--nav-height-sm);
+    svg {
+      height: $height-sm;
     }
   }
 }

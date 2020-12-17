@@ -3,7 +3,6 @@ module Hey.Pages.Github
   ) where
 
 import Prelude
-
 import Control.Monad.Indexed ((:>>=))
 import Data.Maybe (Maybe(..))
 import Hey.Api.Github (fetchViewer)
@@ -12,13 +11,6 @@ import Hey.Hooks.UseFetch (useFetch)
 import React.Basic.DOM as DOM
 import React.Basic.Hooks (Component, component, fragment)
 import React.Basic.Hooks as React
-
-foreign import styles :: Styles
-
-type Styles
-  = { page :: String
-    , content :: String
-    }
 
 mkGithubPage :: forall a. Component a
 mkGithubPage = do

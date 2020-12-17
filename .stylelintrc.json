@@ -1,6 +1,18 @@
 {
-  "extends": "stylelint-config-standard",
+  "extends": "stylelint-config-sass-guidelines",
   "rules": {
+    "max-nesting-depth": [
+      2,
+      {
+        "ignoreAtRules": [
+          "supports"
+        ],
+        "ignore": [
+          "blockless-at-rules",
+          "pseudo-classes"
+        ]
+      }
+    ],
     "selector-pseudo-class-no-unknown": [
       true,
       {

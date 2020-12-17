@@ -1,0 +1,118 @@
+@use 'sass:map';
+@use '~@styles/breakpoint';
+
+@import '~@styles/variables';
+
+$layers: 16;
+$step-z: 5px;
+$size-title: 8vh;
+$size-subtitle: 3.5vh;
+
+.container {
+  font-size: $size-subtitle;
+  max-width: 90vw;
+  perspective: 100px;
+  perspective-origin: center;
+  position: relative;
+  width: max-content;
+}
+
+.placeholder,
+.layers {
+  font-family: map.get($font-family, 'monospace');
+  font-size: $size-title;
+  line-height: 0.75em;
+}
+
+.placeholder {
+  display: block;
+  pointer-events: none;
+  text-transform: uppercase;
+  visibility: hidden;
+}
+
+.layers {
+  height: 100%;
+  left: 0;
+  position: absolute;
+  text-transform: uppercase;
+  top: 0;
+  transform: translateZ(#{($layers - 2) * -1 * $step-z});
+  transform-style: preserve-3d;
+  width: 100%;
+
+  > span {
+    color: #000;
+    font-weight: bold;
+    height: 100%;
+    position: absolute;
+    text-align: center;
+    text-shadow:
+      -1px -1px 0 #fff,
+      1px -1px 0 #fff,
+      -1px 1px 0 #fff,
+      1px 1px 0 #fff;
+    transform-style: preserve-3d;
+    user-select: none;
+    width: 100%;
+    will-change: transform;
+
+    &:last-child {
+      user-select: all;
+    }
+  }
+}
+
+@supports (-webkit-text-stroke: 1px #fff) {
+  .layers > span {
+    text-shadow: none;
+    -webkit-text-stroke: 1.5px #fff;
+  }
+}
+
+@for $i from 1 to $layers {
+  .layers > span:nth-child(#{$i}) {
+    opacity: #{$i / $layers};
+    transform: translateZ(#{($i - 1) * $step-z});
+  }
+}
+
+.before,
+.after {
+  color: #fff;
+  font-family: map.get($font-family, 'display');
+  position: absolute;
+  transform: translateZ(#{$layers * -1 * $step-z});
+  transform-style: preserve-3d;
+  z-index: 1;
+
+  > span {
+    position: absolute;
+    text-shadow:
+      0 0 20px #fff,
+      0 0 15px #fff;
+    transform: translateZ(#{$layers * $step-z});
+    transform-style: preserve-3d;
+    white-space: nowrap;
+  }
+}
+
+.before {
+  display: flex;
+  justify-content: flex-start;
+  left: 0;
+  top: -100%;
+
+  @include breakpoint.down('phone') {
+    left: 25%;
+    top: -50%;
+  }
+}
+
+.after {
+  bottom: 0;
+  display: flex;
+  font-size: 0.75em;
+  justify-content: flex-end;
+  right: 0;
+}

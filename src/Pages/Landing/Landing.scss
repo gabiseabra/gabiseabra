@@ -1,0 +1,85 @@
+@use 'sass:map';
+
+@import '~@styles/variables';
+
+.page {
+  align-items: center;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  transform: translate3d(0, 0, 0);
+  width: 100vw;
+}
+
+.background {
+  background:
+    radial-gradient(circle,
+    map.get($color-purple, 'medium') 0%,
+    map.get($color-purple, 'dark') 77%,
+    map.get($color-purple, 'darker') 100%);
+  height: 100%;
+  isolation: isolate;
+  left: 0;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  will-change: opacity;
+}
+
+.smoke {
+  height: 100%;
+  opacity: 0.5;
+  pointer-events: none;
+  position: absolute;
+  width: 100%;
+
+  &,
+  * { will-change: transform; }
+}
+
+.hole {
+  height: 100%;
+  mix-blend-mode: color-dodge;
+  position: absolute;
+  width: 100%;
+}
+
+.hole2 {
+  background: #000;
+  border-radius: 50%;
+  box-shadow: 0 0 200px 20px inset #9a9a9a;
+  height: 70vh;
+  left: 50%;
+  margin-left: -35vh;
+  margin-top: -35vh;
+  mix-blend-mode: hard-light;
+  overflow: hidden;
+  position: absolute;
+  top: 50%;
+  width: 70vh;
+
+  &::before {
+    background: linear-gradient(to top, transparent 50%, #9a9a9a 100%);
+    content: ' ';
+    display: block;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+}
+
+.text {
+  left: 50%;
+  mix-blend-mode: hard-light;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  &,
+  * { will-change: transform; }
+}

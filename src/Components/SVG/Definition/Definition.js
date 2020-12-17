@@ -1,1 +1,1 @@
-exports.styles = require('./styles.css')
+exports.styles = require('./styles.scss')

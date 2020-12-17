@@ -8,31 +8,31 @@
 }
 
 .scene {
-  position: relative;
+  height: 50vh;
   perspective: 100vh;
   perspective-origin: center;
-  height: 50vh;
+  position: relative;
   width: 100vw;
 
   &,
-  & * { will-change: transform; }
+  * { will-change: transform; }
 }
 
 .list {
-  position: absolute;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
-  transform-style: preserve-3d;
   height: 50vh;
+  position: absolute;
+  transform-style: preserve-3d;
   width: 100vw;
 }
 
 .item {
-  position: absolute;
-  height: 50vh;
-  width: 100vw;
-  padding: 30px;
   box-sizing: border-box;
+  height: 50vh;
   opacity: 0.5;
+  padding: 30px;
+  position: absolute;
+  width: 100vw;
 }

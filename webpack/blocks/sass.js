@@ -4,7 +4,7 @@ const ROOT = path.resolve(__dirname, '../..')
 
 module.exports = () => (_, {addLoader}) =>
   addLoader({
-    test: /\.css$/,
+    test: /\.s[ca]ss$/,
     include: [path.join(ROOT, 'src')],
     use: [
       'style-loader',
@@ -12,6 +12,6 @@ module.exports = () => (_, {addLoader}) =>
         loader: 'css-loader',
         options: {importLoaders: 1, modules: true}
       },
-      'postcss-loader'
+      'sass-loader'
     ]
   })

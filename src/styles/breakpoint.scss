@@ -1,0 +1,38 @@
+@use 'sass:map';
+@use 'sass:list';
+
+$breakpoint-names: ('phone', 'tablet', 'desktop');
+
+$breakpoints: (
+  phone: 480px,
+  tablet: 800px,
+  desktop: 1024px
+);
+
+@function pred($name) {
+  $idx: list.index($breakpoint-names, $name);
+  $pred: list.nth($breakpoint-names, $idx - 1);
+
+  @if $pred { @return map.get($breakpoints, $pred); }
+
+  @else { @return 0; }
+}
+
+@mixin up($name) {
+  $w: map.get($breakpoints, $name);
+
+  @media screen and (min-width: $w) { @content; }
+}
+
+@mixin down($name) {
+  $w: map.get($breakpoints, $name);
+
+  @media screen and (max-width: ($w - 1)) { @content; }
+}
+
+@mixin only($breakpoint) {
+  $max: map.get($breakpoints, $name);
+  $min: pred($name);
+
+  @media screen and (min-width: $min) and (max-width: $max) { @content; }
+}

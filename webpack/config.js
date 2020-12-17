@@ -7,7 +7,7 @@ const {
   setOutput,
   babel
 } = require('webpack-blocks')
-const css = require('./blocks/css')
+const sass = require('./blocks/sass')
 const typescript = require('./blocks/typescript')
 const purescript = require('./blocks/purescript')
 
@@ -20,12 +20,15 @@ module.exports = createConfig([
   entryPoint('./src/index.js'),
   setOutput('./public/build/index.js'),
   resolve({
-    modules: [path.join(ROOT, 'node_modules')]
+    modules: [path.join(ROOT, 'node_modules')],
+    alias: {
+      '@styles': path.join(ROOT, 'src/Styles')
+    }
   }),
   /**
    * Module resolvers
    */
-  css(),
+  sass(),
   babel(),
   typescript(),
   purescript(),

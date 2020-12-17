@@ -1,3 +1,3 @@
 "use strict"
 
-exports.styles = require('./Hole.css')
+exports.styles = require('./Hole.scss')

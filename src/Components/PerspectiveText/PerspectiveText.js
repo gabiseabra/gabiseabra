@@ -3,7 +3,7 @@
 const { gsap } = require('gsap')
 const { ScrollTrigger } = require('gsap/ScrollTrigger')
 
-const styles = require('./PerspectiveText.css')
+const styles = require('./PerspectiveText.scss')
 
 const translateX = (e) => (idx) => (e.clientX - (window.innerWidth / 2)) * (idx + 1) * 0.005
 const translateY = (e) => (idx) => (e.clientY - (window.innerHeight / 2)) * (idx + 1) * 0.005

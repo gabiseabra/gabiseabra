@@ -1,3 +1,3 @@
 "use strict"
 
-exports.styles = require('./Repo.css')
+exports.styles = require('./Repo.scss')

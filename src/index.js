@@ -2,7 +2,7 @@ import merge from 'deepmerge'
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Main from './Main'
-import './styles/main.css'
+import './index.scss'
 
 gsap.registerPlugin(ScrollTrigger);
 

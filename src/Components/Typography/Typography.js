@@ -1,3 +1,3 @@
 "use strict"
 
-exports.styles = require('./Typography.css')
+exports.styles = require('./Typography.scss')
