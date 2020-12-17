@@ -1,10 +1,13 @@
 module Hey.Components.Github.Repo (mkRepo) where
 
 import Prelude
-import Data.Maybe (maybe)
+import Data.Maybe (fromMaybe, maybe)
+import Data.Tuple.Nested ((/\))
 import Hey.Api.Github (Repo)
+import Hey.Components.Typography (Heading(..))
+import Hey.Components.Typography as Typo
 import React.Basic.DOM as DOM
-import React.Basic.Hooks (Component, component)
+import React.Basic.Hooks (Component, JSX, component)
 import React.Basic.Hooks as React
 
 foreign import styles :: Styles
@@ -12,12 +15,29 @@ foreign import styles :: Styles
 type Styles
   = { container :: String
     , repo :: String
+    , languages :: String
+    }
+
+lipsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam sodales eros lectus, eu lacinia ligula imperdiet vel. Nunc varius mattis enim non lacinia. Nulla facilisi. Donec id facilisis nisl. Integer faucibus nisl ut quam finibus blandit. Cras diam mauris, ornare sit amet velit nec, egestas molestie justo. Fusce quis blandit tellus."
+
+languages :: Repo -> JSX
+languages repo =
+  DOM.div
+    { className: styles.languages
+    , children:
+        [ Typo.span
+            Typo.spanProps { highlight = true }
+            [ DOM.text "Languages:" ]
+        , DOM.ul_
+            $ repo.languages.nodes
+            <#> \lang -> DOM.li_ [ DOM.text lang.name ]
+        ]
     }
 
 mkRepo :: Component Repo
 mkRepo =
   component "GithubRepo"
-    $ \{ name, description, languages } -> React.do
+    $ \repo@{ name, description } -> React.do
         pure
           $ DOM.div
               { className: styles.container
@@ -26,11 +46,12 @@ mkRepo =
                     $ DOM.article
                         { className: styles.repo
                         , children:
-                            [ DOM.h2_ [ DOM.text name ]
-                            , DOM.p_ [ maybe mempty DOM.text description ]
-                            , DOM.footer_
-                                $ languages.nodes
-                                <#> \lang -> DOM.span_ [ DOM.text lang.name ]
+                            [ Typo.h H2 $ pure $ DOM.text name
+                            , Typo.p_ $ pure $ DOM.text $ fromMaybe lipsum description
+                            , DOM.footer
+                                { children:
+                                    [ languages repo ]
+                                }
                             ]
                         }
               }
