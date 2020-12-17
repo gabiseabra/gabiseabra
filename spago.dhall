@@ -10,6 +10,7 @@ You can edit this file as you like.
   , "datetime"
   , "debug"
   , "effect"
+  , "formatters"
   , "psci-support"
   , "react-basic"
   , "react-basic-dom"

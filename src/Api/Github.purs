@@ -1,7 +1,6 @@
 module Hey.Api.Github where
 
 import Prelude
-
 import Affjax as AX
 import Affjax.RequestBody as Req
 import Affjax.RequestHeader (RequestHeader(..))
@@ -30,17 +29,18 @@ type RepoInfo
 type Repo
   = { name :: String
     , description :: Maybe String
-    , isFork :: Boolean
+    , url :: String
+    , homepageUrl :: Maybe String
     , createdAt :: JDateTime
     , languages :: Connection Language
     }
 
-type User =
-  { repositories :: Connection RepoInfo
-  , contributions :: Connection RepoInfo
-  , featured :: Connection Repo
-  , forks :: Count
-  }
+type User
+  = { repositories :: Connection RepoInfo
+    , contributions :: Connection RepoInfo
+    , featured :: Connection Repo
+    , forks :: Count
+    }
 
 type ViewerQuery
   = { viewer :: User
@@ -88,11 +88,12 @@ fetchViewer = Fetch "github/viewer" req
       name
       primaryLanguage { ...Language }
     }
-  
+
     fragment Repo on Repository {
       name
       description
-      isFork
+      url
+      homepageUrl
       createdAt
       languages(first: 3) {
         nodes { ...Language }

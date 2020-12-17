@@ -1,4 +1,5 @@
 @use 'sass:map';
+@use '~@styles/breakpoint';
 
 @import '~@styles/variables';
 
@@ -9,8 +10,17 @@
   flex-direction: column;
   height: 100%;
   justify-content: center;
+  margin: auto;
   max-height: 100%;
+  max-width: $content-width;
   perspective: 100vw;
+
+  :global(.icon) {
+    fill: map.get($color-aqua, 'medium');
+    filter: drop-shadow(1.5px 1.5px 0 map.get($color-pink, 'light'));
+    height: 18px;
+    margin-right: 10px;
+  }
 }
 
 .repo {
@@ -20,19 +30,47 @@
   display: flex;
   flex-direction: column;
   max-height: 100%;
+  position: relative;
   width: 100%;
 
-  > * {
-    padding: 0 15px;
+  @include breakpoint.up('tablet') {
+    > * { padding: 0 25px; }
+
+    > *:first-child { margin-top: 25px !important; }
+    > *:last-child { margin-bottom: 25px !important; }
   }
 
-  > p {
-    overflow-y: scroll;
+  @include breakpoint.down('tablet') {
+    > * { padding: 0 15px; }
   }
 
-  > footer,
-  > h2 {
+  > h2,
+  > footer {
     margin: 15px 0;
+  }
+}
+
+.repo > p {
+  overflow-y: scroll;
+
+  @include breakpoint.down('tablet') {
+    margin: 0;
+  }
+}
+
+.repo > footer {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  will-change: unset;
+
+  @include breakpoint.down('tablet') {
+    align-items: baseline;
+    flex-direction: column;
+
+    > * { margin-top: 5px; }
+    > *:first-child { margin-top: 0; }
   }
 }
 
@@ -56,5 +94,29 @@
     }
 
     &:last-child::after { display: none; }
+  }
+}
+
+.date {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+
+  @include breakpoint.up('tablet') {
+    position: absolute;
+    right: 25px;
+    top: 35px;
+  }
+}
+
+.links {
+  @include breakpoint.down('tablet') {
+    bottom: 15px;
+    position: absolute;
+    right: 15px;
+  }
+
+  :global(.icon) {
+    height: 24px;
   }
 }

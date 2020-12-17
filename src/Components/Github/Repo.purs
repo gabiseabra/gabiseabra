@@ -1,8 +1,13 @@
 module Hey.Components.Github.Repo (mkRepo) where
 
 import Prelude
-import Data.Maybe (fromMaybe)
+import Data.Formatter.DateTime (FormatterCommand(..))
+import Data.Formatter.DateTime as FDT
+import Data.List (fromFoldable)
+import Data.Maybe (fromMaybe, maybe)
+import Data.Newtype (unwrap)
 import Hey.Api.Github (Repo)
+import Hey.Components.SVG.Icon (Icon(..), icon)
 import Hey.Components.Typography (FontSize(..), Heading(..))
 import Hey.Components.Typography as Typo
 import React.Basic.DOM as DOM
@@ -14,6 +19,8 @@ type Styles
   = { container :: String
     , repo :: String
     , languages :: String
+    , date :: String
+    , links :: String
     }
 
 lipsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam sodales eros lectus, eu lacinia ligula imperdiet vel. Nunc varius mattis enim non lacinia. Nulla facilisi. Donec id facilisis nisl. Integer faucibus nisl ut quam finibus blandit. Cras diam mauris, ornare sit amet velit nec, egestas molestie justo. Fusce quis blandit tellus."
@@ -43,6 +50,37 @@ languages repo =
         ]
     }
 
+pubDate :: Repo -> JSX
+pubDate { createdAt } =
+  DOM.div
+    { className: styles.date
+    , children:
+        [ icon Clock
+        , Typo.span
+            Typo.spanProps
+              { fontSize = Small
+              , children = pure $ DOM.text $ "Published on " <> FDT.format format (unwrap createdAt)
+              }
+        ]
+    }
+  where
+  format = fromFoldable [ MonthShort, Placeholder " ", YearFull ]
+
+links :: Repo -> JSX
+links { url, homepageUrl } =
+  DOM.div
+    { className: styles.links
+    , children:
+        [ DOM.a
+            { href: url
+            , children: [ icon Github ]
+            }
+        , homepageUrl
+            # maybe mempty \href ->
+                DOM.a { href, children: [ icon ExternalLink ] }
+        ]
+    }
+
 mkRepo :: Component Repo
 mkRepo =
   component "GithubRepo"
@@ -59,7 +97,10 @@ mkRepo =
                             , Typo.p_ $ pure $ DOM.text $ fromMaybe lipsum description
                             , DOM.footer
                                 { children:
-                                    [ languages repo ]
+                                    [ languages repo
+                                    , pubDate repo
+                                    , links repo
+                                    ]
                                 }
                             ]
                         }
