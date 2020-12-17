@@ -1,14 +1,12 @@
 module Hey.Components.Github.Repo (mkRepo) where
 
 import Prelude
-import Data.Maybe (fromMaybe, maybe)
-import Data.Tuple.Nested ((/\))
+import Data.Maybe (fromMaybe)
 import Hey.Api.Github (Repo)
-import Hey.Components.Typography (Heading(..))
+import Hey.Components.Typography (FontSize(..), Heading(..))
 import Hey.Components.Typography as Typo
 import React.Basic.DOM as DOM
 import React.Basic.Hooks (Component, JSX, component)
-import React.Basic.Hooks as React
 
 foreign import styles :: Styles
 
@@ -25,12 +23,23 @@ languages repo =
   DOM.div
     { className: styles.languages
     , children:
-        [ Typo.span
-            Typo.spanProps { highlight = true }
-            [ DOM.text "Languages:" ]
+        [ Typo.mark
+            $ pure
+            $ Typo.span
+                Typo.spanProps
+                  { bold = true
+                  , children = [ DOM.text "Languages:" ]
+                  }
         , DOM.ul_
             $ repo.languages.nodes
-            <#> \lang -> DOM.li_ [ DOM.text lang.name ]
+            <#> \lang ->
+                DOM.li_
+                  [ Typo.span
+                      Typo.spanProps
+                        { fontSize = Small
+                        , children = [ DOM.text lang.name ]
+                        }
+                  ]
         ]
     }
 

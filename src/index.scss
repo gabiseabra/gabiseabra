@@ -27,8 +27,9 @@ body {
 :global(#frame) {
   $frame-padding: 10px;
   $frame-border: 4px;
+  $frame-color: #fff;
 
-  border: $frame-border solid $color-highlight;
+  border: $frame-border solid $frame-color;
   bottom: $frame-padding;
   left: $frame-padding;
 

@@ -8,3 +8,18 @@
   text-shadow: 2.5px 2.5px 0 map.get($color-pink, 'light');
   text-transform: uppercase;
 }
+
+.mark {
+  background: linear-gradient(transparent 35%, $color-highlight 35%, $color-highlight 100%);
+  padding: 0 5px 0.1% 2.5px;
+}
+
+.span,
+.paragraph {
+  position: relative;
+
+  @each $name, $size in $font-size {
+    &:global(.font-#{$name}) { font-size: $size; }
+  }
+  &:global(.bold) { font-weight: bold; }
+}

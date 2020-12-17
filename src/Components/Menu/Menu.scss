@@ -3,6 +3,7 @@
 
 @import '~@styles/variables';
 
+$color: #fff;
 $font-size: 2rem;
 $height-sm: 40px;
 $height-lg: 50px;
@@ -47,7 +48,7 @@ $height-lg: 50px;
   }
 
   text {
-    fill: $color-highlight;
+    fill: $color;
     font-family: map.get($font-family, 'monospace');
     font-size: $font-size;
     transform: scale(0.9);

@@ -1,5 +1,6 @@
 module Hey.Components.Typography
   ( Heading(..)
+  , FontSize(..)
   , h
   , p
   , p_
@@ -9,6 +10,7 @@ module Hey.Components.Typography
   , spanProps
   , span
   , span_
+  , mark
   ) where
 
 import Prelude
@@ -23,6 +25,7 @@ type Styles
   = { heading :: String
     , paragraph :: String
     , span :: String
+    , mark :: String
     }
 
 data Heading
@@ -32,6 +35,20 @@ data Heading
   | H4
 
 derive instance eqHeading :: Eq Heading
+
+data FontSize
+  = Small
+  | Medium
+  | Large
+
+derive instance eqFontSize :: Eq FontSize
+
+fontSizeCls :: FontSize -> String
+fontSizeCls Small = "font-sm"
+
+fontSizeCls Medium = "font-md"
+
+fontSizeCls Large = "font-lg"
 
 h :: Heading -> Array JSX -> JSX
 h = flip $ \children -> component >>> ((#) { className: styles.heading, children })
@@ -43,48 +60,60 @@ h = flip $ \children -> component >>> ((#) { className: styles.heading, children
     | otherwise = DOM.h4
 
 type ParagraphProps
-  = { highlight :: Boolean
+  = { fontSize :: FontSize
+    , children :: Array JSX
     }
 
 pProps =
-  { highlight: false
+  { children: mempty
+  , fontSize: Medium
   } ::
     ParagraphProps
 
-p :: ParagraphProps -> Array JSX -> JSX
-p { highlight } children =
+p :: ParagraphProps -> JSX
+p { fontSize, children } =
   DOM.p
     { className:
         intercalate " "
-          $ pure styles.paragraph
-          <> guard highlight [ "highlight" ]
+          $ [ styles.paragraph
+            , fontSizeCls fontSize
+            ]
     , children: children
     }
 
 p_ :: Array JSX -> JSX
-p_ = p pProps
+p_ children = p pProps { children = children }
 
 type SpanProps
-  = { highlight :: Boolean
+  = { children :: Array JSX
     , bold :: Boolean
+    , fontSize :: FontSize
     }
 
 spanProps =
-  { highlight: false
+  { children: mempty
   , bold: false
+  , fontSize: Medium
   } ::
     SpanProps
 
-span :: SpanProps -> Array JSX -> JSX
-span { highlight, bold } children =
+span :: SpanProps -> JSX
+span { bold, fontSize, children } =
   DOM.span
     { className:
         intercalate " "
           $ pure styles.span
-          <> guard highlight [ "highlight" ]
+          <> pure (fontSizeCls fontSize)
           <> guard bold [ "bold" ]
     , children
     }
 
 span_ :: Array JSX -> JSX
-span_ = span spanProps
+span_ children = span spanProps { children = children }
+
+mark :: Array JSX -> JSX
+mark children =
+  DOM.mark
+    { className: styles.mark
+    , children
+    }

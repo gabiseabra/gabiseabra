@@ -6,6 +6,12 @@ $font-family: (
   paragraph: string.unquote("'Fira Mono', 'Courier New', Courier, monospace")
 ) !default;
 
+$font-size: (
+  sm: 0.8rem,
+  md: 1rem,
+  lg: 2rem
+) !default;
+
 $color-purple: (
   lighter: #e4d3ff,
   light: #b68fff,
@@ -30,4 +36,4 @@ $color-aqua: (
   darker: #003e4d
 ) !default;
 
-$color-highlight: #fff;
+$color-highlight: #20b2aa;
