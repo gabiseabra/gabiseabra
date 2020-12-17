@@ -1,7 +1,9 @@
 module Hey.Components.Menu where
 
 import Prelude
+import Data.Foldable (intercalate)
 import Data.Maybe (maybe)
+import Data.Monoid (guard)
 import Data.String (length)
 import Effect (Effect)
 import Hey.Components.SVG.Definition (def)
@@ -9,7 +11,6 @@ import Hey.Components.SVG.Filters (anaglyph)
 import Hey.Data.Env (Env)
 import Hey.Data.Route (Route(..), href)
 import Hey.Extra.DOM (scrollIntoView)
-import Hey.Styles ((.&), (?&))
 import React.Basic (JSX)
 import React.Basic.DOM as DOM
 import React.Basic.DOM.Events (preventDefault)
@@ -30,6 +31,7 @@ type Styles
     , link :: String
     , active :: String
     , menu :: String
+    , lmao :: String
     }
 
 type LinkProps
@@ -48,7 +50,11 @@ link :: LinkProps -> JSX
 link { label, href, active, onClick } =
   DOM.a
     { href
-    , className: styles.link .& active ?& styles.active
+    , className:
+        intercalate " "
+          $ pure styles.link
+          <> guard active [ styles.active ]
+          <> guard active [ styles.lmao ]
     , onClick: handler preventDefault $ const onClick
     , children:
         [ SVG.svg

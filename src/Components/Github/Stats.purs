@@ -88,7 +88,7 @@ mkStats = do
                   [ DOM.div
                       { className: styles.languages
                       , children:
-                          [ chart { options: { "type": Radar, "data": languagesChart data' } }
+                          [ chart $ { "type": Radar, "data": languagesChart data' }
                           ]
                       }
                   ]
