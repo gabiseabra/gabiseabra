@@ -1,0 +1,13 @@
+@use 'sass:string';
+
+$font-family: (
+  monospace: string.unquote("'Source Code Pro', monospace"),
+  display: string.unquote("'Audiowide', serif"),
+  paragraph: string.unquote("'Fira Mono', 'Courier New', Courier, monospace")
+) !default;
+
+$font-size: (
+  sm: 0.8rem,
+  md: 1rem,
+  lg: 2rem
+) !default;

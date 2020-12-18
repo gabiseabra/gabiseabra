@@ -1,6 +1,6 @@
 @use 'sass:map';
 
-@import '~@styles/variables';
+@import '~@styles/theme';
 
 $size: 70vh;
 
@@ -40,7 +40,7 @@ $size: 70vh;
 .glow > div:nth-child(1) {
   animation: glow0 cubic-bezier(0.85, 0, 0.15, 1) 5s infinite;
   animation-direction: alternate;
-  background: map.get($color-pink, 'lighter');
+  background: map.get($palette-pink, 'lighter');
   left: 0;
   width: 100%;
 }
@@ -52,7 +52,7 @@ $size: 70vh;
 
 .glow > div:nth-child(2) {
   animation: glow1 linear 7s infinite;
-  background: map.get($color-aqua, 'medium');
+  background: map.get($palette-aqua, 'medium');
   right: 0;
 }
 
@@ -80,11 +80,11 @@ $size: 70vh;
 
   > div:nth-child(1) {
     animation: ring linear 2s infinite;
-    background: map.get($color-purple, 'medium');
+    background: map.get($palette-purple, 'medium');
     filter: blur(15px);
   }
 
   > div:nth-child(2) {
-    background: map.get($color-purple, 'darker');
+    background: map.get($palette-purple, 'darker');
   }
 }

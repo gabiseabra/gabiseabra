@@ -1,7 +1,7 @@
 @use 'sass:map';
 @use '~@styles/breakpoint';
 
-@import '~@styles/variables';
+@import '~@styles/theme';
 
 .container {
   align-items: center;
@@ -16,15 +16,15 @@
   perspective: 100vw;
 
   :global(.icon) {
-    fill: map.get($color-aqua, 'medium');
-    filter: drop-shadow(1.5px 1.5px 0 map.get($color-pink, 'light'));
+    fill: $content-color;
+    filter: drop-shadow(1.5px 1.5px 0 $content-highlight);
     height: 18px;
     margin-right: 10px;
   }
 }
 
 .repo {
-  background: map.get($color-pink, 'lighter');
+  background: $content-bg;
   border-radius: 4px;
   box-sizing: border-box;
   display: flex;

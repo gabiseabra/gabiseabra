@@ -1,6 +1,6 @@
 @use 'sass:map';
 
-@import '~@styles/variables';
+@import '~@styles/theme';
 
 html,
 body {
@@ -13,7 +13,8 @@ body {
 }
 
 body {
-  background: map.get($color-purple, 'dark');
+  background: map.get($palette-primary, 'dark');
+  color: $content-color;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -27,7 +28,7 @@ body {
 :global(#frame) {
   $frame-padding: 10px;
   $frame-border: 4px;
-  $frame-color: #fff;
+  $frame-color: $overlay-color;
 
   border: $frame-border solid $frame-color;
   bottom: $frame-padding;

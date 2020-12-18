@@ -1,0 +1,20 @@
+@use 'sass:color';
+@use 'sass:map';
+
+@import 'config/color';
+@import 'config/font';
+
+$palette-primary: $palette-purple;
+
+$palette-secondary: $palette-pink;
+
+$overlay-color: #fff;
+
+$content-width: 800px;
+
+$content-bg: color.change(map.get($palette-purple, 'dark'), $lightness: 45%, $saturation: 60%);
+
+$content-color: map.get($palette-secondary, 'lighter');
+
+$content-highlight: map.get($palette-secondary, 'medium');
+

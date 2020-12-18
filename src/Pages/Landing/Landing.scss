@@ -1,6 +1,6 @@
 @use 'sass:map';
 
-@import '~@styles/variables';
+@import '~@styles/theme';
 
 .page {
   align-items: center;
@@ -16,9 +16,9 @@
 .background {
   background:
     radial-gradient(circle,
-    map.get($color-purple, 'medium') 0%,
-    map.get($color-purple, 'dark') 77%,
-    map.get($color-purple, 'darker') 100%);
+    map.get($palette-primary, 'medium') 0%,
+    map.get($palette-primary, 'dark') 77%,
+    map.get($palette-primary, 'darker') 100%);
   height: 100%;
   isolation: isolate;
   left: 0;

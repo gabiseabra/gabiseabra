@@ -1,7 +1,7 @@
 @use 'sass:map';
 @use '~@styles/breakpoint';
 
-@import '~@styles/variables';
+@import '~@styles/theme';
 
 $layers: 16;
 $step-z: 5px;

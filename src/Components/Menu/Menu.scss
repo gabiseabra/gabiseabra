@@ -1,7 +1,7 @@
 @use 'sass:map';
 @use '~@styles/breakpoint';
 
-@import '~@styles/variables';
+@import '~@styles/theme';
 
 $color: #fff;
 $font-size: 2rem;
@@ -21,7 +21,7 @@ $height-lg: 50px;
 }
 
 .link {
-  color: $color-highlight;
+  color: $overlay-color;
   display: flex;
   text-decoration: none;
 
