@@ -42,7 +42,7 @@ mkPage =
         entry <- Observer.useIntersectionObserverEntry thresholdRef
         let
           ratio = maybe 0.0 intersectionRatio entry
-        -- Update active route when this page becomes visible 
+        -- Update active route when this page becomes visible
         useEffect ratio
           $ do
               if ratio == 1.0 then
@@ -57,7 +57,8 @@ mkPage =
           >>> maybe (pure []) (HTMLElement.offsetTop >=> (pure >>> pure))
         pure
           $ DOM.section
-              { ref: pageRef
+              { id: show route
+              , ref: pageRef
               , className: styles.page
               , children:
                   [ DOM.div { ref: thresholdRef, className: styles.threshold } ]
