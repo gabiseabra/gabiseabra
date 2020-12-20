@@ -31,7 +31,6 @@ type Styles
     , link :: String
     , active :: String
     , menu :: String
-    , lmao :: String
     }
 
 type LinkProps
@@ -43,9 +42,6 @@ type LinkProps
 
 svgDefs = def 100 100 [ anaglyph 5 "anaglyph" ] :: JSX
 
-linkViewBox :: String -> String
-linkViewBox lbl = "0 0 " <> (show $ length lbl * 20 + 20) <> " 60"
-
 link :: LinkProps -> JSX
 link { label, href, active, onClick } =
   DOM.a
@@ -54,22 +50,8 @@ link { label, href, active, onClick } =
         intercalate " "
           $ pure styles.link
           <> guard active [ styles.active ]
-          <> guard active [ styles.lmao ]
     , onClick: handler preventDefault $ const onClick
-    , children:
-        [ SVG.svg
-            { viewBox: linkViewBox label
-            , children:
-                [ SVG.text
-                    { x: "50%"
-                    , y: "50%"
-                    , dominantBaseline: "middle"
-                    , textAnchor: "middle"
-                    , children: [ DOM.text label ]
-                    }
-                ]
-            }
-        ]
+    , children: pure $ DOM.span_ $ [ DOM.text label ]
     }
 
 mkMenu :: Component Env

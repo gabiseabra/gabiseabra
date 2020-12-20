@@ -4,11 +4,14 @@
 @import '~@styles/theme';
 
 $color: #fff;
-$font-size: 2rem;
-$height-sm: 40px;
-$height-lg: 50px;
+$font-size-sm: 1.2rem;
+$font-size-md: 1.4rem;
+$font-size-lg: 1.5rem;
+$height: 60px;
 
 .nav {
+  $height: 60px;
+  align-items: center;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
@@ -18,56 +21,56 @@ $height-lg: 50px;
   right: 15px;
   top: 15px;
   z-index: 1;
+
 }
 
 .link {
   color: $overlay-color;
   display: flex;
+  fill: $color;
+  font-family: map.get($font-family, 'monospace');
+  font-size: $font-size-lg;
+  padding: 10px 0;
   text-decoration: none;
+  transform-origin: center center 0;
+
+
+  > span {
+    align-items: center;
+    display: inline-flex;
+    transform: scale(0.85);
+  }
 
   &.active {
     animation: shake 100ms infinite linear;
 
-    svg text {
+    > span {
       filter: url('#anaglyph');
       transform: scale(1) !important;
     }
   }
 
   &::before {
+    align-items: center;
     content: '•';
-    display: block;
-    font-size: #{$font-size * 0.75};
-    line-height: #{$height-lg * 0.9};
+    display: flex;
+    font-size: 0.75em;
+    line-height: 0;
+    margin-top: -1px;
+    padding: 0 5px;
   }
 
   &:first-child::before { display: none; }
-
-  svg {
-    height: $height-lg;
-  }
-
-  text {
-    fill: $color;
-    font-family: map.get($font-family, 'monospace');
-    font-size: $font-size;
-    transform: scale(0.9);
-    transform-origin: center center 0;
-  }
 }
 
 @include breakpoint.down('tablet') {
   .nav { justify-content: center; }
 
-  .link {
-    &::before {
-      line-height: #{$height-sm * 0.9};
-    }
+  .link { font-size: $font-size-md; }
+}
 
-    svg {
-      height: $height-sm;
-    }
-  }
+@include breakpoint.down('phone') {
+  .link { font-size: $font-size-sm; }
 }
 
 @keyframes shake {
