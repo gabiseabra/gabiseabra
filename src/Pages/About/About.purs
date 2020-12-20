@@ -1,5 +1,5 @@
-module Hey.Pages.Github
-  ( mkGithubPage
+module Hey.Pages.About
+  ( mkAboutPage
   ) where
 
 import Prelude
@@ -12,16 +12,21 @@ import React.Basic.DOM as DOM
 import React.Basic.Hooks (Component, component, fragment)
 import React.Basic.Hooks as React
 
-mkGithubPage :: forall a. Component a
-mkGithubPage = do
-  stats <- GH.mkStats
-  repoList <- GH.mkRepoList
-  component "Repos" \_ -> React.do
+foreign import styles :: Styles
+
+type Styles
+  = { page :: String
+    }
+
+mkAboutPage :: forall a. Component a
+mkAboutPage =
+  component "About" \_ -> React.do
     useFetch fetchViewer
       :>>= case _ of
           Nothing -> pure $ DOM.text "loading..."
           Just { data: res } -> do
             pure
-              $ fragment
-                  [ repoList res.viewer.featured.nodes
-                  ]
+              $ DOM.div
+                  { className: styles.page
+                  , children: [ DOM.text "lmao" ]
+                  }

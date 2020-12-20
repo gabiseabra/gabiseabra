@@ -56,7 +56,7 @@ $height-lg: 50px;
   }
 }
 
-@include breakpoint.down('phone') {
+@include breakpoint.down('tablet') {
   .nav { justify-content: center; }
 
   .link {

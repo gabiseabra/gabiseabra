@@ -81,6 +81,7 @@ mkMenu =
           links =
             [ { label: "HOME", route: Home }
             , { label: "ABOUT", route: About }
+            , { label: "PROJECTS", route: Projects }
             ]
               # map \{ label, route } ->
                   link

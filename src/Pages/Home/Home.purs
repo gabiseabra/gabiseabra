@@ -11,6 +11,7 @@ import Hey.Data.Env (Env)
 import Hey.Data.Route (Route(..))
 import Hey.Hooks.UseIntersectionObserver as Observer
 import Hey.Hooks.UseSnapPoints (useSnapPoint)
+import Hey.Pages.About (mkAboutPage)
 import Hey.Pages.Github (mkGithubPage)
 import Hey.Pages.Landing (mkLandingPage)
 import React.Basic (JSX)
@@ -67,11 +68,13 @@ mkPage =
 
 mkRoutes :: Effect (Array (Route /\ (Env -> JSX)))
 mkRoutes = do
-  githubPage <- mkGithubPage
   landingPage <- mkLandingPage
+  aboutPage <- mkAboutPage
+  githubPage <- mkGithubPage
   pure
     $ [ Home /\ landingPage
-      , About /\ githubPage
+      , About /\ aboutPage
+      , Projects /\ githubPage
       ]
 
 mkHomePage :: Component Env
