@@ -13,9 +13,18 @@ body {
 }
 
 body {
-  background: map.get($palette-primary, 'dark');
   color: $content-color;
   -webkit-overflow-scrolling: touch;
+  padding-bottom: 100vh;
+}
+
+:global(#scene) {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: -1;
 }
 
 :global(#root) {

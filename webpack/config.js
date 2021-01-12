@@ -8,6 +8,7 @@ const {
   babel
 } = require('webpack-blocks')
 const sass = require('./blocks/sass')
+const glsl = require('./blocks/glsl')
 const typescript = require('./blocks/typescript')
 const purescript = require('./blocks/purescript')
 
@@ -29,7 +30,8 @@ module.exports = createConfig([
    * Module resolvers
    */
   sass(),
-  babel(),
+  glsl(),
+  babel(require('../.babelrc')),
   typescript(),
   purescript(),
   /**

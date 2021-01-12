@@ -1,8 +1,11 @@
 import merge from 'deepmerge'
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Canvas from './canvas'
 import Main from './Main'
 import './index.scss'
+
+console.log('...', require('./Hooks/UseSnapPoint.js'))
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -40,4 +43,5 @@ Chart.defaults.radar = merge(Chart.defaults.radar, {
 
 Chart.controllers.radar.prototype.draw = drawChart(Chart.controllers.radar.prototype.draw)
 
+Canvas.main()
 Main.main()

@@ -71,8 +71,10 @@ mkRoutes = do
   landingPage <- mkLandingPage
   aboutPage <- mkAboutPage
   githubPage <- mkGithubPage
+  let
+    spacer = DOM.div { style: DOM.css { width: "100vw", height: "100vh" } }
   pure
-    $ [ Home /\ landingPage
+    $ [ Home /\ const spacer
       , About /\ aboutPage
       , Projects /\ githubPage
       ]
