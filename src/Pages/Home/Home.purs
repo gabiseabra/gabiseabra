@@ -66,17 +66,19 @@ mkPage =
                     <> children
               }
 
+spacer :: JSX
+spacer = DOM.div { style: DOM.css { width: "100vw", height: "100vh" } }
+
 mkRoutes :: Effect (Array (Route /\ (Env -> JSX)))
 mkRoutes = do
   landingPage <- mkLandingPage
   aboutPage <- mkAboutPage
   githubPage <- mkGithubPage
-  let
-    spacer = DOM.div { style: DOM.css { width: "100vw", height: "100vh" } }
   pure
     $ [ Home /\ const spacer
       , About /\ aboutPage
       , Projects /\ githubPage
+      , End /\ const spacer
       ]
 
 mkHomePage :: Component Env

@@ -25,7 +25,7 @@ ScrollTrigger.addEventListener('refresh', () => {
 
 exports.setSnapPoints = (points) => () => {
   window[CALLBACK] = () => {
-    const max = document.body.scrollHeight
+    const max = document.body.scrollHeight - window.innerHeight
     createTrigger({
       markers: true,
       id: TRIGGER_ID,
