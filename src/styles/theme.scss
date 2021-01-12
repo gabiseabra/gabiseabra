@@ -4,17 +4,22 @@
 @import 'config/color';
 @import 'config/font';
 
-$palette-primary: $palette-purple;
+$palette-primary: $palette-pink;
 
-$palette-secondary: $palette-pink;
+$palette-secondary: $palette-aqua;
+
+$palette-highlight: $palette-aqua;
 
 $overlay-color: #fff;
 
 $content-width: 800px;
 
-$content-bg: color.change(map.get($palette-purple, 'dark'), $lightness: 45%, $saturation: 60%);
+$content-bg: map.get($palette-primary, 'lighter');
 
-$content-color: map.get($palette-secondary, 'lighter');
+$content-color: map.get($palette-secondary, 'darker');
 
-$content-highlight: map.get($palette-secondary, 'medium');
+$content-highlight: map.get($palette-highlight, 'light');
 
+$title-color: map.get($palette-primary, 'medium');
+
+$title-highlight: map.get($palette-highlight, 'light');
