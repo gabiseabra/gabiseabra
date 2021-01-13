@@ -1,7 +1,6 @@
 module Hey where
 
 import Prelude
-
 import Data.Maybe (Maybe(..))
 import Effect (Effect)
 import Effect.Exception (throw)
@@ -14,6 +13,7 @@ import Hey.Hooks.UseSnapPoints (mkSnapPointProvider)
 import Hey.Pages.Home (mkHomePage)
 import Hey.Pages.NotFound (mkNotFoundPage)
 import React.Basic.DOM (render)
+import React.Basic.DOM as DOM
 import React.Basic.Hooks (Component, JSX, component)
 import React.Basic.Hooks as React
 import Record.Extra (sequenceRecord)
@@ -52,11 +52,11 @@ mkApp = do
               Nothing -> pure mempty
               Just env ->
                 fetchProvider
-                >:> snapPointProvider
-                >>> pure
-                $ [ menu env
-                  , routes env
-                  ]
+                  >:> snapPointProvider
+                  >>> pure
+                  $ [ menu env
+                    , DOM.main_ [ routes env ]
+                    ]
 
 main :: Effect Unit
 main = do
