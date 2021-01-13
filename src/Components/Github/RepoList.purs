@@ -9,7 +9,6 @@ import Data.Tuple.Nested ((/\))
 import Data.Unfoldable (unfoldr)
 import Effect (Effect)
 import Effect.Exception (throw)
-import Effect.Uncurried (EffectFn1, runEffectFn1)
 import Hey.Api.Github (Repo)
 import Hey.Components.Github.Repo (mkRepo)
 import Hey.Hooks.UseSnapPoints (useSnapPoint)
@@ -23,27 +22,9 @@ import Web.HTML.Window as Window
 
 foreign import styles :: Styles
 
-foreign import animate :: EffectFn1 Node (Effect Unit)
-
 type Styles
   = { container :: String
-    , scroller :: String
-    , scene :: String
-    , list :: String
     , item :: String
-    }
-
-carousel :: Array JSX -> JSX
-carousel children =
-  DOM.div
-    { className: styles.list
-    , children:
-        children
-          # map \child ->
-              DOM.div
-                { className: styles.item
-                , children: [ child ]
-                }
     }
 
 -- | Calculate snap points centered at each slide, relative to the container element
@@ -67,27 +48,20 @@ mkRepoList = do
   repo <- mkRepo
   component "GithubRepoList"
     $ \repos -> React.do
-        scrollerRef <- useRef null
-        useEffectOnce
-          $ readRefMaybe scrollerRef
-          >>= maybe (throw "No container ref") (runEffectFn1 animate)
+        containerRef <- useRef null
         useSnapPoint "github/repos"
-          $ readRefMaybe scrollerRef
+          $ readRefMaybe containerRef
           >>= ((=<<) HTMLElement.fromNode)
           >>> maybe (throw "No container ref") (snapPoints $ length repos)
         pure
           $ DOM.div
-              { className: styles.container
+              { ref: containerRef
+              , className: styles.container
               , children:
-                  [ DOM.div
-                      { ref: scrollerRef
-                      , className: styles.scroller
-                      , children:
-                          pure
-                            $ DOM.div
-                                { className: styles.scene
-                                , children: pure $ carousel $ map repo repos
-                                }
-                      }
-                  ]
+                  repos
+                    <#> \r ->
+                        DOM.div
+                          { className: styles.item
+                          , children: [ repo r ]
+                          }
               }

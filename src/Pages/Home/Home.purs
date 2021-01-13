@@ -24,7 +24,8 @@ import Web.IntersectionObserverEntry (intersectionRatio)
 foreign import styles :: Styles
 
 type Styles
-  = { page :: String
+  = { container :: String
+    , page :: String
     , threshold :: String
     }
 
@@ -90,8 +91,11 @@ mkHomePage = do
     $ \env ->
         pure
           $ observerProvider
-          $ routes
-          # map \(route /\ c) ->
-              page { env, route, children: [ c env ] }
+          $ pure
+          $ DOM.div
+              { className:
+                  styles.container
+              , children: routes # map \(route /\ c) -> page { env, route, children: [ c env ] }
+              }
   where
   observerOpts = Observer.defOptions { threshold = [ 1.0 ] }

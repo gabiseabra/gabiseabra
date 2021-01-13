@@ -1,38 +1,11 @@
 .container {
-  margin-bottom: 50vh;
-}
-
-.scroller {
-  height: 425vh;
-  width: 100vw;
-}
-
-.scene {
-  height: 50vh;
-  perspective: 100vh;
-  perspective-origin: center;
-  position: relative;
-  width: 100vw;
-
-  &,
-  * { will-change: transform; }
-}
-
-.list {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  height: 50vh;
-  position: absolute;
-  transform-style: preserve-3d;
-  width: 100vw;
 }
 
 .item {
   box-sizing: border-box;
   height: 50vh;
-  opacity: 0.5;
   padding: 30px;
-  position: absolute;
-  width: 100vw;
 }

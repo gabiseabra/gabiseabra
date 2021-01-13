@@ -31,6 +31,8 @@ body {
   height: auto;
   position: relative;
   width: 100vw;
+  perspective-origin: center;
+  perspective: 100vh;
 }
 
 :global(#frame) {

@@ -1,9 +1,17 @@
 $threshold-height: 50vh;
 
+.container {
+  transform-style: preserve-3d;
+}
+
+.page {
+  position: relative;
+}
+
 .threshold {
   min-height: $threshold-height;
   pointer-events: none;
-  position: absolute;
+  position: sticky;
   width: 100%;
   z-index: 0;
 }
