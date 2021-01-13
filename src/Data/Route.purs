@@ -14,6 +14,7 @@ data Route
   = Home
   | About
   | Projects
+  | End
   | NotFound
 
 derive instance eqRoute :: Eq Route
@@ -22,6 +23,7 @@ instance showRoute :: Show Route where
   show Home = "home"
   show About = "about"
   show Projects = "projects"
+  show End = "fin"
   show NotFound = "404"
 
 routes :: Match Route
@@ -30,6 +32,7 @@ routes =
     [ Home <$ (root *> end)
     , About <$ (root *> lit (show About) *> end)
     , Projects <$ (root *> lit (show Projects) *> end)
+    , End <$ (root *> lit (show End) *> end)
     , NotFound <$ (root *> lit (show NotFound) *> end)
     , pure NotFound
     ]

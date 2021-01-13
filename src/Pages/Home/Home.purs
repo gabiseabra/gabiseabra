@@ -10,7 +10,7 @@ import Effect (Effect)
 import Hey.Data.Env (Env)
 import Hey.Data.Route (Route(..))
 import Hey.Hooks.UseIntersectionObserver as Observer
-import Hey.Hooks.UseSnapPoints (useSnapPoint)
+import Hey.Hooks.UseScroll (useSnapPoint)
 import Hey.Pages.About (mkAboutPage)
 import Hey.Pages.Github (mkGithubPage)
 import Hey.Pages.Landing (mkLandingPage)
@@ -24,7 +24,8 @@ import Web.IntersectionObserverEntry (intersectionRatio)
 foreign import styles :: Styles
 
 type Styles
-  = { page :: String
+  = { container :: String
+    , page :: String
     , threshold :: String
     }
 
@@ -66,15 +67,19 @@ mkPage =
                     <> children
               }
 
+spacer :: JSX
+spacer = DOM.div { style: DOM.css { width: "100vw", height: "100vh" } }
+
 mkRoutes :: Effect (Array (Route /\ (Env -> JSX)))
 mkRoutes = do
   landingPage <- mkLandingPage
   aboutPage <- mkAboutPage
   githubPage <- mkGithubPage
   pure
-    $ [ Home /\ landingPage
+    $ [ Home /\ const spacer
       , About /\ aboutPage
       , Projects /\ githubPage
+      , End /\ const spacer
       ]
 
 mkHomePage :: Component Env
@@ -86,8 +91,11 @@ mkHomePage = do
     $ \env ->
         pure
           $ observerProvider
-          $ routes
-          # map \(route /\ c) ->
-              page { env, route, children: [ c env ] }
+          $ pure
+          $ DOM.div
+              { className:
+                  styles.container
+              , children: routes # map \(route /\ c) -> page { env, route, children: [ c env ] }
+              }
   where
   observerOpts = Observer.defOptions { threshold = [ 1.0 ] }

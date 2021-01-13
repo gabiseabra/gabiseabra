@@ -2,16 +2,18 @@
 
 @import '~@styles/theme';
 
-.heading {
-  color: $content-color;
-  font-family: map.get($font-family, 'monospace');
-  text-shadow: 2.5px 2.5px 0 $content-highlight;
-  text-transform: uppercase;
+.mark {
+  background: $content-highlight;
+  padding: 0 5px 0.1% 2.5px;
 }
 
-.mark {
-  background: linear-gradient(transparent 35%, $content-highlight 35%, $content-highlight 100%);
-  padding: 0 5px 0.1% 2.5px;
+.heading {
+  color: $title-color;
+  font-family: map.get($font-family, 'monospace');
+  text-shadow: 2.5px 2.5px 0 $title-highlight;
+  text-transform: uppercase;
+
+  .mark { background: $title-highlight; }
 }
 
 .span,
