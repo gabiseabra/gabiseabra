@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "repl": "spago repl",
-    "clean": "rm -rf output public/build node_modules/.cache",
+    "clean": "rm -rf output public/build node_modules/.cache output .spago",
     "build": "webpack -c webpack/config.js",
     "lint": "eslint . --ext '.js,.jsx,.ts,.tsx'",
     "start": "http-server --gzip --proxy http://localhost:8080?"
