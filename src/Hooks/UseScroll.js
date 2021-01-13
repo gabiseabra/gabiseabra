@@ -26,22 +26,23 @@ ScrollTrigger.addEventListener('refresh', () => {
 exports.getScrollHeight = () => document.body.scrollHeight - window.innerHeight
 
 exports.setSnapPoints = (points) => () => {
+  const start = 0
+  const end = exports.getScrollHeight()
   window[CALLBACK] = () => {
     createTrigger({
       markers: true,
       id: TRIGGER_ID,
-      start: 0,
-      end: exports.scrollHeight(),
+      start,
+      end,
       onUpdate(...args) {
         if(window.onScroll) window.onScroll(...args)
       },
       snap: {
-        snapTo: points.reduce((p, fun) => p.concat(fun().map(percent(0, max))), []),
+        snapTo: points.reduce((p, fun) => p.concat(fun().map(percent(start, end))), []),
         duration: { min: 0.1, max: 0.3 },
         ease: "circ.inOut"
       }
     })
   }
-  // Update snap points immediately
   window[CALLBACK]()
 }

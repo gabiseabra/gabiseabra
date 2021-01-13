@@ -9,7 +9,7 @@ import Hey.Data.Env (Env)
 import Hey.Data.Route (Route(..))
 import Hey.Hooks.UseFetch (mkFetchProvider)
 import Hey.Hooks.UseRouter (useRouter)
-import Hey.Hooks.UseSnapPoints (mkSnapPointProvider)
+import Hey.Hooks.UseScroll (mkScrollProvider)
 import Hey.Pages.Home (mkHomePage)
 import Hey.Pages.NotFound (mkNotFoundPage)
 import React.Basic.DOM (render)
@@ -43,7 +43,7 @@ mkApp = do
   menu <- mkMenu
   routes <- mkRoutes
   fetchProvider <- mkFetchProvider
-  snapPointProvider <- mkSnapPointProvider
+  scrollProvider <- mkScrollProvider
   component "App"
     $ \_ -> React.do
         router <- useRouter
@@ -52,7 +52,7 @@ mkApp = do
               Nothing -> pure mempty
               Just env ->
                 fetchProvider
-                  >:> snapPointProvider
+                  >:> scrollProvider
                   >>> pure
                   $ [ menu env
                     , DOM.main_ [ routes env ]

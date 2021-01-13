@@ -1,4 +1,4 @@
-module Hey.Hooks.UseSnapPoints
+module Hey.Hooks.UseScroll
   ( Key
   , mkScrollProvider
   , useScrollHeight

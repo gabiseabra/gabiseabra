@@ -10,7 +10,7 @@ import Effect (Effect)
 import Hey.Data.Env (Env)
 import Hey.Data.Route (Route(..))
 import Hey.Hooks.UseIntersectionObserver as Observer
-import Hey.Hooks.UseSnapPoints (useSnapPoint)
+import Hey.Hooks.UseScroll (useSnapPoint)
 import Hey.Pages.About (mkAboutPage)
 import Hey.Pages.Github (mkGithubPage)
 import Hey.Pages.Landing (mkLandingPage)

@@ -11,11 +11,10 @@ import Effect (Effect)
 import Effect.Exception (throw)
 import Hey.Api.Github (Repo)
 import Hey.Components.Github.Repo (mkRepo)
-import Hey.Hooks.UseSnapPoints (useSnapPoint)
+import Hey.Hooks.UseScroll (useSnapPoint)
 import React.Basic.DOM as DOM
-import React.Basic.Hooks (Component, JSX, component, readRefMaybe, useEffectOnce, useRef)
+import React.Basic.Hooks (Component, component, readRefMaybe, useRef)
 import React.Basic.Hooks as React
-import Web.DOM (Node)
 import Web.HTML (HTMLElement, window)
 import Web.HTML.HTMLElement as HTMLElement
 import Web.HTML.Window as Window

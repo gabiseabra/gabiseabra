@@ -5,8 +5,6 @@ import Canvas from './canvas'
 import Main from './Main'
 import './index.scss'
 
-console.log('...', require('./Hooks/UseSnapPoint.js'))
-
 gsap.registerPlugin(ScrollTrigger);
 
 const drawChart = (draw) => function () {
