@@ -19,6 +19,8 @@ import Web.HTML (HTMLElement, window)
 import Web.HTML.HTMLElement as HTMLElement
 import Web.HTML.Window as Window
 
+foreign import offsetTop :: HTMLElement -> Effect Number
+
 foreign import styles :: Styles
 
 type Styles
@@ -30,16 +32,16 @@ type Styles
 snapPoints :: Int -> HTMLElement -> Effect (Array Number)
 snapPoints count el = do
   vh <- window >>= Window.innerHeight >>= toNumber >>> pure
-  y <- HTMLElement.offsetTop el
+  y <- offsetTop el
   h <- HTMLElement.offsetHeight el
   let
-    x0 = y - vh * 0.25
+    d = vh * 0.5
 
-    xh = h `div` toNumber (count - 1)
+    x0 = y - vh * 0.25
 
     foldx n
       | n == -1 = Nothing
-      | otherwise = Just ((x0 + (xh * toNumber n)) /\ (n - 1))
+      | otherwise = Just ((x0 + (d * toNumber n)) /\ (n - 1))
   pure $ unfoldr foldx (count - 1)
 
 mkRepoList :: Component (Array Repo)
