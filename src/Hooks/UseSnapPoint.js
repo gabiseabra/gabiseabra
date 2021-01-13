@@ -23,14 +23,15 @@ ScrollTrigger.addEventListener('refresh', () => {
   window[CALLBACK].timeout = setTimeout(window[CALLBACK], 210)
 })
 
+exports.getScrollHeight = () => document.body.scrollHeight - window.innerHeight
+
 exports.setSnapPoints = (points) => () => {
   window[CALLBACK] = () => {
-    const max = document.body.scrollHeight - window.innerHeight
     createTrigger({
       markers: true,
       id: TRIGGER_ID,
       start: 0,
-      end: max,
+      end: exports.scrollHeight(),
       onUpdate(...args) {
         if(window.onScroll) window.onScroll(...args)
       },
