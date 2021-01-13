@@ -11,15 +11,13 @@ import Effect (Effect)
 import Effect.Exception (throw)
 import Hey.Api.Github (Repo)
 import Hey.Components.Github.Repo (mkRepo)
-import Hey.Hooks.UseScroll (useSnapPoint)
+import Hey.Hooks.UseScroll (useSnapPoint, offsetTop)
 import React.Basic.DOM as DOM
 import React.Basic.Hooks (Component, component, readRefMaybe, useRef)
 import React.Basic.Hooks as React
 import Web.HTML (HTMLElement, window)
 import Web.HTML.HTMLElement as HTMLElement
 import Web.HTML.Window as Window
-
-foreign import offsetTop :: HTMLElement -> Effect Number
 
 foreign import styles :: Styles
 

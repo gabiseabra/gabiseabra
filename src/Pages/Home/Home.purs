@@ -10,15 +10,13 @@ import Effect (Effect)
 import Hey.Data.Env (Env)
 import Hey.Data.Route (Route(..))
 import Hey.Hooks.UseIntersectionObserver as Observer
-import Hey.Hooks.UseScroll (useSnapPoint)
 import Hey.Pages.About (mkAboutPage)
 import Hey.Pages.Github (mkGithubPage)
 import Hey.Pages.Landing (mkLandingPage)
 import React.Basic (JSX)
 import React.Basic.DOM as DOM
-import React.Basic.Hooks (Component, component, readRefMaybe, useEffect, useRef)
+import React.Basic.Hooks (Component, component, useEffect, useRef)
 import React.Basic.Hooks as React
-import Web.HTML.HTMLElement as HTMLElement
 import Web.IntersectionObserverEntry (intersectionRatio)
 
 foreign import styles :: Styles
@@ -39,7 +37,6 @@ mkPage :: Component PageProps
 mkPage =
   component "Page"
     $ \{ env, route, children } -> React.do
-        pageRef <- useRef null
         thresholdRef <- useRef null
         entry <- Observer.useIntersectionObserverEntry thresholdRef
         let
@@ -52,15 +49,9 @@ mkPage =
               else
                 pure unit
               pure mempty
-        -- Use the beggining of this section as a snap point
-        useSnapPoint (show route)
-          $ readRefMaybe pageRef
-          >>= ((=<<) HTMLElement.fromNode)
-          >>> maybe (pure []) (HTMLElement.offsetTop >=> (pure >>> pure))
         pure
           $ DOM.section
               { id: show route
-              , ref: pageRef
               , className: styles.page
               , children:
                   [ DOM.div { ref: thresholdRef, className: styles.threshold } ]
@@ -93,7 +84,8 @@ mkHomePage = do
           $ observerProvider
           $ pure
           $ DOM.div
-              { className:
+              { id: "scroller"
+              , className:
                   styles.container
               , children: routes # map \(route /\ c) -> page { env, route, children: [ c env ] }
               }

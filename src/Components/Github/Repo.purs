@@ -6,12 +6,15 @@ import Data.Formatter.DateTime as FDT
 import Data.List (fromFoldable)
 import Data.Maybe (fromMaybe, maybe)
 import Data.Newtype (unwrap)
+import Data.Nullable (null)
 import Hey.Api.Github (Repo)
 import Hey.Components.SVG.Icon (Icon(..), icon)
 import Hey.Components.Typography (FontSize(..), Heading(..))
 import Hey.Components.Typography as Typo
+import Hey.Hooks.UseScroll (usePerspective)
 import React.Basic.DOM as DOM
-import React.Basic.Hooks (Component, JSX, component)
+import React.Basic.Hooks (Component, JSX, component, useRef)
+import React.Basic.Hooks as React
 
 foreign import styles :: Styles
 
@@ -85,9 +88,13 @@ mkRepo :: Component Repo
 mkRepo =
   component "GithubRepo"
     $ \repo@{ name, description } -> React.do
+        ref <- useRef null
+        style <- usePerspective ref
         pure
           $ DOM.div
-              { className: styles.container
+              { ref
+              , style
+              , className: styles.container
               , children:
                   pure
                     $ DOM.article
