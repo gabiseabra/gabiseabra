@@ -1,12 +1,11 @@
 module Hey.Hooks.UseScroll
   ( Key
   , mkScrollProvider
-  , useScrollHeight
   , UseSnapPoint
   , useSnapPoint
   , useSnapPointRef
-  , UsePerspective
-  , usePerspective
+  , UseScrollerElement
+  , useScrollerElement
   , offsetTop
   ) where
 
@@ -16,35 +15,29 @@ import Control.Plus (class Plus, empty)
 import Data.Array (fromFoldable)
 import Data.Foldable (class Foldable)
 import Data.Map as Map
-import Data.Maybe (Maybe, fromMaybe)
+import Data.Maybe (Maybe, maybe)
 import Data.Newtype (class Newtype)
-import Data.Nullable (Nullable)
+import Data.Nullable (Nullable, null)
 import Data.Traversable (traverse)
 import Data.Tuple.Nested ((/\))
-import Debug.Trace as Debug
 import Effect (Effect)
 import Effect.Class (liftEffect)
 import Effect.Exception (throw)
 import Effect.Unsafe (unsafePerformEffect)
-import Math as Math
-import React.Basic.DOM (CSS)
 import React.Basic.DOM as DOM
-import React.Basic.Hooks (Component, Hook, JSX, ReactContext, Ref, UseContext, UseEffect, UseState, coerceHook, component, contextProvider, createContext, element, readRefMaybe, useContext, useEffect, useEffectOnce, useState)
+import React.Basic.Hooks (Component, Hook, JSX, ReactContext, Ref, UseContext, UseEffect, UseState, coerceHook, component, contextProvider, createContext, element, readRefMaybe, useContext, useEffect, useEffectOnce, useRef, useState)
 import React.Basic.Hooks as React
 import React.Basic.Hooks.Aff (UseAff, useAff)
 import React.Basic.Hooks.ResetToken (ResetToken, useResetToken)
 import Unsafe.Coerce (unsafeCoerce)
-import Web.DOM (Node)
+import Web.DOM (Element, Node)
+import Web.DOM.Element as Element
 import Web.HTML.HTMLElement (HTMLElement)
 import Web.HTML.HTMLElement as HTMLElement
 
 foreign import setSnapPoints :: Array (Effect (Array Number)) -> Effect Unit
 
-foreign import getScrollHeight :: Effect Number
-
-foreign import updateScroller :: Number -> Effect Unit
-
-foreign import scrollAngle :: Number
+foreign import updateScroller :: HTMLElement -> Effect Unit
 
 foreign import offsetTop :: HTMLElement -> Effect Number
 
@@ -57,31 +50,33 @@ type SnapPoint
 type ScrollContext
   = { token :: ResetToken
     , insert :: Key -> Effect (Array Number) -> Effect (Effect Unit)
-    , scrollHeight :: Number
+    , scrollerRef :: Ref (Nullable Node)
     }
 
 ctx :: ReactContext ScrollContext
 ctx =
   unsafePerformEffect $ createContext
     $ { insert: \_ _ -> throw "useSnapPoint: Tried to add snap point with uninitialized context."
-      , scrollHeight: 0.0
       , token: unsafeCoerce {}
+      , scrollerRef: unsafeCoerce {}
       }
 
-snapPointProvider :: { children :: Array JSX, value :: ScrollContext } -> JSX
-snapPointProvider = element $ contextProvider ctx
+scrollProvider :: { children :: Array JSX, value :: ScrollContext } -> JSX
+scrollProvider = element $ contextProvider ctx
 
 mkScrollProvider :: Component (Array JSX)
 mkScrollProvider =
-  component "SnapPointProvider"
+  component "ScrollProvider"
     $ \children -> React.do
+        scrollerRef <- useRef null
         token /\ reset <- useResetToken
         points /\ setPoints <- useState Map.empty
-        scrollHeight /\ setScrollHeight <- useState 0.0
         useEffect token
           $ do
+              readRefMaybe scrollerRef
+                >>= ((=<<) HTMLElement.fromNode)
+                >>> maybe mempty updateScroller
               setSnapPoints $ fromFoldable $ Map.values points
-              getScrollHeight >>= updateScroller <> (const >>> setScrollHeight)
               pure mempty
         useEffectOnce $ pure $ setSnapPoints mempty
         let
@@ -90,9 +85,23 @@ mkScrollProvider =
             reset
             pure $ setPoints $ Map.delete k
         pure
-          $ snapPointProvider
-              { children
-              , value: { token, insert, scrollHeight }
+          $ scrollProvider
+              { value: { token, insert, scrollerRef }
+              , children:
+                  [ DOM.div
+                      { ref: scrollerRef
+                      , style:
+                          DOM.css
+                            { position: "absolute"
+                            , top: "0px"
+                            , height: "100vh"
+                            , width: "100vw"
+                            , transformOrigin: "50% 50%"
+                            , transformStyle: "preserve-3d"
+                            }
+                      }
+                  , DOM.div_ children
+                  ]
               }
 
 newtype UseSnapPoint f hooks
@@ -120,40 +129,17 @@ useSnapPointRef k ref =
     >>= ((=<<) HTMLElement.fromNode)
     >>> traverse offsetTop
 
-useScrollHeight :: Hook (UseContext ScrollContext) Number
-useScrollHeight = useContext ctx :>>= _.scrollHeight >>> ipure
+newtype UseScrollerElement hooks
+  = ScrollerElement
+  (UseAff Unit (Maybe Element) (UseContext ScrollContext hooks))
 
-newtype UsePerspective hooks
-  = UsePerspective
-  (UseAff Number (Maybe CSS) (UseContext ScrollContext hooks))
+derive instance newtypeUseScrollerElement :: Newtype (UseScrollerElement hooks) _
 
-derive instance newtypeUsePerspective :: Newtype (UsePerspective hooks) _
-
-perspectiveCSS :: Number -> HTMLElement -> Effect CSS
-perspectiveCSS scrollHeight el = do
-  offset <- offsetTop el
-  let
-    y = (offset `div` scrollHeight)
-
-    angle = y * scrollAngle - (Math.pi * 0.5)
-
-    z = scrollHeight `div` scrollAngle
-  Debug.traceM { el, scrollHeight, y, z }
-  pure
-    $ DOM.css
-        { transform: "translate3d(0,0,-" <> (show z) <> "px) rotateX(" <> (show angle) <> "rad)"
-        , transformOrigin: "50% 0%"
-        }
-
-usePerspective :: Ref (Nullable Node) -> Hook UsePerspective CSS
-usePerspective ref =
-  coerceHook
-    $ React.do
-        { token, scrollHeight } <- useContext ctx
-        css <-
-          useAff scrollHeight
-            $ liftEffect
-            $ readRefMaybe ref
-            >>= ((=<<) HTMLElement.fromNode >>> pure)
-            >>= traverse (perspectiveCSS scrollHeight)
-        pure $ fromMaybe (DOM.css {}) $ join css
+useScrollerElement :: Hook UseScrollerElement (Maybe Element)
+useScrollerElement =
+  coerceHook $ useContext ctx
+    :>>= (_.scrollerRef >>> readRefMaybe >=> ((=<<) Element.fromNode >>> pure))
+    >>> liftEffect
+    >>> useAff unit
+    :>>= join
+    >>> ipure

@@ -7,8 +7,8 @@ import Control.Monad.Indexed ((:>>=))
 import Data.Maybe (Maybe(..))
 import Data.Nullable (null)
 import Hey.Api.Github (fetchViewer)
+import Hey.Components.Section (mkSection)
 import Hey.Hooks.UseFetch (useFetch)
-import Hey.Hooks.UseScroll (usePerspective, useSnapPointRef)
 import React.Basic.DOM as DOM
 import React.Basic.Hooks (Component, component, useRef)
 import React.Basic.Hooks as React
@@ -20,14 +20,18 @@ type Styles
     }
 
 mkAboutPage :: forall a. Component a
-mkAboutPage =
+mkAboutPage = do
+  section <- mkSection
   component "About" \_ -> React.do
-    ref <- useRef null
-    style <- usePerspective ref
-    useSnapPointRef "home" ref
     children <-
       useFetch fetchViewer
         :>>= case _ of
             Nothing -> pure [ DOM.text "loading..." ]
             Just { data: res } -> pure [ DOM.text "lmaooo" ]
-    pure $ DOM.div { className: styles.page, ref, style, children }
+    pure
+      $ section
+          { key: "about"
+          , height: "75vh"
+          , snap: Nothing
+          , children
+          }

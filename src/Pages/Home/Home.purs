@@ -10,10 +10,11 @@ import Effect (Effect)
 import Hey.Data.Env (Env)
 import Hey.Data.Route (Route(..))
 import Hey.Hooks.UseIntersectionObserver as Observer
+import Hey.Hooks.UseScroll (mkScrollProvider)
 import Hey.Pages.About (mkAboutPage)
 import Hey.Pages.Github (mkGithubPage)
 import Hey.Pages.Landing (mkLandingPage)
-import React.Basic (JSX)
+import React.Basic (JSX, fragment)
 import React.Basic.DOM as DOM
 import React.Basic.Hooks (Component, component, useEffect, useRef)
 import React.Basic.Hooks as React
@@ -67,7 +68,7 @@ mkRoutes = do
   aboutPage <- mkAboutPage
   githubPage <- mkGithubPage
   pure
-    $ [ Home /\ const spacer
+    $ [ Home /\ landingPage
       , About /\ aboutPage
       , Projects /\ githubPage
       , End /\ const spacer
@@ -75,19 +76,7 @@ mkRoutes = do
 
 mkHomePage :: Component Env
 mkHomePage = do
-  observerProvider <- Observer.mkIntersectionObserverProvider $ observerOpts
   routes <- mkRoutes
-  page <- mkPage
+  scrollProvider <- mkScrollProvider
   component "Home"
-    $ \env ->
-        pure
-          $ observerProvider
-          $ pure
-          $ DOM.div
-              { id: "scroller"
-              , className:
-                  styles.container
-              , children: routes # map \(route /\ c) -> page { env, route, children: [ c env ] }
-              }
-  where
-  observerOpts = Observer.defOptions { threshold = [ 1.0 ] }
+    $ \env -> pure $ scrollProvider $ routes <#> \(route /\ c) -> c env

@@ -21,9 +21,9 @@ function main() {
     }
   )
 
-  window.onScroll = ({progress}) => {
+  window.Scroller.addEventListener(({progress}) => {
     scene.progress = progress
-  }
+  })
 
   function animate() {
     composer.render()

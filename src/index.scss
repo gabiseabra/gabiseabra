@@ -35,6 +35,7 @@ body {
   & > main {
     perspective-origin: center;
     perspective: 100vh;
+    overflow: hidden;
   }
 }
 

@@ -9,7 +9,6 @@ import Hey.Data.Env (Env)
 import Hey.Data.Route (Route(..))
 import Hey.Hooks.UseFetch (mkFetchProvider)
 import Hey.Hooks.UseRouter (useRouter)
-import Hey.Hooks.UseScroll (mkScrollProvider)
 import Hey.Pages.Home (mkHomePage)
 import Hey.Pages.NotFound (mkNotFoundPage)
 import React.Basic.DOM (render)
@@ -33,17 +32,11 @@ mkRoutes = do
       NotFound -> pure $ notFound env
       _ -> pure $ home env
 
-composeProvider :: (Array JSX -> JSX) -> (Array JSX -> JSX) -> Array JSX -> JSX
-composeProvider f g = f >>> pure >>> g
-
-infixr 10 composeProvider as >:>
-
 mkApp :: forall a. Component a
 mkApp = do
   menu <- mkMenu
   routes <- mkRoutes
   fetchProvider <- mkFetchProvider
-  scrollProvider <- mkScrollProvider
   component "App"
     $ \_ -> React.do
         router <- useRouter
@@ -52,7 +45,6 @@ mkApp = do
               Nothing -> pure mempty
               Just env ->
                 fetchProvider
-                  >:> scrollProvider
                   >>> pure
                   $ [ menu env
                     , DOM.main_ [ routes env ]
