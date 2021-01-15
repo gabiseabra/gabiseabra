@@ -13,8 +13,8 @@ import Hey.Hooks.UseIntersectionObserver as Observer
 import Hey.Hooks.UseScroll (mkScrollProvider)
 import Hey.Pages.About (mkAboutPage)
 import Hey.Pages.Github (mkGithubPage)
-import Hey.Pages.Landing (mkLandingPage)
-import React.Basic (JSX, fragment)
+import Hey.Pages.Spacer (mkSpacerPage)
+import React.Basic (JSX)
 import React.Basic.DOM as DOM
 import React.Basic.Hooks (Component, component, useEffect, useRef)
 import React.Basic.Hooks as React
@@ -34,44 +34,19 @@ type PageProps
     , children :: Array JSX
     }
 
-mkPage :: Component PageProps
-mkPage =
-  component "Page"
-    $ \{ env, route, children } -> React.do
-        thresholdRef <- useRef null
-        entry <- Observer.useIntersectionObserverEntry thresholdRef
-        let
-          ratio = maybe 0.0 intersectionRatio entry
-        -- Update active route when this page becomes visible
-        useEffect ratio
-          $ do
-              if ratio == 1.0 then
-                env.router.replace route
-              else
-                pure unit
-              pure mempty
-        pure
-          $ DOM.section
-              { id: show route
-              , className: styles.page
-              , children:
-                  [ DOM.div { ref: thresholdRef, className: styles.threshold } ]
-                    <> children
-              }
-
 spacer :: JSX
 spacer = DOM.div { style: DOM.css { width: "100vw", height: "100vh" } }
 
 mkRoutes :: Effect (Array (Route /\ (Env -> JSX)))
 mkRoutes = do
-  landingPage <- mkLandingPage
+  spacerPage <- mkSpacerPage
   aboutPage <- mkAboutPage
   githubPage <- mkGithubPage
   pure
-    $ [ Home /\ landingPage
+    $ [ Home /\ \_ -> spacerPage "home"
       , About /\ aboutPage
       , Projects /\ githubPage
-      , End /\ const spacer
+      , End /\ \_ -> spacerPage "end"
       ]
 
 mkHomePage :: Component Env

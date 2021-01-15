@@ -11,7 +11,6 @@ import Effect (Effect)
 import Effect.Exception (throw)
 import Hey.Api.Github (Repo)
 import Hey.Components.Github.Repo (mkRepo)
-import Hey.Hooks.UseScroll (useSnapPoint, offsetTop)
 import React.Basic.DOM as DOM
 import React.Basic.Hooks (Component, component, fragment, readRefMaybe, useRef)
 import React.Basic.Hooks as React

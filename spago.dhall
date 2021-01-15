@@ -17,6 +17,7 @@ You can edit this file as you like.
   , "react-basic-hooks"
   , "record-extra"
   , "routing"
+  , "unordered-collections"
   , "web-dom"
   , "web-html"
   , "web-intersection-observer"

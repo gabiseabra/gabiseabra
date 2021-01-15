@@ -41,15 +41,6 @@ $height: 60px;
     transform: scale(0.85);
   }
 
-  &.active {
-    animation: shake 100ms infinite linear;
-
-    > span {
-      filter: url('#anaglyph');
-      transform: scale(1) !important;
-    }
-  }
-
   &::before {
     align-items: center;
     content: '•';

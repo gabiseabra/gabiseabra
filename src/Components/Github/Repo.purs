@@ -3,22 +3,18 @@ module Hey.Components.Github.Repo (mkRepo) where
 import Prelude
 import Data.Formatter.DateTime (FormatterCommand(..))
 import Data.Formatter.DateTime as FDT
-import Data.Int (toNumber)
 import Data.List (fromFoldable)
-import Data.Maybe (Maybe(..), fromMaybe, maybe)
+import Data.Maybe (fromMaybe, maybe)
 import Data.Newtype (unwrap)
 import Data.Nullable (null)
 import Hey.Api.Github (Repo)
 import Hey.Components.SVG.Icon (Icon(..), icon)
-import Hey.Components.Section (mkSection)
 import Hey.Components.Typography (FontSize(..), Heading(..))
 import Hey.Components.Typography as Typo
-import Hey.Hooks.UseScroll (offsetTop)
+import Hey.Hooks.UseScroll (useSnapPoint)
 import React.Basic.DOM as DOM
 import React.Basic.Hooks (Component, JSX, component, useRef)
 import React.Basic.Hooks as React
-import Web.HTML (window)
-import Web.HTML.Window (document, innerHeight)
 
 foreign import styles :: Styles
 
@@ -90,18 +86,14 @@ links { url, homepageUrl } =
 
 mkRepo :: Component Repo
 mkRepo = do
-  section <- mkSection
   component "GithubRepo"
     $ \repo@{ name, description } -> React.do
+        ref <- useRef null
+        useSnapPoint ref
         pure
-          $ section
-              { key: "repo/" <> name
-              , height: "50vh"
-              , snap:
-                  Just \el -> do
-                    y <- offsetTop el
-                    d <- window >>= innerHeight >>= toNumber >>> pure
-                    pure $ y - (d `div` 4.0)
+          $ DOM.section
+              { ref
+              , className: styles.container
               , children:
                   pure
                     $ DOM.article

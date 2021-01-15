@@ -19,7 +19,7 @@ mkGithubPage = do
   component "Repos" \_ -> React.do
     useFetch fetchViewer
       :>>= case _ of
-          Nothing -> pure $ DOM.text "loading..."
+          Nothing -> pure $ mempty
           Just { data: res } -> do
             pure
               $ fragment
