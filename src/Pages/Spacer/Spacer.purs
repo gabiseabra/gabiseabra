@@ -19,8 +19,7 @@ mkSpacerPage = do
           { ref
           , style:
               DOM.css
-                { background: "#0000ff50"
-                , height: "100vh"
+                { height: "100vh"
                 , width: "100vh"
                 }
           }

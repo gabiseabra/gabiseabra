@@ -96,18 +96,20 @@ mkRepo = do
               , className: styles.container
               , children:
                   pure
-                    $ DOM.article
+                    $ DOM.div
                         { className: styles.repo
                         , children:
-                            [ Typo.h H2 $ pure $ DOM.text name
-                            , Typo.p_ $ pure $ DOM.text $ fromMaybe lipsum description
-                            , DOM.footer
-                                { children:
-                                    [ languages repo
-                                    , pubDate repo
-                                    , links repo
-                                    ]
-                                }
-                            ]
+                            pure
+                              $ DOM.article_
+                                  [ Typo.h H2 $ pure $ DOM.text name
+                                  , Typo.p_ $ pure $ DOM.text $ fromMaybe lipsum description
+                                  , DOM.footer
+                                      { children:
+                                          [ languages repo
+                                          , pubDate repo
+                                          , links repo
+                                          ]
+                                      }
+                                  ]
                         }
               }

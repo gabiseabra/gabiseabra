@@ -2,6 +2,11 @@
 
 @import '~@styles/theme';
 
+*::selection {
+  background: map.get($palette-secondary, 'medium');
+  color: white;
+}
+
 html,
 body {
   font-family: map.get($font-family, 'paragraph');
@@ -33,8 +38,8 @@ body {
   width: 100vw;
 
   & > main {
-    perspective-origin: center;
-    perspective: 100vh;
+    max-width: $content-width;
+    margin: 0 auto;
     overflow: hidden;
   }
 }

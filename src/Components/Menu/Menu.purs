@@ -4,17 +4,13 @@ import Prelude
 import Data.Foldable (intercalate)
 import Data.Maybe (maybe)
 import Data.Monoid (guard)
-import Data.String (length)
 import Effect (Effect)
-import Hey.Components.SVG.Definition (def)
-import Hey.Components.SVG.Filters (anaglyph)
 import Hey.Data.Env (Env)
 import Hey.Data.Route (Route(..), href)
 import Hey.Extra.DOM (scrollIntoView)
 import React.Basic (JSX)
 import React.Basic.DOM as DOM
 import React.Basic.DOM.Events (preventDefault)
-import React.Basic.DOM.SVG as SVG
 import React.Basic.Events (handler)
 import React.Basic.Hooks (Component, component)
 import React.Basic.Hooks as React
@@ -39,8 +35,6 @@ type LinkProps
     , active :: Boolean
     , onClick :: Effect Unit
     }
-
-svgDefs = def 100 100 [ anaglyph 5 "anaglyph" ] :: JSX
 
 link :: LinkProps -> JSX
 link { label, href, active, onClick } =
@@ -82,5 +76,5 @@ mkMenu =
         pure
           $ DOM.nav
               { className: styles.nav
-              , children: links <> [ svgDefs ]
+              , children: links
               }

@@ -10,18 +10,16 @@ $font-size-lg: 1.5rem;
 $height: 60px;
 
 .nav {
-  $height: 60px;
-  align-items: center;
+  z-index: 1;
+  height: $height;
+  position: fixed;
   display: flex;
   flex-direction: row;
+  align-items: center;
   justify-content: flex-end;
-  left: 15px;
-  mix-blend-mode: difference;
-  position: fixed;
-  right: 15px;
   top: 15px;
-  z-index: 1;
-
+  left: 15px;
+  right: 15px;
 }
 
 .link {
@@ -31,27 +29,15 @@ $height: 60px;
   font-family: map.get($font-family, 'monospace');
   font-size: $font-size-lg;
   padding: 10px 0;
+  margin: 0 15px;
   text-decoration: none;
   transform-origin: center center 0;
-
 
   > span {
     align-items: center;
     display: inline-flex;
     transform: scale(0.85);
   }
-
-  &::before {
-    align-items: center;
-    content: '•';
-    display: flex;
-    font-size: 0.75em;
-    line-height: 0;
-    margin-top: -1px;
-    padding: 0 5px;
-  }
-
-  &:first-child::before { display: none; }
 }
 
 @include breakpoint.down('tablet') {
@@ -64,11 +50,3 @@ $height: 60px;
   .link { font-size: $font-size-sm; }
 }
 
-@keyframes shake {
-  0% { transform: skewX(-15deg); }
-  5% { transform: skewX(15deg); }
-  10% { transform: skewX(-15deg); }
-  15% { transform: skewX(15deg); }
-  20% { transform: skewX(0deg); }
-  100% { transform: skewX(0deg); }
-}
