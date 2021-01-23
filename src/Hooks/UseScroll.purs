@@ -1,6 +1,7 @@
 module Hey.Hooks.UseScroll
   ( ScrollTrigger
   , ScrollTriggerOptions
+  , snapTo
   , mkScrollProvider
   , UseSnapPoint
   , useSnapPoint
@@ -38,6 +39,9 @@ foreign import setSnapPoints :: Array HTMLElement -> Effect Unit
 foreign import mkScrollTrigger :: ScrollTriggerOptions -> HTMLElement -> Effect ScrollTrigger
 
 foreign import kill :: ScrollTrigger -> Effect Unit
+
+-- | Scroll to the snap point closest to the element
+foreign import snapTo :: HTMLElement -> Effect Unit
 
 type ScrollContext
   = { insert :: HTMLElement -> Effect (Effect Unit)

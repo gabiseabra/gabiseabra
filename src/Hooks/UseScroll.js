@@ -28,32 +28,28 @@ window.Scroller = {
   children: [],
   listeners: new Set(),
   timeout: undefined,
-  get trigger() { return this[TRIGGER] },
-  set trigger(t) {
-    if (this[TRIGGER]) this[TRIGGER].kill()
-    this[TRIGGER] = t
-  },
+  trigger: undefined,
   get height() { return document.body.offsetHeight - window.innerHeight },
   addEventListener(fn) {
     return this.listeners.add(fn)
   },
   removeEventListener(fn) {
     return this.listeners.delete(fn)
-  },
-  getSnapPoints() {
-    return Array.from(this.children).map(offsetTop)
   }
 }
 
 exports.mkIdx = () => Scroller.idx++
 
 exports.setSnapPoints = (children) => () => {
+  if (Scroller.trigger) Scroller.trigger.kill()
+
   Scroller.children = children
+  Scroller.snapPoints = Array.from(children).map(offsetTop)
 
   const start = 0
   const end = Scroller.height
   const snap = {
-    snapTo: Scroller.getSnapPoints().map(percent(start, end)),
+    snapTo: Scroller.snapPoints.map(percent(start, end)),
     duration: { min: 0.1, max: 0.3 },
     ease: "circ.inOut"
   }
@@ -79,6 +75,13 @@ exports.mkScrollTrigger = ({ onEnter, onEnterBack }) => (trigger) => () => {
     onEnter: effect(onEnter),
     onEnterBack: effect(onEnterBack)
   })
+}
+
+exports.snapTo = (el) => () => {
+  const top = offsetTop(el)
+  const distances = Scroller.snapPoints.map((p) => Math.abs(p - top))
+  const idx = distances.indexOf(Math.min(...distances))
+  window.scrollTo({ top: Scroller.snapPoints[idx], behavior: 'smooth' })
 }
 
 exports.kill = (trigger) => () => trigger.kill()

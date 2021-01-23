@@ -7,7 +7,7 @@ import Data.Monoid (guard)
 import Effect (Effect)
 import Hey.Data.Env (Env)
 import Hey.Data.Route (Route(..), href)
-import Hey.Extra.DOM (scrollIntoView)
+import Hey.Hooks.UseScroll (snapTo)
 import React.Basic (JSX)
 import React.Basic.DOM as DOM
 import React.Basic.DOM.Events (preventDefault)
@@ -17,6 +17,7 @@ import React.Basic.Hooks as React
 import Web.DOM.NonElementParentNode (getElementById)
 import Web.HTML (window)
 import Web.HTML.HTMLDocument (toNonElementParentNode)
+import Web.HTML.HTMLElement as HTMLElement
 import Web.HTML.Window (document)
 import Wire.React (useSignal)
 
@@ -71,7 +72,8 @@ mkMenu =
                             >>= document
                             >>= toNonElementParentNode
                             >>> getElementById (show route)
-                            >>= maybe (pure unit) scrollIntoView
+                            >>= (=<<) HTMLElement.fromElement
+                            >>> maybe (pure unit) snapTo
                     }
         pure
           $ DOM.nav
