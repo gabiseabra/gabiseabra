@@ -3,22 +3,19 @@ module Hey.Pages.Home
   ) where
 
 import Prelude
-import Data.Maybe (maybe)
 import Data.Nullable (null)
 import Data.Tuple.Nested (type (/\), (/\))
 import Effect (Effect)
 import Hey.Data.Env (Env)
 import Hey.Data.Route (Route(..))
-import Hey.Hooks.UseIntersectionObserver as Observer
-import Hey.Hooks.UseScroll (mkScrollProvider)
+import Hey.Hooks.UseScroll (useScrollTrigger)
 import Hey.Pages.About (mkAboutPage)
 import Hey.Pages.Github (mkGithubPage)
 import Hey.Pages.Spacer (mkSpacerPage)
-import React.Basic (JSX)
+import React.Basic (JSX, fragment)
 import React.Basic.DOM as DOM
-import React.Basic.Hooks (Component, component, useEffect, useRef)
+import React.Basic.Hooks (Component, component, useRef)
 import React.Basic.Hooks as React
-import Web.IntersectionObserverEntry (intersectionRatio)
 
 foreign import styles :: Styles
 
@@ -37,21 +34,47 @@ type PageProps
 spacer :: JSX
 spacer = DOM.div { style: DOM.css { width: "100vw", height: "100vh" } }
 
+mkPage :: Component ({ env :: Env, route :: Route, children :: Array JSX })
+mkPage =
+  component "Page"
+    $ \{ env, route, children } -> React.do
+        let
+          updateRoute = const $ env.router.replace route
+        ref <- useRef null
+        useScrollTrigger unit ref
+          { onEnter: updateRoute
+          , onEnterBack: updateRoute
+          }
+        pure
+          $ DOM.div
+              { ref
+              , id: show route
+              , className: styles.page
+              , children
+              }
+
 mkRoutes :: Effect (Array (Route /\ (Env -> JSX)))
 mkRoutes = do
   spacerPage <- mkSpacerPage
   aboutPage <- mkAboutPage
   githubPage <- mkGithubPage
   pure
-    $ [ Home /\ \_ -> spacerPage "home"
+    $ [ Home /\ spacerPage
       , About /\ aboutPage
       , Projects /\ githubPage
-      , End /\ \_ -> spacerPage "end"
+      , End /\ spacerPage
       ]
 
 mkHomePage :: Component Env
 mkHomePage = do
   routes <- mkRoutes
-  scrollProvider <- mkScrollProvider
+  page <- mkPage
   component "Home"
-    $ \env -> pure $ scrollProvider $ routes <#> \(route /\ c) -> c env
+    $ \env ->
+        pure $ fragment $ routes
+          <#> \(route /\ c) ->
+              page
+                { env
+                , route
+                , children: [ c env ]
+                }

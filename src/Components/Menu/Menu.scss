@@ -33,6 +33,8 @@ $height: 60px;
   text-decoration: none;
   transform-origin: center center 0;
 
+  &.active { color: red }
+
   > span {
     align-items: center;
     display: inline-flex;

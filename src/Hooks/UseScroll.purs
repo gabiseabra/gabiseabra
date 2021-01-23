@@ -1,11 +1,13 @@
 module Hey.Hooks.UseScroll
-  ( mkScrollProvider
+  ( ScrollTrigger
+  , ScrollTriggerOptions
+  , mkScrollProvider
   , UseSnapPoint
   , useSnapPoint
+  , useScrollTrigger
   ) where
 
 import Prelude
-
 import Data.Array (fromFoldable)
 import Data.HashMap as HMap
 import Data.Maybe (maybe)
@@ -22,9 +24,20 @@ import Web.DOM (Node)
 import Web.HTML.HTMLElement (HTMLElement)
 import Web.HTML.HTMLElement as HTMLElement
 
-foreign import setSnapPoints :: Array HTMLElement -> Effect Unit
+type ScrollTriggerOptions
+  = { onEnter :: ScrollTrigger -> Effect Unit
+    , onEnterBack :: ScrollTrigger -> Effect Unit
+    }
+
+foreign import data ScrollTrigger :: Type
 
 foreign import mkIdx :: Effect Int
+
+foreign import setSnapPoints :: Array HTMLElement -> Effect Unit
+
+foreign import mkScrollTrigger :: ScrollTriggerOptions -> HTMLElement -> Effect ScrollTrigger
+
+foreign import kill :: ScrollTrigger -> Effect Unit
 
 type ScrollContext
   = { insert :: HTMLElement -> Effect (Effect Unit)
@@ -78,3 +91,10 @@ useSnapPoint ref =
         useEffectOnce $ readRefMaybe ref
           >>= ((=<<) HTMLElement.fromNode)
           >>> maybe (pure mempty) insert
+
+useScrollTrigger :: forall a. Eq a => a -> Ref (Nullable Node) -> ScrollTriggerOptions -> Hook (UseEffect a) Unit
+useScrollTrigger deps ref o =
+  useEffect deps
+    $ readRefMaybe ref
+    >>= ((=<<) HTMLElement.fromNode)
+    >>> maybe (pure mempty) (mkScrollTrigger o >=> kill >>> pure)

@@ -33,7 +33,7 @@ window.Scroller = {
     if (this[TRIGGER]) this[TRIGGER].kill()
     this[TRIGGER] = t
   },
-  get height() { return document.getElementById('root').offsetHeight - window.innerHeight },
+  get height() { return document.body.offsetHeight - window.innerHeight },
   addEventListener(fn) {
     return this.listeners.add(fn)
   },
@@ -44,6 +44,8 @@ window.Scroller = {
     return Array.from(this.children).map(offsetTop)
   }
 }
+
+exports.mkIdx = () => Scroller.idx++
 
 exports.setSnapPoints = (children) => () => {
   Scroller.children = children
@@ -64,6 +66,19 @@ exports.setSnapPoints = (children) => () => {
       for(let fn of Scroller.listeners) fn(...args)
     }
   })
+
+  ScrollTrigger.refresh()
 }
 
-exports.mkIdx = () => Scroller.idx++
+exports.mkScrollTrigger = ({ onEnter, onEnterBack }) => (trigger) => () => {
+  const effect = (fn) => (a) => fn(a)()
+  return ScrollTrigger.create({
+    trigger,
+    start: 'top 50%',
+    end: 'bottom 50%',
+    onEnter: effect(onEnter),
+    onEnterBack: effect(onEnterBack)
+  })
+}
+
+exports.kill = (trigger) => () => trigger.kill()
