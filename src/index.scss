@@ -60,3 +60,6 @@ body {
   top: $frame-padding;
   z-index: 1;
 }
+
+// dat.gui
+:global(.dg) { z-index: 1 !important }
