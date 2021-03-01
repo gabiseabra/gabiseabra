@@ -1,10 +1,18 @@
 import * as THREE from 'three'
 
-export const watchSize = (canvas, getSize) => {
-  window.addEventListener('resize', () => {
+export const addResizeListener = (canvas, getSize) => {
+  canvas.resizeListener = () => {
     const { width, height } = getSize()
     setSize(canvas, width, height)
-  })
+  }
+  window.addEventListener('resize', canvas.resizeListener)
+}
+
+export const removeResizeListener = (canvas) => {
+  if (canvas.resizeListener) {
+    window.removeEventListener('resize', canvas.resizeListener)
+  }
+  delete canvas.resizeListener
 }
 
 export const setSize = ({ camera, renderer, composer }, width, height) => {
@@ -19,13 +27,32 @@ export const setSize = ({ camera, renderer, composer }, width, height) => {
   if (composer) this.composer.setSize(width, height)
 }
 
-export const animate = ({ renderer, composer, scene, camera }) => {
-  console.log(renderer, composer, scene, camera)
+export const animate = (canvas) => {
   function go() {
-    if (composer) composer.render()
-    else renderer.render(scene, camera)
-    requestAnimationFrame(go)
+    if (canvas.composer) canvas.composer.render()
+    else canvas.renderer.render(canvas.scene, canvas.camera)
+    canvas.animationFrame = requestAnimationFrame(go)
   }
 
   go()
+}
+
+export const pause = (canvas) => {
+  cancelAnimationFrame(canvas.animationFrame)
+}
+
+export const destroy = (canvas) => {
+  const { scene } = canvas
+
+  pause(canvas)
+  removeResizeListener(canvas)
+
+  while(scene.children.length > 0){
+    scene.remove(scene.children[0]);
+  }
+
+  canvas.renderer = null
+  canvas.composer = null
+  canvas.scene = null
+  canvas.camera = null
 }

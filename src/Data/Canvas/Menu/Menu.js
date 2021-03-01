@@ -1,11 +1,10 @@
 const THREE = require('three')
-const config = require('three-playground/src/theme/config').default
 const { addResizeListener, setSize, animate } = require('../lib/canvas')
 const { Scene } = require('./Scene')
 
 const getSize = () => ({
-  width: window.innerWidth,
-  height: window.innerHeight
+  width: Math.min(window.innerWidth - 30, 600),
+  height: 80
 })
 
 exports.mkCanvas = () => {
@@ -16,16 +15,15 @@ exports.mkCanvas = () => {
     antialias: true
   })
   const element = renderer.domElement
-  element.id = 'background-scene'
+  element.id = 'menu-scene'
 
-  const camera = new THREE.PerspectiveCamera(
-      config.camera.fov,
-      width / height,
-      1,
-      config.camera.far
+  const camera = new THREE.OrthographicCamera(
+      width / 2, width / 2,
+      height / 2, height / 2,
+      1, 1000
     )
 
-  const scene = new Scene({ camera, config })
+  const scene = new Scene()
 
   const canvas = { renderer, camera, scene, element }
 
@@ -34,9 +32,7 @@ exports.mkCanvas = () => {
 
   animate(canvas)
 
-  window.Scroller.addEventListener(({progress}) => {
-    scene.progress = progress
-  })
-
   return canvas
 }
+
+exports.setLinks = ({ scene }) => (links) => scene.setLinks(links)

@@ -1,98 +1,11 @@
-@use 'sass:map';
-@use 'sass:list';
-@use '~@styles/text';
-@use '~@styles/breakpoint';
-
-@import '~@styles/theme';
-
-$color: map.get($palette-primary, 'lighter');
-$shadow-color: map.get($palette-secondary, 'darker');
-$shadow-color: map.get($palette-secondary, 'darker');
-$color-bg0: map.get($palette-secondary, 'medium');
-$color-bg1: map.get($palette-primary, 'medium');
-$shadow-offset: 1px;
-$font-size-sm: 1.2rem;
-$font-size-md: 1.4rem;
-$font-size-lg: 1.5rem;
-$height: 60px;
-$transition: all 100ms linear;
-$perspective: 80px;
-$z0: 2px;
-$z1: 6px;
-$z2: 10px;
-
 .nav {
   z-index: 1;
-  height: $height;
   position: fixed;
   top: 15px;
   left: 15px;
   right: 15px;
-  perspective: $perspective;
-
-  & > div {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    transform-style: preserve-3d;
-  }
-}
-
-.link {
-  position: relative;
+  width: auto;
   display: flex;
-  padding: 10px 0;
-  margin: 0 15px;
-  color: $color;
-  font-family: map.get($font-family, 'monospace');
-  font-size: $font-size-lg;
-  text-decoration: none;
-  transition: $transition;
-
-  > span {
-    align-items: center;
-    display: inline-flex;
-    transition: $transition;
-  }
-
-  > .textForeground {
-    transform: translateZ($z1);
-    @include text.stroke(1px, $shadow-color);
-  }
-
-  > .textBackground {
-    position: absolute;
-    color: $shadow-color;
-    transform: translateZ($z0);
-  }
-
-  &.active {
-    color: $color;
-
-    > .textBackground:nth-child(1) {
-      transform: translateZ($z0);
-      color: $color-bg0;
-      margin-top: 2px;
-      @include text.stroke(1px, $color-bg0);
-    }
-
-    > .textBackground:nth-child(2) {
-      transform: translateZ($z1);
-      color: $color-bg1;
-      margin-top: 1px;
-      @include text.stroke(1px, $color-bg1);
-    }
-
-    > .textForeground { transform: translateZ($z2); }
-  }
+  justify-content: center;
+  align-items: center;
 }
-
-@include breakpoint.down('tablet') {
-  .link { font-size: $font-size-md; }
-}
-
-@include breakpoint.down('phone') {
-  .link { font-size: $font-size-sm; }
-}
-
