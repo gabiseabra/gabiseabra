@@ -1,3 +1,0 @@
-[submodule "src/canvas/three-playground"]
-	path = src/canvas/three-playground
-	url = git@github.com:gabiseabra/three-playground.git
