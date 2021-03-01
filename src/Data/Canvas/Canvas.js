@@ -1,0 +1,1 @@
+exports.toNode = ({ element }) => element

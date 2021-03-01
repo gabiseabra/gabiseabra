@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { Scene as BaseScene } from 'three-playground/src/Scene'
-import { Title } from '../objects/Title'
+import { Title } from '../lib/objects/Title'
 
 const PROGRESS = Symbol('PROGRESS')
 
