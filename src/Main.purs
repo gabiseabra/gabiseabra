@@ -4,6 +4,7 @@ import Prelude
 import Data.Maybe (Maybe(..))
 import Effect (Effect)
 import Effect.Exception (throw)
+import Hey.Canvas.Background as Background
 import Hey.Components.Menu (mkMenu)
 import Hey.Data.Env (Env)
 import Hey.Data.Route (Route(..))
@@ -17,10 +18,12 @@ import React.Basic.DOM as DOM
 import React.Basic.Hooks (Component, JSX, component)
 import React.Basic.Hooks as React
 import Record.Extra (sequenceRecord)
+import Web.DOM.Node (appendChild)
 import Web.DOM.NonElementParentNode (getElementById)
 import Web.HTML (window)
-import Web.HTML.HTMLDocument (toNonElementParentNode)
-import Web.HTML.Window (document)
+import Web.HTML.HTMLDocument as Doc
+import Web.HTML.HTMLElement as El
+import Web.HTML.Window as Win
 import Wire.React (useSignal)
 
 composeProvider :: (Array JSX -> JSX) -> (Array JSX -> JSX) -> Array JSX -> JSX
@@ -61,7 +64,12 @@ mkApp = do
 main :: Effect Unit
 main = do
   app <- mkApp
-  root <- getElementById "root" =<< (map toNonElementParentNode $ document =<< window)
+  doc <- Win.document =<< window
+  body <- Doc.body doc
+  root <- getElementById "root" $ Doc.toNonElementParentNode doc
+  case body of
+    Nothing -> throw "Body element not found."
+    Just x -> void $ join $ appendChild <$> Background.mkCanvas <*> (pure $ El.toNode x)
   case root of
     Nothing -> throw "Container element not found."
     Just x -> render (app {}) x

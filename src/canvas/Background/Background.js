@@ -1,17 +1,14 @@
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { Canvas } from './three-playground/src/Canvas'
-import { Effects } from './three-playground/src/theme/Effects'
-import theme from './three-playground/src/theme/config'
-import { Scene } from './Scene'
+const theme = require('../three-playground/src/theme/config').default
+const { Canvas } = require('../three-playground/src/Canvas')
+const { Effects } = require('../three-playground/src/theme/Effects')
+const { Scene } = require('./Scene')
 
-function main() {
+exports.mkCanvas = function mkCanvas() {
   const canvas = new Canvas(window.innerWidth, window.innerHeight, theme)
   const scene = new Scene(canvas)
   const composer = new Effects(scene, canvas)
 
-  canvas.element.id = 'scene'
-
-  document.body.appendChild(canvas.element)
+  canvas.element.id = 'background-scene'
 
   window.addEventListener(
     'resize',
@@ -31,6 +28,6 @@ function main() {
   }
 
   animate()
-}
 
-export default { main }
+  return canvas.element
+}
