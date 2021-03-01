@@ -9,7 +9,6 @@ const {
 } = require('webpack-blocks')
 const sass = require('./blocks/sass')
 const glsl = require('./blocks/glsl')
-const typescript = require('./blocks/typescript')
 const purescript = require('./blocks/purescript')
 
 const ROOT = path.resolve(__dirname, '..')
@@ -32,7 +31,6 @@ module.exports = createConfig([
   sass(),
   glsl(),
   babel(require('../.babelrc')),
-  typescript(),
   purescript(),
   /**
    * Env vars
