@@ -1,0 +1,117 @@
+{
+  "glyphs": {
+    "A": {
+      "ha": 833,
+      "x_min": 0,
+      "x_max": 833,
+      "o": "m 346 439 l 332 376 l 493 376 l 479 439 q 447 580 464 504 q 414 725 429 656 l 408 725 q 377 580 393 656 q 346 439 361 504 m 0 0 l 272 903 l 561 903 l 833 0 l 581 0 l 536 192 l 289 192 l 244 0 l 0 0 z "
+    },
+    "B": {
+      "ha": 833,
+      "x_min": 89,
+      "x_max": 789,
+      "o": "m 89 0 l 89 903 l 411 903 q 544 892 482 903 q 651 857 606 882 q 724 788 697 832 q 750 678 750 744 q 741 619 750 649 q 713 562 732 589 q 665 514 694 535 q 597 483 636 493 l 597 478 q 741 408 693 458 q 789 267 789 357 q 762 147 789 197 q 687 63 735 96 q 575 15 639 31 q 439 0 511 0 l 89 0 m 328 547 l 406 547 q 490 574 464 547 q 517 642 517 600 q 490 701 517 683 q 406 719 464 719 l 328 719 l 328 547 m 328 183 l 422 183 q 524 210 493 183 q 556 286 556 236 q 524 358 556 336 q 422 381 493 381 l 328 381 l 328 183 z "
+    },
+    "C": {
+      "ha": 833,
+      "x_min": 69,
+      "x_max": 800,
+      "o": "m 497 -17 q 335 12 413 -17 q 199 98 258 40 q 105 242 140 156 q 69 444 69 329 q 104 647 69 558 q 199 795 139 735 q 339 888 258 856 q 511 919 419 919 q 669 884 599 919 q 789 803 740 849 l 658 656 q 592 699 626 683 q 511 714 557 714 q 433 696 469 714 q 371 644 397 678 q 329 563 344 611 q 314 453 314 514 q 372 257 314 325 q 522 189 431 189 q 603 209 567 189 q 669 261 640 229 l 800 117 q 666 17 743 50 q 497 -17 589 -17 z "
+    },
+    "D": {
+      "ha": 833,
+      "x_min": 89,
+      "x_max": 789,
+      "o": "m 89 0 l 89 903 l 349 903 q 526 878 446 903 q 665 799 607 853 q 756 660 724 744 q 789 456 789 575 q 757 250 789 336 q 667 108 725 164 q 532 26 610 53 q 363 0 454 0 l 89 0 m 328 192 l 336 192 q 417 203 379 192 q 483 244 456 215 q 528 325 511 274 q 544 456 544 376 q 528 585 544 535 q 483 663 511 635 q 417 701 456 690 q 336 711 379 711 l 328 711 l 328 192 z "
+    },
+    "E": {
+      "ha": 833,
+      "x_min": 117,
+      "x_max": 744,
+      "o": "m 117 0 l 117 903 l 731 903 l 731 703 l 356 703 l 356 561 l 675 561 l 675 361 l 356 361 l 356 200 l 744 200 l 744 0 l 117 0 z "
+    },
+    "H": {
+      "ha": 833,
+      "x_min": 81,
+      "x_max": 753,
+      "o": "m 81 0 l 81 903 l 319 903 l 319 567 l 514 567 l 514 903 l 753 903 l 753 0 l 514 0 l 514 358 l 319 358 l 319 0 l 81 0 z "
+    },
+    "M": {
+      "ha": 833,
+      "x_min": 72,
+      "x_max": 761,
+      "o": "m 72 0 l 72 903 l 315 903 l 389 608 l 414 492 l 419 492 l 444 608 l 518 903 l 761 903 l 761 0 l 564 0 l 564 213 q 567 315 564 253 q 575 442 571 376 q 585 569 579 508 q 594 671 590 631 l 590 671 l 514 403 l 467 239 l 361 239 l 311 403 l 242 671 l 236 671 q 246 569 240 631 q 256 442 251 508 q 263 315 260 376 q 267 213 267 253 l 267 0 l 72 0 z "
+    },
+    "O": {
+      "ha": 833,
+      "x_min": 47,
+      "x_max": 786,
+      "o": "m 417 -17 q 267 13 335 -17 q 150 102 199 43 q 74 249 101 161 q 47 456 47 338 q 74 656 47 569 q 150 801 101 743 q 267 890 199 860 q 417 919 335 919 q 567 890 499 919 q 683 801 635 860 q 759 656 732 743 q 786 456 786 569 q 759 249 786 338 q 683 102 732 161 q 567 13 635 43 q 417 -17 499 -17 m 417 189 q 508 254 475 189 q 542 456 542 319 q 508 650 542 586 q 417 714 475 714 q 325 650 358 714 q 292 456 292 586 q 325 254 292 319 q 417 189 358 189 z "
+    },
+    "T": {
+      "ha": 833,
+      "x_min": 38,
+      "x_max": 796,
+      "o": "m 297 0 l 297 703 l 38 703 l 38 903 l 796 903 l 796 703 l 536 703 l 536 0 l 297 0 z "
+    },
+    "U": {
+      "ha": 833,
+      "x_min": 81,
+      "x_max": 753,
+      "o": "m 419 -17 q 267 9 331 -17 q 161 83 203 35 q 100 198 119 131 q 81 350 81 265 l 81 903 l 319 903 l 319 322 q 341 226 319 264 q 419 189 363 189 q 500 226 478 189 q 522 322 522 264 l 522 903 l 753 903 l 753 350 q 734 198 753 265 q 675 83 715 131 q 572 9 635 35 q 419 -17 508 -17 z "
+    }
+  },
+  "familyName": "Source Code Pro Black",
+  "ascender": 1367,
+  "descender": -379,
+  "underlinePosition": -104,
+  "underlineThickness": 69,
+  "boundingBox": {
+    "yMin": -631,
+    "xMin": -297,
+    "yMax": 1472,
+    "xMax": 1131
+  },
+  "resolution": 1000,
+  "original_font_information": {
+    "format": 0,
+    "copyright": "Copyright 2010, 2012 Adobe Systems Incorporated (http://www.adobe.com/), with Reserved Font Name ‘Source’.",
+    "fontFamily": "Source Code Pro Black",
+    "fontSubfamily": "Regular",
+    "uniqueID": "2.030;ADBO;SourceCodePro-Black;ADOBE",
+    "fullName": "Source Code Pro Black",
+    "version": "Version 2.030;PS 1.000;hotconv 16.6.51;makeotf.lib2.5.65220",
+    "postScriptName": "SourceCodePro-Black",
+    "trademark": "Source is a trademark of Adobe Systems Incorporated in the United States and/or other countries.",
+    "manufacturer": "Adobe Systems Incorporated",
+    "designer": "Paul D. Hunt, Teo Tuominen",
+    "manufacturerURL": "http://www.adobe.com/type",
+    "licence": "This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: http://scripts.sil.org/OFL. This Font Software is distributed on an ‘AS IS’ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the SIL Open Font License for the specific language, permissions and limitations governing your use of this Font Software.",
+    "licenceURL": "http://www.adobe.com/type/legal.html",
+    "preferredFamily": "Source Code Pro",
+    "preferredSubfamily": "Black",
+    "unknown1": "simple a",
+    "unknown2": "simple g",
+    "unknown3": "serifed i & l",
+    "unknown4": "Sami Ŋ",
+    "unknown5": "cursive β",
+    "unknown6": "cursive θ",
+    "unknown7": "cursive φ",
+    "unknown8": "Serbian φ",
+    "unknown9": "Cyrillic breve [˘]",
+    "unknown10": "slashed zero [0]",
+    "unknown11": "typographic hyphen [-]",
+    "unknown12": "typographic asterisk [*]",
+    "unknown13": "slashed dollar sign [$]",
+    "unknown14": "alternate numeral one [1]",
+    "unknown15": "typographic alternates [-,*]",
+    "unknown16": "simple a, cursive β",
+    "unknown17": "simple g, cursive θ, Serbian б",
+    "unknown18": "serifed i & l",
+    "unknown19": "Sami Ŋ, cursive φ",
+    "unknown20": "slashed dollar sign [$]",
+    "unknown21": "alternate numeral one [1]"
+  },
+  "cssFontWeight": "normal",
+  "cssFontStyle": "normal"
+}

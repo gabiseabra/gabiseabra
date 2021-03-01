@@ -2,7 +2,7 @@ module Hey.Data.Canvas.Menu
   ( Menu
   , Link
   , mkCanvas
-  , setLinks
+  , setActive
   ) where
 
 import Prelude
@@ -12,12 +12,11 @@ import Hey.Data.Canvas (kind Scene, Canvas)
 type Link
   = { id :: String
     , label :: String
-    , active :: Boolean
     , onClick :: Effect Unit
     }
 
 foreign import data Menu :: Scene
 
-foreign import mkCanvas :: Effect (Canvas Menu)
+foreign import mkCanvas :: Array Link -> Effect (Canvas Menu)
 
-foreign import setLinks :: Canvas Menu -> Array Link -> Effect Unit
+foreign import setActive :: Canvas Menu -> String -> Effect Unit

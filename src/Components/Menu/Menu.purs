@@ -37,16 +37,15 @@ pushRoute route =
     >>= (=<<) HTMLElement.fromElement
     >>> maybe (pure unit) snapTo
 
-links :: Route -> Array Menu.Link
-links currentRoute =
+links :: Array Menu.Link
+links =
   [ { label: "HOME", route: Home }
   , { label: "ABOUT", route: About }
-  , { label: "PROJECTS", route: Projects }
+  , { label: "CODE", route: Projects }
   ]
     # map \{ label, route } ->
         { label
         , id: href route
-        , active: route == currentRoute
         , onClick: pushRoute route
         }
 
@@ -61,7 +60,7 @@ mkMenu =
         useEffectOnce
           $ readRefMaybe ref
           >>= maybe (pure mempty) \nav -> do
-              c <- Menu.mkCanvas
+              c <- Menu.mkCanvas $ links
               writeRef canvas $ notNull c
               void $ appendChild (Canvas.toNode c) nav
               pure
@@ -69,10 +68,10 @@ mkMenu =
                     writeRef canvas null
                     void $ removeChild (Canvas.toNode c) nav
                     Canvas.destroy c
-        -- update links
+        -- update active link
         useEffect currentRoute
           $ readRefMaybe canvas
-          >>= maybe (pure unit) (flip Menu.setLinks $ links currentRoute)
+          >>= maybe (pure unit) (flip Menu.setActive $ show currentRoute)
           *> pure mempty
         pure
           $ DOM.nav { ref, className: styles.nav }
