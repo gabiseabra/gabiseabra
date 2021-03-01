@@ -1,6 +1,6 @@
-const theme = require('../three-playground/src/theme/config').default
-const { Canvas } = require('../three-playground/src/Canvas')
-const { Effects } = require('../three-playground/src/theme/Effects')
+const theme = require('three-playground/src/theme/config').default
+const { Canvas } = require('three-playground/src/Canvas')
+const { Effects } = require('three-playground/src/theme/Effects')
 const { Scene } = require('./Scene')
 
 exports.mkCanvas = function mkCanvas() {

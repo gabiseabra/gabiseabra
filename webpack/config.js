@@ -5,7 +5,8 @@ const {
   resolve,
   entryPoint,
   setOutput,
-  babel
+  babel,
+  match
 } = require('webpack-blocks')
 const sass = require('./blocks/sass')
 const glsl = require('./blocks/glsl')
@@ -30,7 +31,11 @@ module.exports = createConfig([
    */
   sass(),
   glsl(),
-  babel(require('../.babelrc')),
+  match(/\.jsx?$/, {
+    exclude: /node_modules\/(?!three-playground)/
+  }, [
+    babel(require('../.babelrc'))
+  ]),
   purescript(),
   /**
    * Env vars
