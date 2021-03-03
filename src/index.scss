@@ -47,13 +47,14 @@ body {
 :global(#frame) {
   $frame-padding: 10px;
   $frame-border: 4px;
-  $frame-color: $overlay-color;
+  $frame-color: #f00;
+  $frame-blend-mode: difference;
 
   border: $frame-border solid $frame-color;
   bottom: $frame-padding;
   left: $frame-padding;
 
-  mix-blend-mode: difference;
+  mix-blend-mode: $frame-blend-mode;
   pointer-events: none;
   position: fixed;
   right: $frame-padding;
