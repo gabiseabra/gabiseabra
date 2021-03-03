@@ -1,7 +1,7 @@
 const THREE = require('three')
 const config = require('three-playground/src/theme/config').default
-const { addResizeListener, setSize, animate } = require('../lib/canvas')
-const { Scene } = require('./Scene')
+const {animate, mkCanvas, watchSize} = require('../lib/canvas')
+const {Scene} = require('./Scene')
 
 const getSize = () => ({
   width: window.innerWidth,
@@ -9,28 +9,25 @@ const getSize = () => ({
 })
 
 exports.mkCanvas = () => {
-  const { width, height } = getSize()
+  const {width, height} = getSize()
 
   const renderer = new THREE.WebGLRenderer({
     powerPreference: 'high-performance',
     antialias: true
   })
-  const element = renderer.domElement
-  element.id = 'background-scene'
 
   const camera = new THREE.PerspectiveCamera(
-      config.camera.fov,
-      width / height,
-      1,
-      config.camera.far
-    )
+    config.camera.fov,
+    width / height,
+    1,
+    config.camera.far
+  )
 
-  const scene = new Scene({ camera, config })
+  const scene = new Scene({camera, config})
 
-  const canvas = { renderer, camera, scene, element }
+  const canvas = mkCanvas('background-scene', {renderer, camera, scene})
 
-  addResizeListener(canvas, getSize)
-  setSize(canvas, width, height)
+  watchSize(canvas, getSize)
 
   animate(canvas)
 
