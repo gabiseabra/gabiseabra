@@ -38,6 +38,7 @@ export class Scene extends BaseScene {
 
   updateCamera() {
     super.updateCamera()
+    // fix z axis at pi
     this.camera.rotateZ(Math.PI)
   }
 }
