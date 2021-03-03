@@ -67,6 +67,4 @@ function tilt(
   camera.position.copy(options.center).add(offset)
 
   camera.lookAt(options.center)
-
-  return false
 }

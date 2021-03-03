@@ -44,4 +44,4 @@ exports.mkCanvas = (links) => () => {
   return canvas
 }
 
-exports.setActive = ({scene}) => (id) => scene.setActive(id)
+exports.setActive = ({scene}) => (id) => scene.nav.setActive(id)

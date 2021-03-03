@@ -45,7 +45,7 @@ links =
   ]
     # map \{ label, route } ->
         { label
-        , id: href route
+        , id: show route
         , onClick: pushRoute route
         }
 
