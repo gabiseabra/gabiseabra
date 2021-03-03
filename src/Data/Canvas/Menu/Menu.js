@@ -31,8 +31,7 @@ exports.mkCanvas = (links) => () => {
 
   const scene = new Scene(links)
 
-  const canvas = mkCanvas({renderer, camera, scene})
-  canvas.element.id = 'menu-scene'
+  const canvas = mkCanvas('menu-scene', {renderer, camera, scene})
 
   watchSize(canvas, getSize)
   addOrbitControl(canvas, {
