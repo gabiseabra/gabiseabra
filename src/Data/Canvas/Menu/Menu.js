@@ -1,8 +1,6 @@
 const THREE = require('three')
 const {animate, mkCanvas, watchSize} = require('../lib/canvas')
-const { OrbitControls } = require('three/examples/jsm/controls/OrbitControls')
-const { addResizeListener, setSize, animate } = require('../lib/canvas')
-const { Scene } = require('./Scene')
+const {addOrbitControl} = require('../lib/orbit')
 const {Scene} = require('./Scene')
 
 const MAX_WIDTH = 500
@@ -37,8 +35,10 @@ exports.mkCanvas = (links) => () => {
   canvas.element.id = 'menu-scene'
 
   watchSize(canvas, getSize)
-  addResizeListener(canvas, getSize)
-  setSize(canvas, width, height)
+  addOrbitControl(canvas, {
+    azimuthAngle: THREE.MathUtils.degToRad(2),
+    polarAngle: THREE.MathUtils.degToRad(4)
+  })
 
   animate(canvas)
 
