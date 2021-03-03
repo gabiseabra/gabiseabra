@@ -18,15 +18,8 @@ module.exports = {
   overrides: [
     {
       files: ['*.ts', '*.tsx'],
-      plugins: ['react', 'prettier', '@typescript-eslint'],
-      extends: [
-        'prettier',
-        'prettier/react',
-        'prettier/@typescript-eslint',
-        'eslint:recommended',
-        'plugin:@typescript-eslint/recommended'
-      ],
-      parser: '@typescript-eslint/parser',
+      plugins: ['react', 'prettier'],
+      extends: ['prettier', 'prettier/react', 'eslint:recommended'],
       parserOptions: {
         ecmaFeatures: {
           experimentalObjectRestSpread: true,
