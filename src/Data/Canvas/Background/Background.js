@@ -3,25 +3,30 @@ const config = require('three-playground/src/theme/config').default
 const {animate, mkCanvas, watchSize} = require('../lib/canvas')
 const {Scene} = require('./Scene')
 
-const getSize = () => ({
-  width: window.innerWidth,
-  height: window.innerHeight
-})
+const NARROW_FOV = 90
+const WIDE_FOV = 45
+
+const getSize = () => {
+  const width = window.innerWidth
+  const height = window.innerHeight
+  const aspect = width / height
+  const fov = THREE.MathUtils.lerp(
+    NARROW_FOV,
+    WIDE_FOV,
+    Math.min(width, 760) / 760
+  )
+  return {width, height, aspect, fov}
+}
 
 exports.mkCanvas = () => {
-  const {width, height} = getSize()
+  const {aspect, fov} = getSize()
 
   const renderer = new THREE.WebGLRenderer({
     powerPreference: 'high-performance',
     antialias: true
   })
 
-  const camera = new THREE.PerspectiveCamera(
-    config.camera.fov,
-    width / height,
-    1,
-    config.camera.far
-  )
+  const camera = new THREE.PerspectiveCamera(fov, aspect, 1, config.camera.far)
 
   const scene = new Scene({camera, config})
 
