@@ -5,7 +5,7 @@ import * as THREE from 'three'
  * @see https://github.com/mrdoob/three.js/blob/master/examples/jsm/controls/OrbitControls.js#L152
  */
 
-export const addOrbitControl = (canvas, options = {}) => {
+export const mkOrbitControl = (canvas, options = {}) => {
   const orbit = mkOrbit(canvas, options)
   const pos = new THREE.Vector2()
   const listener = (e) => {

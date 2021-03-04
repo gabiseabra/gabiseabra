@@ -1,6 +1,7 @@
 const THREE = require('three')
 const {animate, mkCanvas, watchSize} = require('../lib/canvas')
-const {addOrbitControl} = require('../lib/orbit')
+const {mkOrbitControl} = require('../lib/orbit')
+const {mkRayCaster} = require('../lib/raycaster')
 const {Scene} = require('./Scene')
 
 const MAX_WIDTH = 500
@@ -10,7 +11,7 @@ const H_FOV = Math.PI / 4
 
 const getSize = () => {
   const width = Math.min(window.innerWidth - 30, MAX_WIDTH)
-  const height = 80
+  const height = 60
   const aspect = width / height
   const vFov = 2 * Math.atan(Math.tan(H_FOV / 2) / aspect)
   return {width, height, aspect, fov: THREE.MathUtils.radToDeg(vFov)}
@@ -34,9 +35,17 @@ exports.mkCanvas = (links) => () => {
   const canvas = mkCanvas('menu-scene', {renderer, camera, scene})
 
   watchSize(canvas, getSize)
-  addOrbitControl(canvas, {
+  mkOrbitControl(canvas, {
     azimuthAngle: THREE.MathUtils.degToRad(2),
     polarAngle: THREE.MathUtils.degToRad(4)
+  })
+  const rayCaster = mkRayCaster(canvas)
+
+  canvas.element.addEventListener('mousedown', () => {
+    const [intersection] = rayCaster.intersectObjects(scene.nav.children, false)
+    if (!intersection || !links[intersection.object.linkIndex]) return
+    const link = links[intersection.object.linkIndex]
+    link.onClick()
   })
 
   animate(canvas)

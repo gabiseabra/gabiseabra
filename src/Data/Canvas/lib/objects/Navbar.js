@@ -35,10 +35,7 @@ export class Navbar extends THREE.Object3D {
       const spacing = idx * SPACING * CHAR_WIDTH
       mesh.translateX(spacing)
       mesh.name = link.id
-
-      // var bbox = new THREE.BoundingBoxHelper(mesh, 0xff0000)
-      // bbox.update()
-      // this.add(bbox)
+      mesh.linkIndex = idx
 
       this.refs[link.id] = mesh
       this.add(mesh)

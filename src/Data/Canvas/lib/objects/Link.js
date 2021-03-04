@@ -8,18 +8,13 @@ const ACTIVE_COLOR = new THREE.Color(0xffbcb8)
 
 const rgb = ({r, g, b}) => ({r, g, b})
 
-export class Link extends THREE.Object3D {
+export class Link extends THREE.Mesh {
   constructor(geom) {
-    super()
-    const mesh = new THREE.Mesh(
-      geom,
-      new THREE.MeshPhysicalMaterial({color: COLOR})
-    )
-    this.add(mesh)
+    super(geom, new THREE.MeshPhysicalMaterial({color: COLOR}))
 
     this.tween = gsap
       .timeline({defaults: {duration: DURATION}})
-      .fromTo(mesh.material.color, rgb(COLOR), rgb(ACTIVE_COLOR), 0)
+      .fromTo(this.material.color, rgb(COLOR), rgb(ACTIVE_COLOR), 0)
       .pause(0)
   }
 
