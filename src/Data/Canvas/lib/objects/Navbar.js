@@ -8,6 +8,9 @@ const CHAR_WIDTH = 3.5 // 8.45
 const SPACING = 2.5 // num of spaces between links
 const ANGLE = Math.PI * 0.3 // angle of the arc
 
+/**
+ * Draws a navbar with links bended around a curve
+ */
 export class Navbar extends THREE.Object3D {
   refs = {}
 
@@ -73,7 +76,6 @@ const mkLinkGeometries = ({label}) =>
   )
 
 const mkCurve = (length) => {
-  // arc
   const chord = length * CHAR_WIDTH * 2
   const radius = chord / 2 / Math.sin(ANGLE / 2)
   const sagitta =
@@ -84,7 +86,6 @@ const mkCurve = (length) => {
     radius,
     sagitta,
     apothem,
-    getOffset() {},
     modifyGeometry(geom, j, idx0) {
       const mesh = new THREE.Mesh(geom)
 
@@ -97,7 +98,6 @@ const mkCurve = (length) => {
       mesh.updateMatrix()
 
       geom.applyMatrix(mesh.matrix)
-      geom.userData.offset = Math.cos(a) * radius
     }
   }
 }
