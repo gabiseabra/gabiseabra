@@ -1,18 +1,31 @@
 @use '~@styles/breakpoint';
+@use 'sass:map';
+
+@import '~@styles/theme';
 
 .container {
   box-sizing: border-box;
   height: 75vh;
   margin: 0 auto;
-  max-width: 800px;
   padding-top: 60px;
+  margin: 0 -15px;
   position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.body {
+  background-color: $content-bg;
+  background-color: linear-gradient(transparent, $content-bg 30%);
+  padding: 25px 15px;
+  position: relative;
+  flex: 1;
 }
 
 .languages {
-  height: 50vh;
-  position: relative;
-  width: 50vh;
+  height: 45vh;
+  width: 45vh;
+  margin: 0 25px;
 }
 
 @include breakpoint.down('tablet') {

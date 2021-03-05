@@ -1,4 +1,4 @@
-module Hey.Components.Github.Stats where
+module Hey.Components.Github.Stats (mkStats) where
 
 import Prelude
 import Data.Array (elem, fold, fromFoldable)
@@ -23,6 +23,7 @@ foreign import styles :: Styles
 
 type Styles
   = { container :: String
+    , body :: String
     , stats :: String
     , languages :: String
     }
@@ -75,8 +76,8 @@ mkStats = do
     $ \user -> React.do
         let
           data' =
-            [ { label: "my repositories", color: [ 247, 99, 153 ] } /\ user.repositories.nodes
-            , { label: "open source contributions", color: [ 52, 217, 165 ] } /\ user.contributions.nodes
+            [ { label: "my repos", color: pink } /\ user.repositories.nodes
+            , { label: "contributions", color: purple } /\ user.contributions.nodes
             ]
         ref <- useRef null
         entry <- useIntersectionObserverEntry ref
@@ -86,10 +87,19 @@ mkStats = do
               , className: styles.container
               , children:
                   [ DOM.div
-                      { className: styles.languages
+                      { className: styles.body
                       , children:
-                          [ chart $ { "type": Radar, "data": languagesChart data' }
+                          [ DOM.div
+                              { className: styles.languages
+                              , children:
+                                  [ chart $ { "type": Radar, "data": languagesChart data' }
+                                  ]
+                              }
                           ]
                       }
                   ]
               }
+  where
+  pink = [ 247, 99, 153 ]
+
+  purple = [ 141, 149, 236 ]

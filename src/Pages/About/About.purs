@@ -7,6 +7,7 @@ import Control.Monad.Indexed ((:>>=))
 import Data.Maybe (Maybe(..))
 import Data.Nullable (null)
 import Hey.Api.Github (fetchViewer)
+import Hey.Components.Github (mkStats)
 import Hey.Hooks.UseFetch (useFetch)
 import Hey.Hooks.UseScroll (useSnapPoint)
 import React.Basic.DOM as DOM
@@ -21,6 +22,7 @@ type Styles
 
 mkAboutPage :: forall a. Component a
 mkAboutPage = do
+  stats <- mkStats
   component "About" \_ -> React.do
     ref <- useRef null
     useSnapPoint ref
@@ -28,7 +30,7 @@ mkAboutPage = do
       useFetch fetchViewer
         :>>= case _ of
             Nothing -> pure [ DOM.text "loading..." ]
-            Just { data: res } -> pure [ DOM.text "lmaooo" ]
+            Just { data: res } -> pure [ stats res.viewer ]
     pure
       $ DOM.section
           { ref

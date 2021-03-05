@@ -1,13 +1,13 @@
-"use-strict"
+'use-strict'
 
 const {Chart} = require('chart.js')
 
 const rgba = (rgb, a) => `rgb(${rgb.join(',')},${a})`
 
 const parseData = {
-  radar: ({labels, color, datasets}) => ({
+  radar: ({labels, datasets}) => ({
     labels,
-    datasets: datasets.map(({ label, color, data }) => ({
+    datasets: datasets.map(({label, color, data}) => ({
       label,
       data,
       backgroundColor: rgba(color, 0.2),
@@ -29,4 +29,4 @@ exports.destroy = (chart) => () => chart.destroy()
 exports.reset = (chart) => () => chart.reset()
 
 exports.update_ = (duration) => (easing) => (chart) => () =>
-  chart.update({ duration, easing })
+  chart.update({duration, easing})
