@@ -1,7 +1,7 @@
 const THREE = require('three')
-const {animate, mkCanvas, watchSize} = require('../lib/canvas')
-const {mkOrbitControl} = require('../lib/orbit')
-const {mkRayCaster} = require('../lib/raycaster')
+const {animate, mkCanvas, watchSize} = require('../../../lib/3d/canvas')
+const {mkOrbitControl} = require('../../../lib/3d/orbit')
+const {mkRayCaster} = require('../../../lib/3d/raycaster')
 const {Scene} = require('./Scene')
 
 const MAX_WIDTH = 500

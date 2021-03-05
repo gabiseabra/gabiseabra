@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import {BufferGeometryUtils} from 'three/examples/jsm/utils/BufferGeometryUtils'
-import SourceCodePro from '../fonts/SourceCodePro'
+import SourceCodePro from '../../fonts/SourceCodePro'
 import {Link} from './Link'
 
 /* curve modifier options */
