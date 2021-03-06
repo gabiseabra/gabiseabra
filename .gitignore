@@ -8,6 +8,7 @@ node_modules
 .spago
 build
 output
+.env
 .env.local
 .env.development.local
 .env.test.local
