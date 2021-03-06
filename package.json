@@ -57,6 +57,7 @@
     "glslify-loader": "^2.0.0",
     "gsap": "^3.6.0",
     "http-server": "^0.12.3",
+    "pixi.js": "^6.0.0",
     "postprocessing": "^6.19.1",
     "raw-loader": "^4.0.2",
     "react": "^17.0.1",

@@ -1,15 +1,21 @@
+const PIXI = require('pixi.js')
+
 export const mkCanvas2D = (id, {width, height}) => {
-  const element = document.createElement('canvas')
+  const app = new PIXI.Application({
+    antialias: true,
+    backgroundAlpha: 0
+  })
+  const element = app.view
   element.id = id
 
-  const context = element.getContext('2d')
-
   const canvas = {
-    ctx: context,
+    app,
+    element,
     width,
     height,
-    element,
-    listeners: []
+    aspect: width / height,
+    listeners: [],
+    destroy: () => destroy(canvas)
   }
 
   setSize(canvas, {width, height})
@@ -24,20 +30,27 @@ export const addResizeListener = (canvas, getSize) => {
 }
 
 export const setSize = (canvas, {width, height}) => {
-  canvas.element.width = width
-  canvas.element.height = height
-  canvas.width = width
-  canvas.height = height
+  const {aspect, element} = canvas
+  let w, h
+  if (width / height >= aspect) {
+    w = width * aspect
+    h = height
+  } else {
+    w = width
+    h = height / aspect
+  }
+
+  element.width = canvas.width = w
+  element.height = canvas.height = h
 }
 
-export const watchSize = (canvas, getSize, draw) => {
+export const watchSize = (canvas, getSize) => {
   addResizeListener(canvas, getSize)
   setSize(canvas, getSize())
-  draw(canvas)
 }
 
 export const destroy = (canvas) => {
   canvas.listeners.forEach((fn) => fn())
-  canvas.element.remove()
+  canvas.app.destroy(true)
   canvas.listeners = []
 }

@@ -2,14 +2,17 @@ export const mkCanvas3D = (id, {camera, renderer, scene, composer}) => {
   const element = renderer.domElement
   element.id = id
 
-  return {
+  const canvas = {
     camera,
     renderer,
     composer,
     scene,
     element,
-    listeners: []
+    listeners: [],
+    destroy: () => destroy(canvas)
   }
+
+  return canvas
 }
 
 export const addResizeListener = (canvas, getSize) => {
