@@ -67,7 +67,7 @@
     "raw-loader": "^4.0.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "three": "^0.126.1",
+    "three": "^0.124.0",
     "three-playground": "gabiseabra/three-playground#main",
     "xhr2": "^0.2.1"
   },
