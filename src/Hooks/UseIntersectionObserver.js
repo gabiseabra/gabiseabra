@@ -1,3 +1,4 @@
-"use strict"
+'use strict'
 
-exports.isIntersectionObserverEntry = (a) => a instanceof IntersectionObserverEntry
+exports.isIntersectionObserverEntry = (a) =>
+  a instanceof IntersectionObserverEntry

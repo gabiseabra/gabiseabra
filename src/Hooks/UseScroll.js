@@ -1,9 +1,7 @@
-"use strict"
+'use strict'
 
-const { gsap } = require('gsap')
-const { ScrollTrigger } = require('gsap/ScrollTrigger')
-
-const TRIGGER = Symbol('TRIGGER')
+const {gsap} = require('gsap')
+const {ScrollTrigger} = require('gsap/ScrollTrigger')
 
 const percent = (min, max) => (x) => gsap.utils.mapRange(min, max, 0, 1, x)
 
@@ -18,7 +16,7 @@ const offsetTop = (target) => {
   do {
     y += el.offsetTop
     el = el.offsetParent
-  } while(el)
+  } while (el)
 
   return y
 }
@@ -29,7 +27,9 @@ window.Scroller = {
   listeners: new Set(),
   timeout: undefined,
   trigger: undefined,
-  get height() { return document.body.offsetHeight - window.innerHeight },
+  get height() {
+    return document.body.offsetHeight - window.innerHeight
+  },
   addEventListener(fn) {
     return this.listeners.add(fn)
   },
@@ -50,8 +50,8 @@ exports.setSnapPoints = (children) => () => {
   const end = Scroller.height
   const snap = {
     snapTo: Scroller.snapPoints.map(percent(start, end)),
-    duration: { min: 0.1, max: 0.3 },
-    ease: "circ.inOut"
+    duration: {min: 0.1, max: 0.3},
+    ease: 'circ.inOut'
   }
 
   Scroller.trigger = ScrollTrigger.create({
@@ -59,14 +59,14 @@ exports.setSnapPoints = (children) => () => {
     end,
     snap,
     onUpdate(...args) {
-      for(let fn of Scroller.listeners) fn(...args)
+      for (let fn of Scroller.listeners) fn(...args)
     }
   })
 
   ScrollTrigger.refresh()
 }
 
-exports.mkScrollTrigger = ({ onEnter, onEnterBack }) => (trigger) => () => {
+exports.mkScrollTrigger = ({onEnter, onEnterBack}) => (trigger) => () => {
   const effect = (fn) => (a) => fn(a)()
   return ScrollTrigger.create({
     trigger,
@@ -81,7 +81,7 @@ exports.snapTo = (el) => () => {
   const top = offsetTop(el)
   const distances = Scroller.snapPoints.map((p) => Math.abs(p - top))
   const idx = distances.indexOf(Math.min(...distances))
-  window.scrollTo({ top: Scroller.snapPoints[idx], behavior: 'smooth' })
+  window.scrollTo({top: Scroller.snapPoints[idx], behavior: 'smooth'})
 }
 
 exports.kill = (trigger) => () => trigger.kill()

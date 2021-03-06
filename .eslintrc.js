@@ -60,6 +60,7 @@ module.exports = {
     'object-curly-spacing': ['error', 'never']
   },
   globals: {
+    Scroller: true,
     process: true
   }
 }

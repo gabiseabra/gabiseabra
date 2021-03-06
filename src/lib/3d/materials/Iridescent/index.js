@@ -1,20 +1,19 @@
 import * as THREE from 'three'
-import { IridescentMaterial as Base } from './IridescentMaterial'
-import { ThinFilmFresnelMap } from './ThinFilmFresnelMap'
+import {IridescentMaterial as Base} from './IridescentMaterial'
+import {ThinFilmFresnelMap} from './ThinFilmFresnelMap'
 
 const cubeMap = (name) =>
-  new THREE.CubeTextureLoader()
-    .load([
-      `/img/skybox/${name}/posX.jpg`,
-      `/img/skybox/${name}/negX.jpg`,
-      `/img/skybox/${name}/posY.jpg`,
-      `/img/skybox/${name}/negY.jpg`,
-      `/img/skybox/${name}/posZ.jpg`,
-      `/img/skybox/${name}/negZ.jpg`
-    ]);
+  new THREE.CubeTextureLoader().load([
+    `/img/skybox/${name}/posX.jpg`,
+    `/img/skybox/${name}/negX.jpg`,
+    `/img/skybox/${name}/posY.jpg`,
+    `/img/skybox/${name}/negY.jpg`,
+    `/img/skybox/${name}/posZ.jpg`,
+    `/img/skybox/${name}/negZ.jpg`
+  ])
 
-const radiance = cubeMap("radiance");
-const irradiance = cubeMap("irradiance");
+const radiance = cubeMap('radiance')
+const irradiance = cubeMap('irradiance')
 
 export class IridescentMaterial extends Base {
   constructor(
@@ -24,7 +23,8 @@ export class IridescentMaterial extends Base {
     size = 1
   ) {
     super(
-      irradiance, radiance,
+      irradiance,
+      radiance,
       new ThinFilmFresnelMap(
         filmThickness,
         refractiveIndexFilm,

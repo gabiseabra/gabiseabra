@@ -31,11 +31,13 @@ module.exports = createConfig([
    */
   sass(),
   glsl(),
-  match(/\.jsx?$/, {
-    exclude: /node_modules\/(?!three-playground)/
-  }, [
-    babel(require('../.babelrc'))
-  ]),
+  match(
+    /\.jsx?$/,
+    {
+      exclude: /node_modules\/(?!three-playground)/
+    },
+    [babel(require('../.babelrc'))]
+  ),
   purescript(),
   /**
    * Env vars

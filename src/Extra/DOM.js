@@ -1,3 +1,3 @@
 exports.scrollIntoView = (element) => {
-  element.scrollIntoView({ behavior: 'smooth' })
+  element.scrollIntoView({behavior: 'smooth'})
 }
