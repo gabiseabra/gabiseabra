@@ -7,7 +7,7 @@ import Control.Monad.Indexed ((:>>=))
 import Data.Maybe (Maybe(..))
 import Data.Nullable (null)
 import Hey.Api.Github (fetchViewer)
-import Hey.Components.Github (mkStats)
+import Hey.Components.Github.Stats (mkStats)
 import Hey.Hooks.UseFetch (useFetch)
 import Hey.Hooks.UseScroll (useSnapPoint)
 import React.Basic.DOM as DOM
