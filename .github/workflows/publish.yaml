@@ -14,9 +14,10 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v1
       with:
-        node-version: '12.x'
+        node-version: '12.10'
     - run: yarn
     - run: yarn lint
+    - run: spago build
     - run: yarn build
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
