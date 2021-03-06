@@ -17,7 +17,6 @@ jobs:
         node-version: '12.10'
     - run: yarn
     - run: yarn lint
-    - run: spago build
     - run: yarn build
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
