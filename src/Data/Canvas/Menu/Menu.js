@@ -1,5 +1,5 @@
 const THREE = require('three')
-const {animate, mkCanvas, watchSize} = require('../../../lib/3d/canvas')
+const {animate, mkCanvas3D, watchSize} = require('../../../lib/3d/canvas')
 const {mkOrbitControl} = require('../../../lib/3d/orbit')
 const {mkRayCaster} = require('../../../lib/3d/raycaster')
 const {Scene} = require('./Scene')
@@ -32,7 +32,7 @@ exports.mkCanvas = (links) => () => {
 
   const scene = new Scene(links)
 
-  const canvas = mkCanvas('menu-scene', {renderer, camera, scene})
+  const canvas = mkCanvas3D('menu-scene', {renderer, camera, scene})
 
   watchSize(canvas, getSize)
   mkOrbitControl(canvas, {

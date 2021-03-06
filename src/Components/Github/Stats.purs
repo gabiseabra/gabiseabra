@@ -12,12 +12,13 @@ import Data.String (toLower)
 import Data.Tuple (snd)
 import Data.Tuple.Nested (type (/\), (/\))
 import Hey.Api.Github (User, RepoInfo)
-import Hey.Components.Chart (ChartData, ChartType(..), mkChart)
-import Hey.Components.Chart.FFI (RGB)
-import Hey.Hooks.UseIntersectionObserver (useIntersectionObserverEntry)
+import Hey.Data.Canvas as Canvas
+import Hey.Data.Canvas.Chart (ChartOptions)
+import Hey.Data.Canvas.Chart as Chart
 import React.Basic.DOM as DOM
-import React.Basic.Hooks (Component, component, useRef)
+import React.Basic.Hooks (Component, component, readRefMaybe, useEffectOnce, useRef, useState)
 import React.Basic.Hooks as React
+import Web.DOM.Node (appendChild, removeChild)
 
 foreign import styles :: Styles
 
@@ -30,13 +31,13 @@ type Styles
 
 extension :: String -> String
 extension lang
-  | lang == "javascript" = ".js"
-  | lang == "typescript" = ".ts"
-  | lang == "purescript" = ".ps"
-  | lang == "haskell" = ".hs"
-  | lang == "ruby" = ".rb"
-  | lang == "elixir" = ".ex"
-  | otherwise = "." <> lang
+  | lang == "javascript" = "js"
+  | lang == "typescript" = "ts"
+  | lang == "purescript" = "purs"
+  | lang == "haskell" = "hs"
+  | lang == "ruby" = "rb"
+  | lang == "elixir" = "ex"
+  | otherwise = lang
 
 collectData :: Array RepoInfo -> Map String Int
 collectData = foldr (_.primaryLanguage >>> _.name >>> Map.alter (maybe 1 ((+) 1) >>> Just)) mempty
@@ -52,8 +53,8 @@ uniq =
     )
     mempty
 
-languagesChart :: Array ({ label :: String, color :: RGB } /\ Array RepoInfo) -> ChartData
-languagesChart =
+langChartOptions :: Array ({ label :: String, color :: String } /\ Array RepoInfo) -> ChartOptions
+langChartOptions =
   map (rmap collectData)
     >>> \x ->
         let
@@ -69,9 +70,24 @@ languagesChart =
         in
           { labels: map (toLower >>> extension) labels, datasets: datasets }
 
+mkLanguagesChart :: Component ChartOptions
+mkLanguagesChart = do
+  component "Chart"
+    $ \options -> React.do
+        ref <- useRef null
+        chart /\ setChart <- useState Nothing
+        useEffectOnce
+          $ readRefMaybe ref
+          >>= maybe (pure mempty) \node -> do
+              c <- Chart.mkCanvas options
+              void $ appendChild (Canvas.toNode c) node
+              setChart (const $ Just c)
+              pure $ void $ removeChild (Canvas.toNode c) node
+        pure $ DOM.div { className: styles.languages, ref }
+
 mkStats :: Component User
 mkStats = do
-  chart <- mkChart
+  langChart <- mkLanguagesChart
   component "Repo"
     $ \user -> React.do
         let
@@ -79,27 +95,19 @@ mkStats = do
             [ { label: "my repos", color: pink } /\ user.repositories.nodes
             , { label: "contributions", color: purple } /\ user.contributions.nodes
             ]
-        ref <- useRef null
-        entry <- useIntersectionObserverEntry ref
         pure
           $ DOM.div
-              { ref
-              , className: styles.container
+              { className: styles.container
               , children:
                   [ DOM.div
                       { className: styles.body
                       , children:
-                          [ DOM.div
-                              { className: styles.languages
-                              , children:
-                                  [ chart $ { "type": Radar, "data": languagesChart data' }
-                                  ]
-                              }
+                          [ langChart $ langChartOptions data'
                           ]
                       }
                   ]
               }
   where
-  pink = [ 247, 99, 153 ]
+  pink = "rgb(247, 99, 153)"
 
-  purple = [ 141, 149, 236 ]
+  purple = "rgb(141, 149, 236)"

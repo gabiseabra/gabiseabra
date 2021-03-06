@@ -1,6 +1,6 @@
 const THREE = require('three')
 const config = require('three-playground/src/theme/config').default
-const {animate, mkCanvas, watchSize} = require('../../../lib/3d/canvas')
+const {animate, mkCanvas3D, watchSize} = require('../../../lib/3d/canvas')
 const {Scene} = require('./Scene')
 
 const NARROW_FOV = 90
@@ -30,7 +30,7 @@ exports.mkCanvas = () => {
 
   const scene = new Scene({camera, config})
 
-  const canvas = mkCanvas('background-scene', {renderer, camera, scene})
+  const canvas = mkCanvas3D('background-scene', {renderer, camera, scene})
 
   watchSize(canvas, getSize)
 

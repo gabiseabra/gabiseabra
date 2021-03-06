@@ -4,13 +4,13 @@ import {mkTitleMesh} from './TitleMesh'
 export class Title extends THREE.Object3D {
   constructor(ctx) {
     super()
+    this.rotateX(-Math.PI * 0.37)
 
     mkTitleMesh().then((mesh) => this.init(mesh, ctx))
   }
 
   init(mesh, {config}) {
     const pivot = new THREE.Object3D()
-    pivot.rotateX(-1.17)
     this.add(pivot)
 
     mesh.translateY(config.sun.distance / 2).rotateX(-1.5)
@@ -23,8 +23,8 @@ export class Title extends THREE.Object3D {
     this.ready = true
   }
 
-  setProgress(p, d) {
+  setProgress(p) {
     if (!this.ready) return
-    this.mesh.rotateX((Math.PI / 2) * d)
+    this.pivot.rotation.x = THREE.MathUtils.lerp(0, Math.PI / 3, p)
   }
 }

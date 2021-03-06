@@ -1,4 +1,4 @@
-export const mkCanvas = (id, {camera, renderer, scene, composer}) => {
+export const mkCanvas3D = (id, {camera, renderer, scene, composer}) => {
   const element = renderer.domElement
   element.id = id
 
