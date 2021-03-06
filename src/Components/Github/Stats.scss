@@ -1,7 +1,7 @@
-@use '~@styles/breakpoint';
+@use '@styles/breakpoint.scss';
 @use 'sass:map';
 
-@import '~@styles/theme';
+@import '@styles/theme.scss';
 
 .container {
   box-sizing: border-box;
