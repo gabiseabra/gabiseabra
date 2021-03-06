@@ -1,6 +1,6 @@
 @use 'sass:map';
 
-@import '@styles/theme.scss';
+@import '~styles/theme';
 
 .mark {
   background: $content-highlight;

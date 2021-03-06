@@ -21,10 +21,7 @@ module.exports = createConfig([
   entryPoint('./src/index.js'),
   setOutput('./public/build/index.js'),
   resolve({
-    modules: [path.join(ROOT, 'node_modules')],
-    alias: {
-      '@styles': path.join(ROOT, 'src/Styles')
-    }
+    modules: [path.join(ROOT, 'node_modules'), path.join(ROOT, 'src')]
   }),
   /**
    * Module resolvers

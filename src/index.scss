@@ -1,6 +1,6 @@
 @use 'sass:map';
 
-@import '@styles/theme.scss';
+@import '~styles/theme';
 
 *::selection {
   background: map.get($palette-secondary, 'medium');

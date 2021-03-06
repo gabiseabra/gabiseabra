@@ -1,7 +1,7 @@
 @use 'sass:map';
-@use '@styles/breakpoint.scss';
+@use '~styles/breakpoint';
 
-@import '@styles/theme.scss';
+@import '~styles/theme';
 
 $shadow-offset: 6px;
 
