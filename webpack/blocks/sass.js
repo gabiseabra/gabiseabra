@@ -12,6 +12,17 @@ module.exports = () => (_, {addLoader}) =>
         loader: 'css-loader',
         options: {importLoaders: 1, modules: true}
       },
-      'sass-loader'
+      {
+        loader: 'sass-loader',
+        options: {
+          sassOptions: {
+            webpackImporter: false,
+            includePaths: [
+              path.join(ROOT, 'node_modules'),
+              path.join(ROOT, 'src')
+            ]
+          }
+        }
+      }
     ]
   })
