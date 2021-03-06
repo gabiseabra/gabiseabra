@@ -6,6 +6,13 @@ import Effect (Effect)
 import Hey.Data.Route (Route)
 import Wire.Signal (Signal)
 
+type Options = {
+  github :: { token :: String }
+}
+
+-- TODO could use argonaut or something for validation
+foreign import getOptions :: Effect Options
+
 type Router =
   { signal :: Signal Route
   , push :: Route -> Effect Unit
@@ -14,4 +21,5 @@ type Router =
 
 type Env =
   { router :: Router
+  , options :: Options
   }

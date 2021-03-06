@@ -3,11 +3,13 @@ module Hey.Pages.About
   ) where
 
 import Prelude
+
 import Control.Monad.Indexed ((:>>=))
 import Data.Maybe (Maybe(..))
 import Data.Nullable (null)
 import Hey.Api.Github (fetchViewer)
 import Hey.Components.Github.Stats (mkStats)
+import Hey.Data.Env (Env)
 import Hey.Hooks.UseFetch (useFetch)
 import Hey.Hooks.UseScroll (useSnapPoint)
 import React.Basic.DOM as DOM
@@ -20,14 +22,14 @@ type Styles
   = { page :: String
     }
 
-mkAboutPage :: forall a. Component a
+mkAboutPage :: Component Env
 mkAboutPage = do
   stats <- mkStats
-  component "About" \_ -> React.do
+  component "About" \{ options } -> React.do
     ref <- useRef null
     useSnapPoint ref
     children <-
-      useFetch fetchViewer
+      useFetch (fetchViewer options.github.token)
         :>>= case _ of
             Nothing -> pure [ DOM.text "loading..." ]
             Just { data: res } -> pure [ stats res.viewer ]

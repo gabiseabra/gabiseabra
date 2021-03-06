@@ -1,13 +1,14 @@
 module Hey where
 
 import Prelude
+
 import Data.Maybe (Maybe(..))
 import Effect (Effect)
 import Effect.Exception (throw)
+import Hey.Components.Menu (mkMenu)
 import Hey.Data.Canvas as Canvas
 import Hey.Data.Canvas.Background as Background
-import Hey.Components.Menu (mkMenu)
-import Hey.Data.Env (Env)
+import Hey.Data.Env (Env, getOptions)
 import Hey.Data.Route (Route(..))
 import Hey.Hooks.UseFetch (mkFetchProvider)
 import Hey.Hooks.UseRouter (useRouter)
@@ -48,10 +49,11 @@ mkApp = do
   routes <- mkRoutes
   fetchProvider <- mkFetchProvider
   scrollProvider <- mkScrollProvider
+  options <- getOptions
   component "App"
     $ \_ -> React.do
         router <- useRouter
-        sequenceRecord { router }
+        sequenceRecord { router, options: Just options }
           # case _ of
               Nothing -> pure mempty
               Just env ->

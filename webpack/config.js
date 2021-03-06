@@ -41,6 +41,6 @@ module.exports = createConfig([
    * Set default values for the output bundle's process.env here
    */
   setEnv({
-    // ...
+    GH_TOKEN: ''
   })
 ])

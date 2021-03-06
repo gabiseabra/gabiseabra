@@ -46,13 +46,13 @@ type ViewerQuery
   = { viewer :: User
     }
 
-fetchViewer :: Fetch { data :: ViewerQuery }
-fetchViewer = Fetch "github/viewer" req
+fetchViewer :: String -> Fetch { data :: ViewerQuery }
+fetchViewer token = Fetch "github/viewer" req
   where
   req =
     AX.defaultRequest
       { url = "https://api.github.com/graphql"
-      , headers = [ RequestHeader "Authorization" "bearer e2cdad17d8b6308897f05edaace521b1964cfb0e" ]
+      , headers = [ RequestHeader "Authorization" $ "bearer " <> token ]
       , content = Just $ Req.json $ encodeJson { query }
       , method = Left POST
       , responseFormat = Res.json
