@@ -2,11 +2,11 @@ export function draw({ctx, width, height}, {labels, datasets}) {
   const center = {x: width / 2, y: height / 2}
 
   console.log(labels)
-  const step = 5
-  const max =
-    Math.ceil(
-      Math.max(...[].concat(...datasets.map(({data}) => data))) / step
-    ) * step
+  // const step = 5
+  // const max =
+  //   Math.ceil(
+  //     Math.max(...[].concat(...datasets.map(({data}) => data))) / step
+  //   ) * step
   const coords = drawScale(ctx, {
     center,
     edges: datasets[0].data.length,
