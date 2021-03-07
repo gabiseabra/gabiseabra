@@ -133,17 +133,15 @@ userInfo user =
   DOM.section
     { className: styles.info
     , children:
-        pure
-          $ DOM.div_
-              [ DOM.article_
-                  $ [ infoHead Code "repos" (forks + repos)
-                    , infoScale [ "forks" /\ forks, "sources" /\ repos ]
-                    ]
-              , DOM.article_ $ pure $ infoHead HandsHelping "contributed to" contrib
-              , DOM.article_ $ pure $ infoHead CodeBranch "PRs" prs
-              , DOM.article_ $ pure $ infoHead Nag "issues" issues
-              , DOM.article_ $ pure $ infoHead Star "stars" stars
+        [ DOM.article_
+            $ [ infoHead Code "repos" (forks + repos)
+              , infoScale [ "forks" /\ forks, "sources" /\ repos ]
               ]
+        , DOM.article_ $ pure $ infoHead HandsHelping "contributed to" contrib
+        , DOM.article_ $ pure $ infoHead CodeBranch "PRs" prs
+        , DOM.article_ $ pure $ infoHead Nag "issues" issues
+        , DOM.article_ $ pure $ infoHead Star "stars" stars
+        ]
     }
   where
   forks = user.forks.totalCount
