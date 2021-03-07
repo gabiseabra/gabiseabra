@@ -4,6 +4,7 @@ import Prelude
 import Data.Array (elem, fold, fromFoldable)
 import Data.Bifunctor (rmap)
 import Data.Foldable (class Foldable, foldl, foldr)
+import Data.Int as Int
 import Data.Map (Map)
 import Data.Map as Map
 import Data.Maybe (Maybe(..), fromMaybe, maybe)
@@ -12,11 +13,13 @@ import Data.String (toLower)
 import Data.Tuple (snd)
 import Data.Tuple.Nested (type (/\), (/\))
 import Hey.Api.Github (User, RepoInfo)
+import Hey.Components.SVG.Icon (Icon(..), icon)
+import Hey.Components.Typography as Typo
 import Hey.Data.Canvas as Canvas
 import Hey.Data.Canvas.Chart (ChartOptions)
 import Hey.Data.Canvas.Chart as Chart
 import React.Basic.DOM as DOM
-import React.Basic.Hooks (Component, component, readRefMaybe, useEffectOnce, useRef, useState)
+import React.Basic.Hooks (Component, JSX, component, readRefMaybe, useEffectOnce, useRef, useState)
 import React.Basic.Hooks as React
 import Web.DOM.Node (appendChild, removeChild)
 
@@ -27,6 +30,10 @@ type Styles
     , body :: String
     , stats :: String
     , languages :: String
+    , info :: String
+    , infoHead :: String
+    , infoScale :: String
+    , infoScaleBar :: String
     }
 
 extension :: String -> String
@@ -53,7 +60,7 @@ uniq =
     )
     mempty
 
-langChartOptions :: Array ({ label :: String, color :: String } /\ Array RepoInfo) -> ChartOptions
+langChartOptions :: Array (String /\ Array RepoInfo) -> ChartOptions
 langChartOptions =
   map (rmap collectData)
     >>> \x ->
@@ -62,9 +69,8 @@ langChartOptions =
 
           datasets =
             x
-              # map \({ label, color } /\ data') ->
-                  { color: notNull color
-                  , label: notNull label
+              # map \(label /\ data') ->
+                  { label: notNull label
                   , "data": labels # map ((flip Map.lookup) data' >>> fromMaybe 0)
                   }
         in
@@ -85,6 +91,73 @@ mkLanguagesChart = do
               pure $ void $ removeChild (Canvas.toNode c) node
         pure $ DOM.div { className: styles.languages, ref }
 
+infoHead :: Icon -> String -> Int -> JSX
+infoHead ic label value =
+  DOM.header
+    { className: styles.infoHead
+    , children:
+        [ icon ic
+        , Typo.mark [ Typo.span_ [ DOM.text (label <> ":") ] ]
+        , Typo.span
+            $ Typo.spanProps
+                { bold = true
+                , children = [ DOM.text $ show value ]
+                }
+        ]
+    }
+
+type ScaleItem
+  = String /\ Int
+
+infoScale :: Array ScaleItem -> JSX
+infoScale l =
+  DOM.div
+    { className: styles.infoScale
+    , children:
+        l
+          <#> \(label /\ x) ->
+              DOM.div
+                { style: DOM.css { width: width x }
+                , children: pure $ Typo.span_ [ DOM.text label ]
+                }
+    }
+  where
+  max = foldr (snd >>> (+)) 0 l
+
+  ratio n = Int.toNumber n / Int.toNumber max
+
+  width n = (show $ Int.ceil $ (ratio n * 100.0)) <> "%"
+
+userInfo :: User -> JSX
+userInfo user =
+  DOM.section
+    { className: styles.info
+    , children:
+        pure
+          $ DOM.div_
+              [ DOM.article_
+                  $ [ infoHead Code "repos" (forks + repos)
+                    , infoScale [ "forks" /\ forks, "sources" /\ repos ]
+                    ]
+              , DOM.article_ $ pure $ infoHead HandsHelping "contributed to" contrib
+              , DOM.article_ $ pure $ infoHead CodeBranch "PRs" prs
+              , DOM.article_ $ pure $ infoHead Nag "issues" issues
+              , DOM.article_ $ pure $ infoHead Star "stars" stars
+              ]
+    }
+  where
+  forks = user.forks.totalCount
+
+  repos = user.repositories.totalCount
+
+  contrib = user.contributions.totalCount
+
+  stars = foldr (_.stargazerCount >>> (+)) 0 user.repositories.nodes
+
+  issues = user.issues.totalCount
+
+  prs = user.pullRequests.totalCount
+
 mkStats :: Component User
 mkStats = do
   langChart <- mkLanguagesChart
@@ -92,8 +165,8 @@ mkStats = do
     $ \user -> React.do
         let
           data' =
-            [ { label: "my repos", color: pink } /\ user.repositories.nodes
-            , { label: "contributions", color: purple } /\ user.contributions.nodes
+            [ "my repos" /\ user.repositories.nodes
+            , "contributions" /\ user.contributions.nodes
             ]
         pure
           $ DOM.div
@@ -103,11 +176,8 @@ mkStats = do
                       { className: styles.body
                       , children:
                           [ langChart $ langChartOptions data'
+                          , userInfo user
                           ]
                       }
                   ]
               }
-  where
-  pink = "rgb(247, 99, 153)"
-
-  purple = "rgb(141, 149, 236)"

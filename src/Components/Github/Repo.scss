@@ -3,8 +3,6 @@
 
 @import '~styles/theme';
 
-$shadow-offset: 6px;
-
 .container {
   display: flex;
   flex-direction: column;
@@ -32,8 +30,8 @@ $shadow-offset: 6px;
   content: ' ';
   width: 100%;
   height: 100%;
-  top: $shadow-offset;
-  left: $shadow-offset;
+  top: $content-shadow;
+  left: $content-shadow;
   background: map.get($palette-primary, 'medium');
 }
 

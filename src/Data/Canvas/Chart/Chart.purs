@@ -11,7 +11,6 @@ import Hey.Data.Canvas (kind Scene, Canvas)
 
 type DataSet
   = { label :: Nullable String
-    , color :: Nullable String
     , data :: Array Int
     }
 

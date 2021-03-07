@@ -20,6 +20,8 @@ $content-color: map.get($palette-secondary, 'darker');
 
 $content-highlight: map.get($palette-highlight, 'light');
 
+$content-shadow: 6px;
+
 $title-color: map.get($palette-primary, 'medium');
 
 $title-highlight: map.get($palette-highlight, 'light');

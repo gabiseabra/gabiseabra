@@ -13,7 +13,7 @@ import Hey.Data.JSON (JDateTime)
 import Hey.Hooks.UseFetch (Fetch(..))
 
 type Connection a
-  = { nodes :: Array a }
+  = { totalCount :: Int, nodes :: Array a }
 
 type Count
   = { totalCount :: Int }
@@ -24,6 +24,7 @@ type Language
 type RepoInfo
   = { name :: String
     , primaryLanguage :: Language
+    , stargazerCount :: Int
     }
 
 type Repo
@@ -39,7 +40,9 @@ type User
   = { repositories :: Connection RepoInfo
     , contributions :: Connection RepoInfo
     , featured :: Connection Repo
+    , pullRequests :: Count
     , forks :: Count
+    , issues :: Count
     }
 
 type ViewerQuery
@@ -62,16 +65,21 @@ fetchViewer token = Fetch "github/viewer" req
     """
     query {
       viewer {
+        issues { totalCount }
+        pullRequests { totalCount }
         forks: repositories(isFork: true) {
           totalCount
         }
         repositories: repositories(first: 100, isFork: false) {
+          totalCount
           nodes { ...RepoInfo }
         }
         contributions: repositoriesContributedTo(first: 100) {
+          totalCount
           nodes { ...RepoInfo }
         }
         featured: pinnedItems(first: 6, types: [REPOSITORY]) {
+          totalCount
           nodes {
             ... on Repository { ...Repo }
           }
@@ -86,6 +94,7 @@ fetchViewer token = Fetch "github/viewer" req
 
     fragment RepoInfo on Repository {
       name
+      stargazerCount
       primaryLanguage { ...Language }
     }
 
@@ -96,6 +105,7 @@ fetchViewer token = Fetch "github/viewer" req
       homepageUrl
       createdAt
       languages(first: 3) {
+        totalCount
         nodes { ...Language }
       }
     }

@@ -16,18 +16,12 @@ function outlineSection(g, {radius, edges, center}) {
 }
 
 export class Scale extends PIXI.Graphics {
-  static FILL_COLOR = 0xffcaca
+  static FILL_COLOR = 0x72d6e7
   static HIGHLIGHT_COLOR = 0x72d6e7
-
-  static BORDER_STYLE = {
-    width: 10,
-    color: 0xffcaca,
-    cap: PIXI.LINE_CAP.ROUND
-  }
 
   static LINE_STYLE = {
     width: 0.8,
-    color: 0xffa1b4
+    color: 0xd3efff
   }
 
   static LABEL_STYLE = new PIXI.TextStyle({
@@ -53,12 +47,11 @@ export class Scale extends PIXI.Graphics {
     // scale fill
     {
       const fill = new PIXI.Graphics()
-      fill.lineStyle(Scale.BORDER_STYLE)
       fill.beginFill(Scale.FILL_COLOR)
       outlineSection(fill, {
         center,
         edges,
-        radius: radius
+        radius: radius * 1.05
       })
       fill.closePath()
       fill.lineStyle(Scale.LINE_STYLE)

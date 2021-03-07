@@ -11,6 +11,11 @@ data Icon
   = Clock
   | Github
   | ExternalLink
+  | Code
+  | CodeBranch
+  | Star
+  | HandsHelping
+  | Nag
 
 derive instance eqIcon :: Eq Icon
 
@@ -24,6 +29,11 @@ foreign import icons ::
   { clock :: IconDefinition
   , github :: IconDefinition
   , externalLink :: IconDefinition
+  , code :: IconDefinition
+  , codeBranch :: IconDefinition
+  , star :: IconDefinition
+  , handsHelping :: IconDefinition
+  , nag :: IconDefinition
   , empty :: IconDefinition
   }
 
@@ -32,6 +42,11 @@ def ic
   | ic == Clock = icons.clock
   | ic == Github = icons.github
   | ic == ExternalLink = icons.externalLink
+  | ic == Code = icons.code
+  | ic == CodeBranch = icons.codeBranch
+  | ic == Star = icons.star
+  | ic == HandsHelping = icons.handsHelping
+  | ic == Nag = icons.nag
   | otherwise = icons.empty
 
 icon :: Icon -> JSX
