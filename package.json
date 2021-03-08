@@ -64,7 +64,7 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "three": "^0.124.0",
-    "three-playground": "gabiseabra/three-playground#954c1e0",
+    "three-playground": "gabiseabra/three-playground#0264deb",
     "xhr2": "^0.2.1"
   },
   "resolutions": {

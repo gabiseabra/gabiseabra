@@ -9311,9 +9311,9 @@ text-table@^0.2.0:
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
   integrity sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=
 
-three-playground@gabiseabra/three-playground#main:
+three-playground@gabiseabra/three-playground#0264deb:
   version "1.0.0"
-  resolved "https://codeload.github.com/gabiseabra/three-playground/tar.gz/954c1e0db9fe26b5c6a0c7135669f0515e2b0636"
+  resolved "https://codeload.github.com/gabiseabra/three-playground/tar.gz/0264debc5950edc352efd4170b573a58f84b7b57"
   dependencies:
     dat.gui "^0.7.7"
     glsl-noise "^0.0.0"

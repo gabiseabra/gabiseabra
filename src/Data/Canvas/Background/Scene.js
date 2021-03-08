@@ -3,6 +3,7 @@ import cubicBezier from 'bezier-easing'
 import {Sun} from 'three-playground/src/objects/Sun'
 import {World} from 'three-playground/src/objects/World'
 import {CameraController} from 'three-playground/src/objects/CameraController'
+import {SunLight} from 'three-playground/src/theme/Lights'
 import {Title} from '../../../lib/3d/objects/Title'
 
 const PROGRESS = Symbol('PROGRESS')
@@ -15,9 +16,6 @@ const mkSun = (config) => {
   const pivot = new THREE.Object3D()
   const sun = new Sun(config.sun)
   sun.position.z = -config.sun.distance
-  const sunLight = config.lights.sun.clone()
-  sunLight.position.z = -config.sun.distance
-  pivot.add(sunLight)
   pivot.add(sun)
 
   return pivot
@@ -39,6 +37,10 @@ export class Scene extends THREE.Scene {
     ctx.camera.rotateZ(Math.PI)
     this.add(this.cameraController)
 
+    this.sunLight = new SunLight()
+    this.sunLight.position.z = ctx.config.sun.distance
+    this.add(this.sunLight)
+
     const sun0 = mkSun(ctx.config)
     const sun1 = mkSun(ctx.config)
     this.add(sun0, sun1)
@@ -56,6 +58,8 @@ export class Scene extends THREE.Scene {
     this.cameraController.angle = angle
     this.world.angle = angle
     this.title.setProgress(t, d)
+
+    this.sunLight.position.copy(this.world.sunPosition)
 
     const sunTopPos = Math.min(t, 0.3) / 0.2
     const sunBottomPos = (1 - Math.max(t, 0.7)) / 0.2

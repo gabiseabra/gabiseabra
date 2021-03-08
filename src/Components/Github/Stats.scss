@@ -8,10 +8,13 @@
   height: 75vh;
   margin: 0 auto;
   padding-top: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .body {
-  padding: 25px 15px;
+  padding: 25px 30px;
   display: flex;
   flex-direction: row-reverse;
   align-items: center;
@@ -59,7 +62,7 @@
     filter: drop-shadow(1.5px 1.5px 0 $content-highlight);
   }
 
-  mark { background: map.get($palette-secondary, 'lighter') !important; }
+  mark { background: map.get($palette-primary, 'lighter') !important; }
 
   & > * {
     position: relative;
