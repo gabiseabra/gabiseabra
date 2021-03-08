@@ -11,6 +11,7 @@ export class Title extends THREE.Object3D {
 
   init(mesh, {config}) {
     const pivot = new THREE.Object3D()
+    pivot.position.z = -50
     this.add(pivot)
 
     mesh.translateY(config.sun.distance / 2).rotateX(-1.5)

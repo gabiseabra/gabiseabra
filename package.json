@@ -51,6 +51,7 @@
     "@fortawesome/free-brands-svg-icons": "^5.15.1",
     "@fortawesome/free-regular-svg-icons": "^5.15.1",
     "@fortawesome/free-solid-svg-icons": "^5.15.1",
+    "bezier-easing": "^2.1.0",
     "core-js": "3",
     "glsl-noise": "^0.0.0",
     "glsl-worley": "^1.0.2",
@@ -63,7 +64,7 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "three": "^0.124.0",
-    "three-playground": "gabiseabra/three-playground#main",
+    "three-playground": "gabiseabra/three-playground#954c1e0",
     "xhr2": "^0.2.1"
   },
   "resolutions": {
