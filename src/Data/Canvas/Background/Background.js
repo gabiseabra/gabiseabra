@@ -4,7 +4,6 @@ const {animate, mkCanvas3D, watchSize} = require('../../../lib/3d/canvas')
 const {Effects} = require('../../../lib/3d/postprocessing/Effects')
 const {Scene} = require('./Scene')
 const {addObject} = require('three-playground/src/lib/GUI/properties')
-const Dat = require('dat.gui')
 
 const NARROW_FOV = 90
 const WIDE_FOV = 45
@@ -48,9 +47,6 @@ exports.mkCanvas = () => {
   watchSize(canvas, getSize)
 
   animate(canvas)
-
-  const gui = new Dat.GUI()
-  addObject(gui, 'post processing', composer)
 
   window.Scroller.addEventListener(({progress}) => {
     scene.progress = progress

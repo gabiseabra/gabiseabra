@@ -46,11 +46,6 @@ export class Effects extends EffectComposer {
 
     this.uniforms = {
       focus: bokeh.uniforms.get('focus'),
-      focalLength: bokeh.uniforms.get('focalLength'),
-      fStop: bokeh.uniforms.get('fStop'),
-      luminanceThreshold: bokeh.uniforms.get('luminanceThreshold'),
-      luminanceGain: bokeh.uniforms.get('luminanceGain'),
-      bias: bokeh.uniforms.get('bias'),
       fringe: bokeh.uniforms.get('fringe'),
       maxBlur: bokeh.uniforms.get('maxBlur'),
       dof: bokeh.uniforms.get('dof')
@@ -72,19 +67,5 @@ export class Effects extends EffectComposer {
     }
     this.uniforms.fringe.value = THREE.MathUtils.lerp(0, 10, t)
     this.uniforms.maxBlur.value = THREE.MathUtils.lerp(10, 4, tHalf)
-  }
-
-  getGUI() {
-    return [
-      ['uniforms.focus', {min: 0, max: 4, step: 0.01}],
-      ['uniforms.focalLength', {min: 0, max: 10, step: 0.1}],
-      ['uniforms.fStop', {min: 0, max: 10, step: 0.1}],
-      ['uniforms.luminanceThreshold', {min: 0, max: 10, step: 0.1}],
-      ['uniforms.luminanceGain', {min: 0, max: 10, step: 0.1}],
-      ['uniforms.bias', {min: 0, max: 10, step: 0.1}],
-      ['uniforms.fringe', {min: 0, max: 10, step: 0.1}],
-      ['uniforms.maxBlur', {min: 0, max: 10, step: 0.1}],
-      ['dof', {min: 0, max: 10, step: 0.001}]
-    ]
   }
 }
