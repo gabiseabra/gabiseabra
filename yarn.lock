@@ -9308,7 +9308,7 @@ text-table@^0.2.0:
 
 three-playground@gabiseabra/three-playground#main:
   version "1.0.0"
-  resolved "https://codeload.github.com/gabiseabra/three-playground/tar.gz/da615538a764dd0b0539b2977c043dc0b16224e2"
+  resolved "https://codeload.github.com/gabiseabra/three-playground/tar.gz/3b658887621f3a4f6eacb8904e97cb9f93a711ea"
   dependencies:
     dat.gui "^0.7.7"
     glsl-noise "^0.0.0"
