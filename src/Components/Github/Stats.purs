@@ -1,16 +1,14 @@
 module Hey.Components.Github.Stats (mkStats) where
 
 import Prelude
-import Data.Array (elem, fold, fromFoldable)
-import Data.Bifunctor (rmap)
-import Data.Foldable (class Foldable, foldl, foldr)
+import Data.Array as Array
 import Data.Int as Int
 import Data.Map (Map)
 import Data.Map as Map
 import Data.Maybe (Maybe(..), fromMaybe, maybe)
-import Data.Nullable (notNull, null)
-import Data.String (toLower)
-import Data.Tuple (snd)
+import Data.Nullable (null)
+import Data.String as String
+import Data.Tuple as Tuple
 import Data.Tuple.Nested (type (/\), (/\))
 import Hey.Api.Github (User, RepoInfo)
 import Hey.Components.SVG.Icon (Icon(..), icon)
@@ -21,7 +19,7 @@ import Hey.Data.Canvas.Chart as Chart
 import React.Basic.DOM as DOM
 import React.Basic.Hooks (Component, JSX, component, readRefMaybe, useEffectOnce, useRef, useState)
 import React.Basic.Hooks as React
-import Web.DOM.Node (appendChild, removeChild)
+import Web.DOM.Node as Node
 
 foreign import styles :: Styles
 
@@ -47,34 +45,35 @@ extension lang
   | otherwise = lang
 
 collectData :: Array RepoInfo -> Map String Int
-collectData = foldr (_.primaryLanguage >>> _.name >>> Map.alter (maybe 1 ((+) 1) >>> Just)) mempty
+collectData = Array.foldr (_.primaryLanguage >>> _.name >>> Map.alter (maybe 1 ((+) 1) >>> Just)) mempty
 
-uniq :: forall f a. Eq a => Foldable f => Monoid (f a) => Applicative f => f a -> f a
+uniq :: forall a. Eq a => Monoid (Array a) => Array a -> Array a
 uniq =
-  foldl
+  Array.foldl
     ( \as a ->
-        if a `elem` as then
+        if a `Array.elem` as then
           as
         else
           pure a <> as
     )
     mempty
 
-langChartOptions :: Array (String /\ Array RepoInfo) -> ChartOptions
+langChartOptions :: Array (Array RepoInfo) -> ChartOptions
 langChartOptions =
-  map (rmap collectData)
+  map collectData
     >>> \x ->
         let
-          labels = (map (snd >>> Map.keys) >>> fold >>> fromFoldable >>> uniq) x
+          langs = x # map Map.keys >>> Array.fold >>> Array.fromFoldable >>> uniq
 
-          datasets =
-            x
-              # map \(label /\ data') ->
-                  { label: notNull label
-                  , "data": labels # map ((flip Map.lookup) data' >>> fromMaybe 0)
-                  }
+          labels = langs # map (String.toLower >>> extension)
+
+          mkDataset d = langs # map ((flip Map.lookup) d >>> fromMaybe 0)
+
+          data0 = Array.replicate (Array.length langs) 0
+
+          data' = x # map mkDataset >>> Array.foldr (Array.zipWith (+)) data0
         in
-          { labels: map (toLower >>> extension) labels, datasets: datasets }
+          { labels, datasets: [ { label: null, "data": data' } ] }
 
 mkLanguagesChart :: Component ChartOptions
 mkLanguagesChart = do
@@ -86,9 +85,12 @@ mkLanguagesChart = do
           $ readRefMaybe ref
           >>= maybe (pure mempty) \node -> do
               c <- Chart.mkCanvas options
-              void $ appendChild (Canvas.toNode c) node
+              void $ Node.appendChild (Canvas.toNode c) node
               setChart (const $ Just c)
-              pure $ void $ removeChild (Canvas.toNode c) node
+              pure
+                $ do
+                    Canvas.destroy c
+                    void $ Node.removeChild (Canvas.toNode c) node
         pure $ DOM.div { className: styles.languages, ref }
 
 infoHead :: Icon -> String -> Int -> JSX
@@ -122,7 +124,7 @@ infoScale l =
                 }
     }
   where
-  max = foldr (snd >>> (+)) 0 l
+  max = Array.foldr (Tuple.snd >>> (+)) 0 l
 
   ratio n = Int.toNumber n / Int.toNumber max
 
@@ -150,7 +152,7 @@ userInfo user =
 
   contrib = user.contributions.totalCount
 
-  stars = foldr (_.stargazerCount >>> (+)) 0 user.repositories.nodes
+  stars = Array.foldr (_.stargazerCount >>> (+)) 0 user.repositories.nodes
 
   issues = user.issues.totalCount
 
@@ -163,8 +165,8 @@ mkStats = do
     $ \user -> React.do
         let
           data' =
-            [ "my repos" /\ user.repositories.nodes
-            , "contributions" /\ user.contributions.nodes
+            [ user.repositories.nodes
+            , user.contributions.nodes
             ]
         pure
           $ DOM.div
