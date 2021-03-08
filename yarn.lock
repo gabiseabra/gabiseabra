@@ -7559,6 +7559,11 @@ postprocessing@^6.19.1:
   resolved "https://registry.yarnpkg.com/postprocessing/-/postprocessing-6.19.1.tgz#93e4d673815325a6303c3af9600526afbdda97e2"
   integrity sha512-Uqx0GRCv975/wjwsQkgTPyvwVeGHqGIf97Vtof49VpptJL0LOZyAtzXwHlzD2tj+PCeTWsJD+Q7WQrOrfa1vWQ==
 
+postprocessing@^6.21.0:
+  version "6.21.0"
+  resolved "https://registry.yarnpkg.com/postprocessing/-/postprocessing-6.21.0.tgz#6e0211742c442b90cc453684ebff17041cb3506b"
+  integrity sha512-lEB323ZKf8RoVU+vWn0vyj6I0zRZggs5cOOjY6orhdmnDZjAed4BiIjkGV3ti2Zl9a2h2eOp7M0q+cH61KIidw==
+
 prelude-ls@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.2.1.tgz#debc6489d7a6e6b0e7611888cec880337d316396"

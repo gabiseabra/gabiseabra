@@ -6,6 +6,7 @@ const PROGRESS = Symbol('PROGRESS')
 
 export class Scene extends BaseScene {
   cameraAxis = new THREE.Vector3(1, 0, 0)
+  background = 0x3fb3dc
 
   constructor(ctx) {
     super(ctx)
