@@ -50,8 +50,8 @@ exports.setSnapPoints = (children) => () => {
   const end = Scroller.height
   const snap = {
     snapTo: Scroller.snapPoints.map(percent(start, end)),
-    duration: {min: 0.1, max: 0.3},
-    ease: 'circ.inOut'
+    duration: {min: 0.3, max: 0.5},
+    ease: 'power1.inOut'
   }
 
   Scroller.trigger = ScrollTrigger.create({
