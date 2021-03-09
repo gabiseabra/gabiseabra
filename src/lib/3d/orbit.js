@@ -13,6 +13,7 @@ export const mkOrbitControl = (canvas, options = {}) => {
     const y = e.clientY / window.innerHeight
     pos.set(x, y).sub(orbit.options.axis).multiplyScalar(2)
     tilt(pos, orbit)
+    if (options.onChange) options.onChange()
   }
   document.addEventListener('mousemove', listener)
   canvas.listeners.push(() =>
