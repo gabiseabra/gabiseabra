@@ -10,7 +10,7 @@ import Data.Nullable (null)
 import Data.String as String
 import Data.Tuple as Tuple
 import Data.Tuple.Nested (type (/\), (/\))
-import Hey.Api.Github (User, RepoInfo)
+import Hey.API.Github (User, RepoInfo)
 import Hey.Components.SVG.Icon (Icon(..), icon)
 import Hey.Components.Typography as Typo
 import Hey.Data.Canvas as Canvas

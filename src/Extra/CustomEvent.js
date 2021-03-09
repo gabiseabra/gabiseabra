@@ -1,3 +1,5 @@
+'use strict'
+
 exports.detail = (event) => event.detail
 
 exports.customEvent_ = (type) => (detail) => {

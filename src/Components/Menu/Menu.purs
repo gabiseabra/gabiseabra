@@ -7,14 +7,14 @@ import Effect (Effect)
 import Hey.Data.Canvas as Canvas
 import Hey.Data.Canvas.Menu as Menu
 import Hey.Data.Env (Env)
-import Hey.Data.Route (Route(..), href)
+import Hey.Data.Route (Route(..))
 import Hey.Hooks.UseScroll (snapTo)
 import React.Basic.DOM as DOM
 import React.Basic.Hooks (Component, component, readRefMaybe, useEffect, useEffectOnce, useRef, writeRef)
 import React.Basic.Hooks as React
-import Web.DOM.Node (appendChild, removeChild)
+import Web.DOM.Node as Node
 import Web.DOM.NonElementParentNode as NEPN
-import Web.HTML (window)
+import Web.HTML as HTML
 import Web.HTML.HTMLDocument as HTMLDocument
 import Web.HTML.HTMLElement as HTMLElement
 import Web.HTML.Window as Win
@@ -30,7 +30,7 @@ type Styles
 
 pushRoute :: Route -> Effect Unit
 pushRoute route =
-  window
+  HTML.window
     >>= Win.document
     >>= HTMLDocument.toNonElementParentNode
     >>> NEPN.getElementById (show route)
@@ -62,11 +62,11 @@ mkMenu =
           >>= maybe (pure mempty) \nav -> do
               c <- Menu.mkCanvas $ links
               writeRef canvas $ notNull c
-              void $ appendChild (Canvas.toNode c) nav
+              void $ Node.appendChild (Canvas.toNode c) nav
               pure
                 $ do
                     writeRef canvas null
-                    void $ removeChild (Canvas.toNode c) nav
+                    void $ Node.removeChild (Canvas.toNode c) nav
                     Canvas.destroy c
         -- update active link
         useEffect currentRoute

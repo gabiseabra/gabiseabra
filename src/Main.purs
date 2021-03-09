@@ -1,7 +1,6 @@
 module Hey where
 
 import Prelude
-
 import Data.Maybe (Maybe(..))
 import Effect (Effect)
 import Effect.Exception (throw)
@@ -15,14 +14,14 @@ import Hey.Hooks.UseRouter (useRouter)
 import Hey.Hooks.UseScroll (mkScrollProvider)
 import Hey.Pages.Home (mkHomePage)
 import Hey.Pages.NotFound (mkNotFoundPage)
-import React.Basic.DOM (render)
 import React.Basic.DOM as DOM
 import React.Basic.Hooks (Component, JSX, component)
 import React.Basic.Hooks as React
 import Record.Extra (sequenceRecord)
-import Web.DOM.Node (appendChild)
-import Web.DOM.NonElementParentNode (getElementById)
-import Web.HTML (HTMLElement, window)
+import Web.DOM.Node as Node
+import Web.DOM.NonElementParentNode as NEPN
+import Web.HTML (HTMLElement)
+import Web.HTML as HTML
 import Web.HTML.HTMLDocument as Doc
 import Web.HTML.HTMLElement as El
 import Web.HTML.Window as Win
@@ -68,19 +67,19 @@ mkBackground :: HTMLElement -> Effect Unit
 mkBackground body =
   void
     $ join
-    $ appendChild
+    $ Node.appendChild
     <$> (Canvas.toNode <$> Background.mkCanvas)
     <*> (pure $ El.toNode body)
 
 main :: Effect Unit
 main = do
   app <- mkApp
-  doc <- Win.document =<< window
+  doc <- Win.document =<< HTML.window
   body <- Doc.body doc
-  root <- getElementById "root" $ Doc.toNonElementParentNode doc
+  root <- NEPN.getElementById "root" $ Doc.toNonElementParentNode doc
   case body of
     Nothing -> throw "Body element not found."
     Just x -> mkBackground x
   case root of
     Nothing -> throw "Container element not found."
-    Just x -> render (app {}) x
+    Just x -> DOM.render (app {}) x

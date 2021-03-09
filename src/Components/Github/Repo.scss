@@ -35,7 +35,7 @@
   background: map.get($palette-primary, 'medium');
 }
 
-.repo article {
+.repo > * {
   background: $content-bg;
   box-sizing: border-box;
   display: flex;
@@ -63,7 +63,7 @@
   }
 }
 
-.repo > article > p {
+.repo > * > p {
   overflow-y: scroll;
 
   @include breakpoint.down('tablet') {
@@ -71,7 +71,7 @@
   }
 }
 
-.repo > article > footer {
+.repo > * > footer {
   align-items: center;
   display: flex;
   flex-direction: row;
