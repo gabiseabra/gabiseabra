@@ -5,7 +5,7 @@ const getPos = (i, {radius, edges, center}) => {
   return {angle: a, x, y}
 }
 
-function outlineSection(ctx, {radius, edges, center}) {
+function traceSection(ctx, {radius, edges, center}) {
   ctx.beginPath()
 
   ctx.moveTo(center.x, center.y - radius)
@@ -20,7 +20,7 @@ function outlineSection(ctx, {radius, edges, center}) {
   return ctx
 }
 
-function outlineLines(ctx, {radius, edges, center}) {
+function traceLines(ctx, {radius, edges, center}) {
   ctx.beginPath()
 
   for (let i = 0; i < edges; ++i) {
@@ -39,7 +39,7 @@ function drawBackground(ctx) {
 }
 
 function drawLine(ctx) {
-  ctx.strokeStyle = '#d3efff'
+  ctx.strokeStyle = '#d3efff90'
   ctx.strokeWidth = 0.8
   ctx.stroke()
 }
@@ -64,15 +64,15 @@ export const mkScale = (ctx, {center, labels, sections, radius}) => {
   const opts = {center, radius, edges}
 
   // background
-  outlineSection(ctx, {...opts, radius: radius * 1.05})
+  traceSection(ctx, {...opts, radius: radius * 1.05})
   drawBackground(ctx)
   // section lines
   for (let i = 0; i < sections; ++i) {
     const n = (i + 1) / sections
-    outlineSection(ctx, {...opts, radius: radius * n})
+    traceSection(ctx, {...opts, radius: radius * n})
     drawLine(ctx)
   }
-  outlineLines(ctx, opts)
+  traceLines(ctx, opts)
   drawLine(ctx)
   // labels
   labels.forEach((text, idx) => {

@@ -6,30 +6,28 @@ const getSize = () => {
   return {width: size, height: size}
 }
 
-const draw = ({datasets, labels}) => (canvas) => {
-  // const max = Math.max(...[].concat(...datasets.map((d) => d.data)))
-  const center = {x: canvas.width / 2, y: canvas.width / 2}
-  const radius = canvas.width / 2 - 60
+const draw = ({datasets, labels}) => ({width, height, ctx}) => {
+  const max = Math.max(...[].concat(...datasets.map((d) => d.data)))
+  const center = {x: width / 2, y: width / 2}
+  const radius = width / 2 - 60
 
-  Chart.mkScale(canvas.ctx, {
+  Chart.mkScale(ctx, {
     center,
     radius,
     labels: labels,
     sections: 3
   })
 
-  /*
   datasets.forEach(({data}) =>
-    app.stage.addChild(
-      new Chart.Dataset(app, {
-        center,
-        radius,
-        max,
-        data
-      })
-    )
+    Chart.mkDataset(ctx, {
+      center,
+      width,
+      height,
+      radius,
+      max,
+      data
+    })
   )
-  */
 }
 
 exports.mkCanvas = (options) => () => {
