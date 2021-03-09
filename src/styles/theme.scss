@@ -16,6 +16,8 @@ $content-width: 800px;
 
 $content-bg: map.get($palette-primary, 'lighter');
 
+$content-border: map.get($palette-primary, 'medium');
+
 $content-color: map.get($palette-secondary, 'darker');
 
 $content-highlight: map.get($palette-highlight, 'light');

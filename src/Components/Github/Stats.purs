@@ -117,10 +117,10 @@ infoScale l =
     { className: styles.infoScale
     , children:
         l
-          <#> \(label /\ x) ->
+          <#> \(l /\ n) ->
               DOM.div
-                { style: DOM.css { width: width x }
-                , children: pure $ Typo.span_ [ DOM.text label ]
+                { style: DOM.css { width: width n }
+                , children: pure $ Typo.span_ [ DOM.text $ label l n ]
                 }
     }
   where
@@ -129,6 +129,8 @@ infoScale l =
   ratio n = Int.toNumber n / Int.toNumber max
 
   width n = (show $ Int.ceil $ (ratio n * 100.0)) <> "%"
+
+  label l' n = l' <> ": " <> width n
 
 userInfo :: User -> JSX
 userInfo user =
