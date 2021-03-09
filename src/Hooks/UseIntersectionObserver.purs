@@ -103,7 +103,7 @@ useIntersectionObserverContext :: Hook UseIntersectionObserverContext (Maybe Int
 useIntersectionObserverContext = useContext ctx
 
 newtype UseIntersectionObserver hooks
-  = UseCarouselController
+  = UseIntersectionObserver
   (UseEffect Unit (UseState (Maybe IntersectionObserver) hooks))
 
 derive instance newtypeUseIntersectionObserver :: Newtype (UseIntersectionObserver hooks) _
@@ -123,7 +123,7 @@ useIntersectionObserver opts =
         pure $ observer
 
 newtype UseIntersectionObserverEntry hooks
-  = UseCarouselSlide
+  = UseIntersectionObserverEntry
   (UseEffect Boolean (UseIntersectionObserverContext (UseState (Maybe IntersectionObserverEntry) hooks)))
 
 derive instance newtypeUseIntersectionObserverEntry :: Newtype (UseIntersectionObserverEntry hooks) _
