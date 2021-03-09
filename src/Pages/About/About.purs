@@ -3,11 +3,10 @@ module Hey.Pages.About
   ) where
 
 import Prelude
-
 import Control.Monad.Indexed ((:>>=))
 import Data.Maybe (Maybe(..))
 import Data.Nullable (null)
-import Hey.Api.Github (fetchViewer)
+import Hey.API.Github (fetchViewer)
 import Hey.Components.Github.Stats (mkStats)
 import Hey.Data.Env (Env)
 import Hey.Hooks.UseFetch (useFetch)

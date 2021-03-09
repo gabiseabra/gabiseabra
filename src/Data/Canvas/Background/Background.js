@@ -1,9 +1,8 @@
 const THREE = require('three')
-const config = require('three-playground/src/theme/config').default
 const {animate, mkCanvas3D, watchSize} = require('../../../lib/3d/canvas')
 const {Effects} = require('../../../lib/3d/postprocessing/Effects')
 const {Scene} = require('./Scene')
-const {addObject} = require('three-playground/src/lib/GUI/properties')
+const config = require('./config')
 
 const NARROW_FOV = 90
 const WIDE_FOV = 45

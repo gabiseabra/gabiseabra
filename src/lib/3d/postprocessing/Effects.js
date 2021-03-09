@@ -9,9 +9,9 @@ const {
 } = require('postprocessing')
 
 const DOF = [
-  new THREE.Vector4(6.77, 0, 0.01, 0.2),
+  new THREE.Vector4(6.77, 0, 0.001, 0.62),
   new THREE.Vector4(0.04, 0.02, 0.01, 0.35),
-  new THREE.Vector4(0.04, 0.5, 0, 0)
+  new THREE.Vector4(0, 0.15, 0.062, 0.31)
 ]
 
 export class Effects extends EffectComposer {
@@ -63,7 +63,7 @@ export class Effects extends EffectComposer {
       this.uniforms.focus.value = THREE.MathUtils.lerp(0.13, 0.06, tHalf)
     } else {
       this.uniforms.dof.value.lerpVectors(DOF[1], DOF[2], tHalf)
-      this.uniforms.focus.value = THREE.MathUtils.lerp(0.06, 0.24, tHalf)
+      this.uniforms.focus.value = THREE.MathUtils.lerp(0.06, 0.016, tHalf)
     }
     this.uniforms.fringe.value = THREE.MathUtils.lerp(0, 10, t)
     this.uniforms.maxBlur.value = THREE.MathUtils.lerp(10, 4, tHalf)

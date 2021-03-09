@@ -1,4 +1,4 @@
-module Hey.Components.Github.Repo (mkRepo) where
+module Hey.Components.Github.Repo (mkRepo, mkRepoList) where
 
 import Prelude
 import Data.Formatter.DateTime (FormatterCommand(..))
@@ -7,13 +7,13 @@ import Data.List (fromFoldable)
 import Data.Maybe (fromMaybe, maybe)
 import Data.Newtype (unwrap)
 import Data.Nullable (null)
-import Hey.Api.Github (Repo)
+import Hey.API.Github (Repo)
 import Hey.Components.SVG.Icon (Icon(..), icon)
 import Hey.Components.Typography (FontSize(..), Heading(..))
 import Hey.Components.Typography as Typo
 import Hey.Hooks.UseScroll (useSnapPoint)
 import React.Basic.DOM as DOM
-import React.Basic.Hooks (Component, JSX, component, useRef)
+import React.Basic.Hooks (Component, JSX, component, fragment, useRef)
 import React.Basic.Hooks as React
 
 foreign import styles :: Styles
@@ -25,8 +25,6 @@ type Styles
     , date :: String
     , links :: String
     }
-
-lipsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam sodales eros lectus, eu lacinia ligula imperdiet vel. Nunc varius mattis enim non lacinia. Nulla facilisi. Donec id facilisis nisl. Integer faucibus nisl ut quam finibus blandit. Cras diam mauris, ornare sit amet velit nec, egestas molestie justo. Fusce quis blandit tellus."
 
 languages :: Repo -> JSX
 languages repo =
@@ -84,6 +82,9 @@ links { url, homepageUrl } =
         ]
     }
 
+placeholder :: String
+placeholder = "lmaoo"
+
 mkRepo :: Component Repo
 mkRepo = do
   component "GithubRepo"
@@ -91,7 +92,7 @@ mkRepo = do
         ref <- useRef null
         useSnapPoint ref
         pure
-          $ DOM.section
+          $ DOM.article
               { ref
               , className: styles.container
               , children:
@@ -100,9 +101,9 @@ mkRepo = do
                         { className: styles.repo
                         , children:
                             pure
-                              $ DOM.article_
+                              $ DOM.div_
                                   [ Typo.h H2 $ pure $ DOM.text name
-                                  , Typo.p_ $ pure $ DOM.text $ fromMaybe lipsum description
+                                  , Typo.p_ $ pure $ DOM.text $ fromMaybe placeholder description
                                   , DOM.footer
                                       { children:
                                           [ languages repo
@@ -113,3 +114,10 @@ mkRepo = do
                                   ]
                         }
               }
+
+mkRepoList :: Component (Array Repo)
+mkRepoList = do
+  repo <- mkRepo
+  component "GithubRepoList"
+    $ \repos -> React.do
+        pure $ fragment $ repos <#> \r -> repo r
