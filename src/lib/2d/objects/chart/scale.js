@@ -39,7 +39,7 @@ function drawBackground(ctx) {
 }
 
 function drawLine(ctx) {
-  ctx.strokeStyle = '#d3efff90'
+  ctx.strokeStyle = '#d3efff60'
   ctx.strokeWidth = 0.8
   ctx.stroke()
 }
