@@ -1139,6 +1139,11 @@
   dependencies:
     "@pixi/core" "6.0.0"
 
+"@pixi/filter-glow@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@pixi/filter-glow/-/filter-glow-4.0.0.tgz#3151b1fa36c2252bc67ea6f01088d9f9dc9433ec"
+  integrity sha512-3M0HN/8PuRzPVz3/AafPHTs/0SfM4MXA3wRSZgvrwoBaMTrtfew5P1w5ofE+gF9/Wroc0pcxMqSoc+O335bagw==
+
 "@pixi/filter-noise@6.0.0":
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/@pixi/filter-noise/-/filter-noise-6.0.0.tgz#b2bc0bccb96923e5bd9f2dc4841092f28e9c65f6"

@@ -1,56 +1,63 @@
-const PIXI = require('pixi.js')
+export const pixelRatio = (ctx) => {
+  const dpr = window.devicePixelRatio || 1
+  const bsr =
+    ctx.webkitBackingStorePixelRatio ||
+    ctx.mozBackingStorePixelRatio ||
+    ctx.msBackingStorePixelRatio ||
+    ctx.oBackingStorePixelRatio ||
+    ctx.backingStorePixelRatio ||
+    1
 
-export const mkCanvas2D = (id, {width, height}) => {
-  const app = new PIXI.Application({
-    antialias: true,
-    backgroundAlpha: 0
-  })
-  const element = app.view
+  return dpr / bsr
+}
+
+export const mkCanvas2D = (id, draw, {width, height}) => {
+  const element = document.createElement('canvas')
+  const ctx = element.getContext('2d')
+  const resolution = pixelRatio(ctx)
+
+  element.width = width * resolution
+  element.height = height * resolution
+  element.style.width = `${width}px`
+  element.style.height = `${height}px`
   element.id = id
 
+  ctx.setTransform(resolution, 0, 0, resolution, 0, 0)
+
   const canvas = {
-    app,
     element,
+    ctx,
     width,
     height,
-    aspect: width / height,
+    resolution,
     listeners: [],
+    draw: () => draw(canvas),
     destroy: () => destroy(canvas)
   }
 
-  setSize(canvas, {width, height})
+  canvas.draw()
 
   return canvas
 }
 
-export const addResizeListener = (canvas, getSize) => {
+export const watchSize = (canvas, getSize) => {
   const listener = () => setSize(canvas, getSize())
   window.addEventListener('resize', listener)
   canvas.listeners.push(() => window.addEventListener('resize', listener))
 }
 
 export const setSize = (canvas, {width, height}) => {
-  const {aspect, element} = canvas
-  let w, h
-  if (width / height >= aspect) {
-    w = width * aspect
-    h = height
-  } else {
-    w = width
-    h = height / aspect
-  }
+  const {element, resolution} = canvas
 
-  element.width = canvas.width = w
-  element.height = canvas.height = h
-}
+  element.width = canvas.width = width * resolution
+  element.height = canvas.height = height * resolution
+  element.style.width = width
+  element.style.height = height
 
-export const watchSize = (canvas, getSize) => {
-  addResizeListener(canvas, getSize)
-  setSize(canvas, getSize())
+  canvas.draw()
 }
 
 export const destroy = (canvas) => {
   canvas.listeners.forEach((fn) => fn())
-  canvas.app.destroy(true)
   canvas.listeners = []
 }
