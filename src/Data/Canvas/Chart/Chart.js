@@ -11,6 +11,8 @@ const draw = ({datasets, labels}) => ({width, height, ctx}) => {
   const center = {x: width / 2, y: width / 2}
   const radius = width / 2 - 60
 
+  ctx.clearRect(0, 0, width, height)
+
   Chart.mkScale(ctx, {
     center,
     radius,
