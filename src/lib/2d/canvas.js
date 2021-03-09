@@ -47,14 +47,10 @@ export const watchSize = (canvas, getSize) => {
 }
 
 export const setSize = (canvas, {width, height}) => {
-  const {element, resolution} = canvas
+  const {element} = canvas
 
-  element.width = canvas.width = width * resolution
-  element.height = canvas.height = height * resolution
-  element.style.width = width
-  element.style.height = height
-
-  canvas.draw()
+  element.style.width = `${width}px`
+  element.style.height = `${height}px`
 }
 
 export const destroy = (canvas) => {
