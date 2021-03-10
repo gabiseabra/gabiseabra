@@ -128,7 +128,7 @@ infoScale l =
 
   ratio n = Int.toNumber n / Int.toNumber max
 
-  width n = (show $ Int.ceil $ (ratio n * 100.0)) <> "%"
+  width n = (show $ Int.round $ (ratio n * 100.0)) <> "%"
 
   label l' n = l' <> ": " <> width n
 
