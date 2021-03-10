@@ -58,7 +58,9 @@ exports.mkCanvas = (links) => () => {
   return canvas
 }
 
-exports.setActive = (canvas) => (id) => () => {
+// exports.setActive = (canvas) => (id) => () => {
+// why??
+exports.setActive = (canvas) => (id) => {
   canvas.scene.nav.setActive(id)
   requestAnimationFrame(canvas.render)
 }

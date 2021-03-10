@@ -22,8 +22,6 @@ import Wire.React (useSignal)
 
 foreign import styles :: Styles
 
-foreign import attachMouseMove :: ({ x :: Number, y :: Number } -> Effect Unit) -> Effect (Effect Unit)
-
 type Styles
   = { nav :: String
     }
