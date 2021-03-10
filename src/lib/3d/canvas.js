@@ -44,7 +44,11 @@ export const render = (canvas) => {
   else canvas.renderer.render(canvas.scene, canvas.camera)
 }
 
+export const isAnimated = (canvas) => Boolean(canvas.animationFrame)
+
 export const animate = (canvas) => {
+  if (isAnimated(canvas)) return
+
   function go() {
     render(canvas)
     canvas.animationFrame = requestAnimationFrame(go)
@@ -54,7 +58,9 @@ export const animate = (canvas) => {
 }
 
 export const pause = (canvas) => {
+  if (!isAnimated(canvas)) return
   cancelAnimationFrame(canvas.animationFrame)
+  canvas.animationFrame = null
 }
 
 export const destroy = (canvas) => {

@@ -1,5 +1,10 @@
 const THREE = require('three')
-const {mkCanvas3D, watchSize} = require('../../../lib/3d/canvas')
+const {
+  mkCanvas3D,
+  watchSize,
+  animate,
+  pause
+} = require('../../../lib/3d/canvas')
 const {mkOrbitControl} = require('../../../lib/3d/orbit')
 const {mkRayCaster} = require('../../../lib/3d/raycaster')
 const {Scene} = require('./Scene')
@@ -62,5 +67,8 @@ exports.mkCanvas = (links) => () => {
 // why??
 exports.setActive = (canvas) => (id) => {
   canvas.scene.nav.setActive(id)
+  animate(canvas)
+  if (canvas.rafTimeout) clearTimeout(canvas.rafTimeout)
+  canvas.rafTimeout = setTimeout(() => pause(canvas), 300)
   requestAnimationFrame(canvas.render)
 }
