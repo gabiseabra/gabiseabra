@@ -9,7 +9,7 @@ const {
 } = require('postprocessing')
 
 const DOF = [
-  new THREE.Vector4(6.77, 0, 0.001, 0.62),
+  new THREE.Vector4(6.77, 0, 0.001, 0.8),
   new THREE.Vector4(0.04, 0.02, 0.01, 0.35),
   new THREE.Vector4(0, 0.15, 0.062, 0.31)
 ]
