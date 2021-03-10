@@ -17,6 +17,7 @@ jobs:
         node-version: '12.10'
     - run: yarn
     - run: yarn lint
+    - run: cp public/index.html public/404.html
     - run: yarn build
       env:
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
