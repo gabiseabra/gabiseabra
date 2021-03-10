@@ -9,16 +9,11 @@ export const mkCanvas3D = (id, {camera, renderer, scene, composer}) => {
     scene,
     element,
     listeners: [],
+    render: () => render(canvas),
     destroy: () => destroy(canvas)
   }
 
   return canvas
-}
-
-export const addResizeListener = (canvas, getSize) => {
-  const listener = () => setSize(canvas, getSize())
-  window.addEventListener('resize', listener)
-  canvas.listeners.push(() => window.addEventListener('resize', listener))
 }
 
 export const setSize = (
@@ -34,15 +29,24 @@ export const setSize = (
   if (composer) composer.setSize(width, height)
 }
 
-export const watchSize = (canvas, getSize) => {
-  addResizeListener(canvas, getSize)
+export const watchSize = (canvas, getSize, fn) => {
   setSize(canvas, getSize())
+  const listener = () => {
+    setSize(canvas, getSize())
+    if (fn) fn()
+  }
+  window.addEventListener('resize', listener)
+  canvas.listeners.push(() => window.addEventListener('resize', listener))
+}
+
+export const render = (canvas) => {
+  if (canvas.composer) canvas.composer.render()
+  else canvas.renderer.render(canvas.scene, canvas.camera)
 }
 
 export const animate = (canvas) => {
   function go() {
-    if (canvas.composer) canvas.composer.render()
-    else canvas.renderer.render(canvas.scene, canvas.camera)
+    render(canvas)
     canvas.animationFrame = requestAnimationFrame(go)
   }
 

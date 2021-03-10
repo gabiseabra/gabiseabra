@@ -1,5 +1,5 @@
 const THREE = require('three')
-const {animate, mkCanvas3D, watchSize} = require('../../../lib/3d/canvas')
+const {mkCanvas3D, watchSize} = require('../../../lib/3d/canvas')
 const {mkOrbitControl} = require('../../../lib/3d/orbit')
 const {mkRayCaster} = require('../../../lib/3d/raycaster')
 const {Scene} = require('./Scene')
@@ -34,11 +34,16 @@ exports.mkCanvas = (links) => () => {
 
   const canvas = mkCanvas3D('menu-scene', {renderer, camera, scene})
 
-  watchSize(canvas, getSize)
+  const render = () => requestAnimationFrame(canvas.render)
+
+  watchSize(canvas, getSize, render)
+
   mkOrbitControl(canvas, {
     azimuthAngle: THREE.MathUtils.degToRad(2),
-    polarAngle: THREE.MathUtils.degToRad(4)
+    polarAngle: THREE.MathUtils.degToRad(4),
+    onChange: render
   })
+
   const rayCaster = mkRayCaster(canvas)
 
   canvas.element.addEventListener('mousedown', () => {
@@ -48,9 +53,12 @@ exports.mkCanvas = (links) => () => {
     link.onClick()
   })
 
-  animate(canvas)
+  canvas.render()
 
   return canvas
 }
 
-exports.setActive = ({scene}) => (id) => scene.nav.setActive(id)
+exports.setActive = (canvas) => (id) => () => {
+  canvas.scene.nav.setActive(id)
+  requestAnimationFrame(canvas.render)
+}
