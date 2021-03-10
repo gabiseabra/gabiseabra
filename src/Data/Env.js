@@ -1,5 +1,5 @@
 'use strict'
 
 exports.getOptions = () => ({
-  github: {token: process.env.GH_TOKEN}
+  github: {token: atob(process.env.GH_TOKEN)}
 })
