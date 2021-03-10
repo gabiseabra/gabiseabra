@@ -7,6 +7,7 @@ import Data.Map (Map)
 import Data.Map as Map
 import Data.Maybe (Maybe(..), fromMaybe, maybe)
 import Data.Nullable (null)
+import Data.Number.Format as Num
 import Data.String as String
 import Data.Tuple as Tuple
 import Data.Tuple.Nested (type (/\), (/\))
@@ -117,10 +118,15 @@ infoScale l =
     { className: styles.infoScale
     , children:
         l
-          <#> \(l /\ n) ->
+          <#> \(label /\ n) ->
               DOM.div
-                { style: DOM.css { width: width n }
-                , children: pure $ Typo.span_ [ DOM.text $ label l n ]
+                { style: DOM.css { width: pct 6 n }
+                , children:
+                    pure
+                      $ DOM.div_
+                          [ Typo.span_ $ pure $ DOM.text $ label <> ":"
+                          , Typo.span_ $ pure $ DOM.text $ pct 2 n
+                          ]
                 }
     }
   where
@@ -128,9 +134,7 @@ infoScale l =
 
   ratio n = Int.toNumber n / Int.toNumber max
 
-  width n = (show $ Int.round $ (ratio n * 100.0)) <> "%"
-
-  label l' n = l' <> ": " <> width n
+  pct p n = (Num.toStringWith (Num.fixed p) $ ratio n * 100.0) <> "%"
 
 userInfo :: User -> JSX
 userInfo user =
