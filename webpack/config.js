@@ -12,6 +12,8 @@ const sass = require('./blocks/sass')
 const glsl = require('./blocks/glsl')
 const purescript = require('./blocks/purescript')
 
+require('dotenv').config()
+
 const ROOT = path.resolve(__dirname, '..')
 
 /**
