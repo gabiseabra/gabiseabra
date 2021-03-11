@@ -4,7 +4,7 @@ import Prelude
 import Data.Formatter.DateTime (FormatterCommand(..))
 import Data.Formatter.DateTime as FDT
 import Data.List (fromFoldable)
-import Data.Maybe (fromMaybe, maybe)
+import Data.Maybe (Maybe(..), fromMaybe, maybe)
 import Data.Newtype (unwrap)
 import Data.Nullable (null)
 import Hey.API.Github (Repo)
@@ -72,7 +72,7 @@ links { url, homepageUrl } =
   DOM.div
     { className: styles.links
     , children:
-        [ homepageUrl
+        [ nonEmpty homepageUrl
             # maybe mempty \href ->
                 DOM.a { href, children: [ icon ExternalLink ] }
         , DOM.a
@@ -81,6 +81,10 @@ links { url, homepageUrl } =
             }
         ]
     }
+  where
+  nonEmpty (Just "") = Nothing
+
+  nonEmpty x = x
 
 placeholder :: String
 placeholder = "lmaoo"
