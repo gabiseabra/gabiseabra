@@ -104,7 +104,7 @@ fetchViewer token = Fetch "github/viewer" req
       url
       homepageUrl
       createdAt
-      languages(first: 3) {
+      languages(first: 3, orderBy: {field: SIZE, direction: DESC}) {
         totalCount
         nodes { ...Language }
       }
