@@ -103,7 +103,7 @@ mkRepo = do
                             pure
                               $ DOM.div_
                                   [ Typo.h H2 $ pure $ DOM.text name
-                                  , Typo.p_ $ pure $ DOM.text $ fromMaybe placeholder description
+                                  , Typo.p_ $ pure $ Typo.autoLink $ fromMaybe placeholder description
                                   , DOM.footer
                                       { children:
                                           [ languages repo

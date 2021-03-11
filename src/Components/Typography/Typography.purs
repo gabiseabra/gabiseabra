@@ -11,13 +11,23 @@ module Hey.Components.Typography
   , span
   , span_
   , mark
+  , a
+  , autoLink
   ) where
 
 import Prelude
+import Control.Alt ((<|>))
+import Data.Array (mapWithIndex)
+import Data.Either (Either, either)
+import Data.Filterable (maybeBool)
 import Data.Foldable (intercalate)
-import Data.Monoid (guard)
+import Data.Maybe (Maybe(..), maybe)
+import Data.Monoid as Monoid
+import Data.String as String
+import Data.String.Regex (Regex)
+import Data.String.Regex as Regex
 import React.Basic.DOM as DOM
-import React.Basic.Hooks (JSX)
+import React.Basic.Hooks (JSX, fragment)
 
 foreign import styles :: Styles
 
@@ -26,6 +36,7 @@ type Styles
     , paragraph :: String
     , span :: String
     , mark :: String
+    , link :: String
     }
 
 data Heading
@@ -104,7 +115,7 @@ span { bold, fontSize, children } =
         intercalate " "
           $ pure styles.span
           <> pure (fontSizeCls fontSize)
-          <> guard bold [ "bold" ]
+          <> Monoid.guard bold [ "bold" ]
     , children
     }
 
@@ -117,3 +128,82 @@ mark children =
     { className: styles.mark
     , children
     }
+
+type LinkProps
+  = { children :: Array JSX
+    , href :: String
+    }
+
+aProps =
+  { children: mempty
+  , href: "#"
+  } ::
+    LinkProps
+
+a :: LinkProps -> JSX
+a { href, children } =
+  DOM.a
+    { className: styles.link
+    , href
+    , children
+    }
+
+data Link
+  = URL String
+  | GH String String
+
+mkLink :: String -> Maybe Link
+mkLink text = parseURL <|> parseGH
+  where
+  slash = String.Pattern "/"
+
+  parseURL = maybeBool isURL text <#> URL
+
+  parseGH =
+    String.indexOf slash text
+      >>= (flip String.splitAt) text
+      >>> \{ before, after } -> pure $ GH before $ String.drop 1 after
+
+isURL :: String -> Boolean
+isURL text = startsWith http text || startsWith https text
+  where
+  startsWith :: String.Pattern -> String -> Boolean
+  startsWith pat x = String.indexOf pat x == Just 0
+
+  http = String.Pattern "http://"
+
+  https = String.Pattern "https://"
+
+link :: Link -> JSX
+link (URL href) = a { href, children: pure $ DOM.text href }
+
+link (GH user repo) =
+  a
+    { href: "https://" <> user <> ".github.io/" <> repo
+    , children: pure $ DOM.text $ user <> "/" <> repo
+    }
+
+autoLink :: String -> JSX
+autoLink text =
+  regex
+    # either fail
+        ( (flip Regex.split) text
+            >>> mapWithIndex render
+            >>> fragment
+        )
+  where
+  fail err = DOM.text $ "[AutoLink Error] " <> err
+
+  regex :: Either String Regex
+  regex =
+    let
+      url = "https?\\:\\/\\/.*(?:\\.\\w+)+"
+
+      gh = "[\\w\\d-_]+\\/[\\w\\d-_]+"
+    in
+      Regex.regex ("(" <> url <> "|" <> gh <> ")") mempty
+
+  render :: Int -> String -> JSX
+  render i
+    | mod i 2 == 0 = DOM.text
+    | otherwise = mkLink >>> maybe (fail $ "invalid link type") link

@@ -26,3 +26,25 @@
   }
   &:global(.bold) { font-weight: 600; }
 }
+
+.link {
+  $color: map.get($palette-primary, 'dark');
+  $underline: #9997e6;
+
+  display: inline-block;
+  position: relative;
+  text-decoration: none;
+  color: $color;
+
+  &::after {
+    position: absolute;
+    display: inline-block;
+    content: ' ';
+    width: 100%;
+    height: .5em;
+    bottom: -1px;
+    left: 4px;
+    background: $underline;
+    mix-blend-mode: darken;
+  }
+}
