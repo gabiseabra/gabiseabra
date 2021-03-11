@@ -1,3 +1,11 @@
+let stats = {begin() {}, enf() {}}
+
+if (process.env.NODE_ENV == 'development') {
+  const Stats = require('stats.js')
+  stats = new Stats()
+  document.body.appendChild(stats.dom)
+}
+
 export const mkCanvas3D = (id, {camera, renderer, scene, composer}) => {
   const element = renderer.domElement
   element.id = id
@@ -50,7 +58,9 @@ export const animate = (canvas) => {
   if (isAnimated(canvas)) return
 
   function go() {
+    stats.begin()
     render(canvas)
+    stats.end()
     canvas.animationFrame = requestAnimationFrame(go)
   }
 
