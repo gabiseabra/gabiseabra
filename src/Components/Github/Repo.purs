@@ -72,13 +72,13 @@ links { url, homepageUrl } =
   DOM.div
     { className: styles.links
     , children:
-        [ DOM.a
+        [ homepageUrl
+            # maybe mempty \href ->
+                DOM.a { href, children: [ icon ExternalLink ] }
+        , DOM.a
             { href: url
             , children: [ icon Github ]
             }
-        , homepageUrl
-            # maybe mempty \href ->
-                DOM.a { href, children: [ icon ExternalLink ] }
         ]
     }
 

@@ -17,8 +17,18 @@
   :global(.icon) {
     fill: $content-color;
     filter: drop-shadow(1.5px 1.5px 0 $content-highlight);
-    height: 18px;
-    margin-right: 10px;
+    margin: 0 10px;
+    display: inline-block;
+    &:global(.clock) {
+      height: 18px !important;
+    }
+    &:global(.github) {
+      height: 24px !important;
+    }
+    &:global(.externalLink) {
+      height: 18px !important;
+      margin-bottom: 4px;
+    }
   }
 }
 

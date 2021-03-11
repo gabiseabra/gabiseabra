@@ -6,6 +6,7 @@ module Hey.Components.SVG.Icon
 import Prelude
 import React.Basic (JSX)
 import React.Basic.DOM.SVG as SVG
+import Data.Tuple.Nested (type (/\), (/\))
 
 data Icon
   = Clock
@@ -37,24 +38,24 @@ foreign import icons ::
   , empty :: IconDefinition
   }
 
-def :: Icon -> IconDefinition
+def :: Icon -> String /\ IconDefinition
 def ic
-  | ic == Clock = icons.clock
-  | ic == Github = icons.github
-  | ic == ExternalLink = icons.externalLink
-  | ic == Code = icons.code
-  | ic == CodeBranch = icons.codeBranch
-  | ic == Star = icons.star
-  | ic == HandsHelping = icons.handsHelping
-  | ic == Nag = icons.nag
-  | otherwise = icons.empty
+  | ic == Clock = "clock" /\ icons.clock
+  | ic == Github = "github" /\ icons.github
+  | ic == ExternalLink = "externalLink" /\ icons.externalLink
+  | ic == Code = "code" /\ icons.code
+  | ic == CodeBranch = "codeBranch" /\ icons.codeBranch
+  | ic == Star = "star" /\ icons.star
+  | ic == HandsHelping = "handsHelping" /\ icons.handsHelping
+  | ic == Nag = "nag" /\ icons.nag
+  | otherwise = "" /\ icons.empty
 
 icon :: Icon -> JSX
 icon =
   def
-    >>> \{ path, width, height } ->
+    >>> \(className /\ { path, width, height }) ->
         SVG.svg
-          { className: "icon"
+          { className: "icon " <> className
           , viewBox: "0 0 " <> (show width) <> " " <> (show height)
           , x: "0"
           , y: "0"
