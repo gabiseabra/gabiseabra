@@ -1,4 +1,4 @@
-module Hey.Components.Github.Repo (mkRepo, mkRepoList) where
+module Hey.Components.Github.Repo (mkRepo) where
 
 import Prelude
 import Data.Formatter.DateTime (FormatterCommand(..))
@@ -118,10 +118,3 @@ mkRepo = do
                                   ]
                         }
               }
-
-mkRepoList :: Component (Array Repo)
-mkRepoList = do
-  repo <- mkRepo
-  component "GithubRepoList"
-    $ \repos -> React.do
-        pure $ fragment $ repos <#> \r -> repo r

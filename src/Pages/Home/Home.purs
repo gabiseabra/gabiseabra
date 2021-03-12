@@ -39,7 +39,7 @@ mkPage =
   component "Page"
     $ \{ env, route, children } -> React.do
         let
-          updateRoute = const $ env.router.replace route
+          updateRoute = env.router.replace route
         ref <- useRef null
         useScrollTrigger unit ref updateRoute
         pure
