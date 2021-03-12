@@ -40,6 +40,12 @@ body {
   & > main {
     max-width: $content-width;
     margin: 0 auto;
+    height: 100vh;
+    overflow: scroll;
+    scroll-snap-type: y mandatory;
+    & > * {
+      scroll-snap-align: start;
+    }
   }
 }
 

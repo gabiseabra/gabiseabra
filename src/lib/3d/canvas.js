@@ -54,11 +54,12 @@ export const render = (canvas) => {
 
 export const isAnimated = (canvas) => Boolean(canvas.animationFrame)
 
-export const animate = (canvas) => {
+export const animate = (canvas, fn) => {
   if (isAnimated(canvas)) return
 
   function go() {
     stats.begin()
+    if (fn) fn()
     render(canvas)
     stats.end()
     canvas.animationFrame = requestAnimationFrame(go)

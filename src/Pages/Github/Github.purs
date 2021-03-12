@@ -11,7 +11,6 @@ import Hey.Components.Github.Repo (mkRepo)
 import Hey.Data.Env (Env)
 import Hey.Data.Route (Route(..))
 import Hey.Hooks.UseFetch (useFetch)
-import Hey.Hooks.UseScroll (useScrollTrigger)
 import React.Basic.Hooks (Component, component, fragment, useRef)
 
 mkGithubPage :: Component Env

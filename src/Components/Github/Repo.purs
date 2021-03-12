@@ -11,7 +11,6 @@ import Hey.API.Github (Repo)
 import Hey.Components.SVG.Icon (Icon(..), icon)
 import Hey.Components.Typography (FontSize(..), Heading(..))
 import Hey.Components.Typography as Typo
-import Hey.Hooks.UseScroll (useSnapPoint)
 import React.Basic.DOM as DOM
 import React.Basic.Hooks (Component, JSX, component, fragment, useRef)
 import React.Basic.Hooks as React
@@ -93,12 +92,9 @@ mkRepo :: Component Repo
 mkRepo = do
   component "GithubRepo"
     $ \repo@{ name, description } -> React.do
-        ref <- useRef null
-        useSnapPoint ref
         pure
           $ DOM.article
-              { ref
-              , className: styles.container
+              { className: styles.container
               , children:
                   pure
                     $ DOM.div

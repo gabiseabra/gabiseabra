@@ -1,21 +1,6 @@
-.container {
-  transform-style: preserve-3d;
-
-  & main > section {
-    .content {
-      position: absolute;
-      top: 0;
-      width: 100vw;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-  }
-}
-
-.page {
-  position: relative;
-  margin-top: -1px;
-  padding-top: 1px;
+.threshold {
+  width: 100%;
+  height: 1px;
+  margin-bottom: -1px;
+  scroll-snap-align: unset;
 }

@@ -8,7 +8,7 @@ import Data.Tuple.Nested (type (/\), (/\))
 import Effect (Effect)
 import Hey.Data.Env (Env)
 import Hey.Data.Route (Route(..))
-import Hey.Hooks.UseScroll (useScrollTrigger)
+import Hey.Hooks.UseScroller (useScrollTrigger)
 import Hey.Pages.About (mkAboutPage)
 import Hey.Pages.Github (mkGithubPage)
 import Hey.Pages.Spacer (mkSpacerPage)
@@ -20,9 +20,7 @@ import React.Basic.Hooks as React
 foreign import styles :: Styles
 
 type Styles
-  = { container :: String
-    , page :: String
-    , threshold :: String
+  = { threshold :: String
     }
 
 type PageProps
@@ -34,21 +32,13 @@ type PageProps
 spacer :: JSX
 spacer = DOM.div { style: DOM.css { width: "100vw", height: "100vh" } }
 
-mkPage :: Component ({ env :: Env, route :: Route, children :: Array JSX })
-mkPage =
-  component "Page"
-    $ \{ env, route, children } -> React.do
-        let
-          updateRoute = env.router.replace route
+mkScrollTrigger :: Component { id :: String, onEnter :: Effect Unit }
+mkScrollTrigger =
+  component "ScrollTrigger"
+    $ \{ id, onEnter } -> React.do
         ref <- useRef null
-        useScrollTrigger unit ref updateRoute
-        pure
-          $ DOM.div
-              { ref
-              , id: show route
-              , className: styles.page
-              , children
-              }
+        useScrollTrigger ref onEnter
+        pure $ DOM.div { ref, id, className: styles.threshold }
 
 mkRoutes :: Effect (Array (Route /\ (Env -> JSX)))
 mkRoutes = do
@@ -65,13 +55,15 @@ mkRoutes = do
 mkHomePage :: Component Env
 mkHomePage = do
   routes <- mkRoutes
-  page <- mkPage
+  scrollTrigger <- mkScrollTrigger
   component "Home"
     $ \env ->
         pure $ fragment $ routes
           <#> \(route /\ c) ->
-              page
-                { env
-                , route
-                , children: [ c env ]
-                }
+              let
+                onEnter = env.router.replace route
+              in
+                fragment
+                  $ [ scrollTrigger { id: show route, onEnter }
+                    , c env
+                    ]
