@@ -1,10 +1,8 @@
-import {gsap} from 'gsap'
-import {ScrollTrigger} from 'gsap/ScrollTrigger'
+import * as scroller from './lib/scroller'
 import Main from './Main'
 import './index.scss'
 
-gsap.registerPlugin(ScrollTrigger)
-
 document.addEventListener('DOMContentLoaded', () => {
+  scroller.init()
   Main.main()
 })

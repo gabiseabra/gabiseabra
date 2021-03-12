@@ -41,10 +41,7 @@ mkPage =
         let
           updateRoute = const $ env.router.replace route
         ref <- useRef null
-        useScrollTrigger unit ref
-          { onEnter: updateRoute
-          , onEnterBack: updateRoute
-          }
+        useScrollTrigger unit ref updateRoute
         pure
           $ DOM.div
               { ref
