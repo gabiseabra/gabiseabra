@@ -1,6 +1,3 @@
-let $id = 0
-const mkId = () => $id++
-
 const rIC = (fn) => {
   let id
   return (e) => {
@@ -70,9 +67,7 @@ export class Scroller {
     }))
   }
 
-  addTrigger(element, onEnter) {
-    const id = mkId()
-
+  addTrigger({id, element, onEnter}) {
     this.triggers.push({id, element, onEnter})
     this.update()
 

@@ -28,7 +28,7 @@ foreign import nullScroller :: Scroller
 
 foreign import mkScroller :: Node -> Effect Scroller
 
-foreign import mkScrollTrigger :: Scroller -> Effect Unit -> Node -> Effect (Effect Unit)
+foreign import mkScrollTrigger :: Scroller -> String -> Effect Unit -> Node -> Effect (Effect Unit)
 
 foreign import destroy :: Scroller -> Effect Unit
 
@@ -66,11 +66,11 @@ newtype UseScrollTrigger hooks
 
 derive instance netypeUseScrollTrigger :: Newtype (UseScrollTrigger hooks) _
 
-useScrollTrigger :: Ref (Nullable Node) -> Effect Unit -> Hook UseScrollTrigger Unit
-useScrollTrigger ref f =
+useScrollTrigger :: Ref (Nullable Node) -> String -> Effect Unit -> Hook UseScrollTrigger Unit
+useScrollTrigger ref id f =
   coerceHook
     $ React.do
         scroller <- useScroller
         useEffect scroller
           $ readRefMaybe ref
-          >>= maybe (pure mempty) (mkScrollTrigger scroller f)
+          >>= maybe (pure mempty) (mkScrollTrigger scroller id f)

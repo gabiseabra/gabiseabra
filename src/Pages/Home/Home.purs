@@ -37,7 +37,7 @@ mkScrollTrigger =
   component "ScrollTrigger"
     $ \{ id, onEnter } -> React.do
         ref <- useRef null
-        useScrollTrigger ref onEnter
+        useScrollTrigger ref id onEnter
         pure $ DOM.div { ref, id, className: styles.threshold }
 
 mkRoutes :: Effect (Array (Route /\ (Env -> JSX)))
