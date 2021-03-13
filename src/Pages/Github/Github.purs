@@ -5,13 +5,11 @@ module Hey.Pages.Github
 import Prelude
 import Control.Monad.Indexed ((:>>=))
 import Data.Maybe (Maybe(..))
-import Data.Nullable (null)
-import Hey.API.Github (Repo, fetchViewer)
+import Hey.API.Github (fetchViewer)
 import Hey.Components.Github.Repo (mkRepo)
 import Hey.Data.Env (Env)
-import Hey.Data.Route (Route(..))
 import Hey.Hooks.UseFetch (useFetch)
-import React.Basic.Hooks (Component, component, fragment, useRef)
+import React.Basic.Hooks (Component, component, fragment)
 
 mkGithubPage :: Component Env
 mkGithubPage = do
