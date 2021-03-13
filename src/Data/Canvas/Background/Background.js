@@ -3,13 +3,12 @@ const {
   animate,
   mkCanvas3D,
   watchSize,
+  render,
   pause
 } = require('../../../lib/3d/canvas')
 const {Effects} = require('../../../lib/3d/postprocessing/Effects')
 const {Scene} = require('./Scene')
 const config = require('./config')
-
-let prevProgress
 
 const NARROW_FOV = 90
 const WIDE_FOV = 45
@@ -50,18 +49,22 @@ exports.mkCanvas = () => {
     composer
   })
 
+  render(canvas)
+
   watchSize(canvas, getSize)
 
   return canvas
 }
 
 exports.setScroller = (canvas) => (scroller) => () => {
-  pause()
+  pause(canvas)
+
   let prevProgress = null
+
   animate(canvas, () => {
     const progress = scroller.progress
 
-    if (progress != prevProgress) {
+    if (!isNaN(progress) && progress != prevProgress) {
       prevProgress = progress
       canvas.scene.progress = progress
       canvas.composer.progress = progress

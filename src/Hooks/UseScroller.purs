@@ -7,17 +7,22 @@ module Hey.Hooks.UseScroller
   ) where
 
 import Prelude
-import Data.Maybe (Maybe(..), maybe)
+import Data.Maybe (Maybe(..), fromMaybe, maybe)
 import Data.Newtype (class Newtype)
 import Data.Nullable (Nullable)
 import Data.Tuple.Nested ((/\), type (/\))
 import Effect (Effect)
 import Effect.Unsafe (unsafePerformEffect)
-import React.Basic.Hooks (Component, Hook, JSX, ReactContext, Ref, UseContext, UseEffect, coerceHook, component, contextProvider, createContext, element, fragment, readRefMaybe, useContext, useEffectOnce, useState)
+import React.Basic.Hooks (Component, Hook, JSX, ReactContext, Ref, UseContext, UseEffect, coerceHook, component, contextProvider, createContext, element, readRefMaybe, useContext, useEffect, useEffectOnce, useState)
 import React.Basic.Hooks as React
 import Web.DOM (Node)
 
 foreign import data Scroller :: Type
+
+foreign import eqScroller_ :: Scroller -> Scroller -> Boolean
+
+instance eqScroller :: Eq Scroller where
+  eq = eqScroller_
 
 foreign import nullScroller :: Scroller
 
@@ -47,19 +52,17 @@ mkScrollProvider =
               setScroller $ const $ Just s
               pure $ destroy s
         pure
-          $ scroller
-          # maybe (fragment children) \s ->
-              scrollProvider
-                { value: s
-                , children
-                }
+          $ scrollProvider
+              { value: fromMaybe nullScroller scroller
+              , children
+              }
 
 useScroller :: Hook (UseContext Scroller) Scroller
 useScroller = useContext ctx
 
 newtype UseScrollTrigger hooks
   = UseScrollTrigger
-  (UseEffect Unit (UseContext Scroller hooks))
+  (UseEffect Scroller (UseContext Scroller hooks))
 
 derive instance netypeUseScrollTrigger :: Newtype (UseScrollTrigger hooks) _
 
@@ -68,6 +71,6 @@ useScrollTrigger ref f =
   coerceHook
     $ React.do
         scroller <- useScroller
-        useEffectOnce
+        useEffect scroller
           $ readRefMaybe ref
           >>= maybe (pure mempty) (mkScrollTrigger scroller f)

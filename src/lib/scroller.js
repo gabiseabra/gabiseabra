@@ -1,7 +1,13 @@
-import {debounce} from 'debounce'
-
 let $id = 0
 const mkId = () => $id++
+
+const rIC = (fn) => {
+  let id
+  return (e) => {
+    if (id) cancelIdleCallback(id)
+    id = requestIdleCallback(() => fn(e))
+  }
+}
 
 /**
  * Get an element's offset top relative to the document root without transforms.
@@ -25,9 +31,8 @@ export class Scroller {
   constructor(element) {
     this.element = element
 
-    console.log(element)
-    const onScroll = debounce(() => this.onScroll(), 100)
-    const onReflow = debounce(() => this.update(), 200)
+    const onScroll = rIC(() => this.onScroll())
+    const onReflow = rIC(() => this.update())
 
     window.addEventListener('resize', onReflow, {passive: true})
     this.element.addEventListener('scroll', onScroll)
@@ -46,13 +51,11 @@ export class Scroller {
   }
 
   get scrollY() {
-    return this.element.scrollY
+    return this.element.scrollTop
   }
 
   get scrollHeight() {
-    return (
-      (this.element.scrollHeight || document.body.scrollHeight) - this.height
-    )
+    return this.element.scrollHeight - this.height
   }
 
   get progress() {
@@ -60,18 +63,19 @@ export class Scroller {
   }
 
   update() {
-    this.height = this.element.offsetHeight || this.element.innerHeight
+    this.height = this.element.offsetHeight
     this.triggers = this.triggers.map((trigger) => ({
       ...trigger,
       y: offsetTop(trigger.element)
     }))
-    console.log(this)
   }
 
   addTrigger(element, onEnter) {
     const id = mkId()
+
     this.triggers.push({id, element, onEnter})
     this.update()
+
     return () => {
       const idx = this.triggers.findIndex((t) => t.id === id)
       this.triggers.splice(idx, 1)
@@ -84,14 +88,19 @@ export class Scroller {
 
     for (i = 0; i < this.triggers.length; ++i) {
       const trigger = this.triggers[i]
-      if (trigger.y < threshold) break
+      if (trigger.y > threshold) break
     }
 
     const trigger = this.triggers[i - 1]
 
     if (!trigger || this.triggers.current === trigger.id) return
 
-    requestIdleCallback(trigger.onEnter)
     this.triggers.current = trigger.id
+
+    requestIdleCallback(() => this.updateTrigger())
+  }
+
+  updateTrigger() {
+    /* TODO */
   }
 }

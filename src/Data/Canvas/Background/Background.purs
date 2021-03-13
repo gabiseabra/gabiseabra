@@ -1,4 +1,8 @@
-module Hey.Data.Canvas.Background (Background, mkCanvas) where
+module Hey.Data.Canvas.Background
+  ( Background
+  , mkCanvas
+  , setScroller
+  ) where
 
 import Prelude
 import Effect (Effect)

@@ -23,5 +23,4 @@ type Router
 type Env
   = { router :: Router
     , options :: Options
-    , bg :: Canvas Background
     }
