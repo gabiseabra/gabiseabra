@@ -16,20 +16,20 @@ mkBackground :: forall a. Component a
 mkBackground =
   component "Background"
     $ \_ -> React.do
-        bg /\ setBg <- useState Nothing
+        canvas /\ setCanvas <- useState Nothing
         scroller <- useScroller
         ref <- useRef null
         useEffectOnce
           $ readRefMaybe ref
           >>= maybe (pure mempty) \node -> do
-              x <- Background.mkCanvas
-              setBg $ const $ Just x
-              void $ Node.appendChild (Canvas.toNode x) node
+              c <- Background.mkCanvas
+              setCanvas $ const $ Just c
+              void $ Node.appendChild (Canvas.toNode c) node
               pure
                 $ do
-                    setBg $ const Nothing
-                    Canvas.destroy x
+                    setCanvas $ const Nothing
+                    Canvas.destroy c
         useEffect scroller
-          $ maybe (mempty) (flip Background.setScroller $ scroller) bg
+          $ maybe (mempty) (flip Background.setScroller $ scroller) canvas
           *> pure mempty
         pure $ DOM.div { ref, id: "background" }

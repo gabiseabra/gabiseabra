@@ -2,12 +2,13 @@ module Hey.Data.Canvas.Menu
   ( Menu
   , Link
   , mkCanvas
-  , setActive
+  , setScroller
   ) where
 
 import Prelude
 import Effect (Effect)
 import Hey.Data.Canvas (kind Scene, Canvas)
+import Hey.Hooks.UseScroller (Scroller)
 
 type Link
   = { id :: String
@@ -19,4 +20,4 @@ foreign import data Menu :: Scene
 
 foreign import mkCanvas :: Array Link -> Effect (Canvas Menu)
 
-foreign import setActive :: Canvas Menu -> String -> Effect Unit
+foreign import setScroller :: Canvas Menu -> Scroller -> Effect Unit

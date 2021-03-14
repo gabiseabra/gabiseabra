@@ -1,3 +1,5 @@
+import * as THREE from 'three'
+
 const rIC = (fn) => {
   let id
   return (e) => {
@@ -22,10 +24,12 @@ const offsetTop = (target) => {
   return Math.max(0, y)
 }
 
-export class Scroller {
+export class Scroller extends THREE.EventDispatcher {
   triggers = []
 
   constructor(element) {
+    super()
+
     this.element = element
 
     const onScroll = rIC(() => this.onScroll())
@@ -91,8 +95,7 @@ export class Scroller {
     if (!trigger || this.triggers.current === trigger.id) return
 
     this.triggers.current = trigger.id
-
-    requestIdleCallback(() => this.updateTrigger())
+    this.dispatchEvent({type: 'scrolltrigger', id: trigger.id, trigger})
   }
 
   updateTrigger() {

@@ -1,23 +1,23 @@
 module Hey.Components.Menu where
 
 import Prelude
-import Data.Maybe (maybe)
-import Data.Nullable (null, notNull)
+import Data.Maybe (Maybe(..), maybe)
+import Data.Nullable (null)
+import Data.Tuple.Nested ((/\))
 import Effect (Effect)
 import Hey.Data.Canvas as Canvas
 import Hey.Data.Canvas.Menu as Menu
-import Hey.Data.Env (Env)
 import Hey.Data.Route (Route(..))
 import Hey.Extra.DOM (scrollIntoView)
+import Hey.Hooks.UseScroller (useScroller)
 import React.Basic.DOM as DOM
-import React.Basic.Hooks (Component, component, readRefMaybe, useEffect, useEffectOnce, useRef, writeRef)
+import React.Basic.Hooks (Component, component, readRefMaybe, useEffect, useEffectOnce, useRef, useState)
 import React.Basic.Hooks as React
 import Web.DOM.Node as Node
 import Web.DOM.NonElementParentNode as NEPN
 import Web.HTML as HTML
 import Web.HTML.HTMLDocument as HTMLDocument
 import Web.HTML.Window as Win
-import Wire.React (useSignal)
 
 foreign import styles :: Styles
 
@@ -45,29 +45,28 @@ links =
         , onClick: pushRoute route
         }
 
-mkMenu :: Component Env
+mkMenu :: forall a. Component a
 mkMenu =
   component "Menu"
-    $ \env -> React.do
+    $ \_ -> React.do
         ref <- useRef null
-        canvas <- useRef null
-        currentRoute <- useSignal env.router.signal
+        canvas /\ setCanvas <- useState Nothing
+        scroller <- useScroller
         -- instantiate canvas
         useEffectOnce
           $ readRefMaybe ref
           >>= maybe (pure mempty) \nav -> do
               c <- Menu.mkCanvas $ links
-              writeRef canvas $ notNull c
+              setCanvas $ const $ Just c
               void $ Node.appendChild (Canvas.toNode c) nav
               pure
                 $ do
-                    writeRef canvas null
+                    setCanvas $ const Nothing
                     void $ Node.removeChild (Canvas.toNode c) nav
                     Canvas.destroy c
-        -- update active link
-        useEffect currentRoute
-          $ readRefMaybe canvas
-          >>= maybe (pure unit) (flip Menu.setActive $ show currentRoute)
+        -- the scroller has info on the actve route
+        useEffect scroller
+          $ maybe (mempty) (flip Menu.setScroller $ scroller) canvas
           *> pure mempty
         pure
           $ DOM.nav { ref, className: styles.nav }

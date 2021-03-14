@@ -11,7 +11,7 @@ exports.nullScroller = {
 
 exports.mkScroller = (element) => () => new Scroller(element)
 
-exports.mkScrollTrigger = (scroller) => (id) => (element) => (onEnter) => () =>
+exports.mkScrollTrigger = (scroller) => (id) => (onEnter) => (element) => () =>
   scroller.addTrigger({id, element, onEnter})
 
 exports.destroy = (scroller) => () => scroller.destroy()

@@ -65,8 +65,9 @@ exports.mkCanvas = (links) => () => {
   return canvas
 }
 
-// exports.setActive = (canvas) => (id) => () => {
-// why??
-exports.setActive = (canvas) => (id) => {
-  canvas.scene.nav.activeId = id
+exports.setScroller = (canvas) => (scroller) => () => {
+  scroller.addEventListener('scrolltrigger', ({id}) => {
+    canvas.scene.nav.activeId = id
+  })
+  canvas.scene.nav.activeId = scroller.trigger.current
 }
