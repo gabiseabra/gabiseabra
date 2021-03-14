@@ -1,26 +1,24 @@
 module Hey where
 
 import Prelude
-import Data.Maybe (Maybe(..), maybe)
+import Data.Maybe (Maybe(..))
 import Data.Nullable (null)
 import Data.Tuple.Nested ((/\))
 import Effect (Effect)
 import Effect.Exception (throw)
+import Hey.Components.Background (mkBackground)
 import Hey.Components.Menu (mkMenu)
-import Hey.Data.Canvas as Canvas
-import Hey.Data.Canvas.Background as Background
 import Hey.Data.Env (Env, getOptions)
 import Hey.Data.Route (Route(..))
 import Hey.Hooks.UseFetch (mkFetchProvider)
 import Hey.Hooks.UseRouter (useRouter)
-import Hey.Hooks.UseScroller (mkScrollProvider, useScroller)
+import Hey.Hooks.UseScroller (mkScrollProvider)
 import Hey.Pages.Home (mkHomePage)
 import Hey.Pages.NotFound (mkNotFoundPage)
 import React.Basic.DOM as DOM
-import React.Basic.Hooks (Component, JSX, component, readRefMaybe, useEffect, useEffectOnce, useRef, useState)
+import React.Basic.Hooks (Component, JSX, component, useRef, useState)
 import React.Basic.Hooks as React
 import Record.Extra (sequenceRecord)
-import Web.DOM.Node as Node
 import Web.DOM.NonElementParentNode as NEPN
 import Web.HTML (HTMLDocument)
 import Web.HTML as HTML
@@ -43,28 +41,6 @@ mkRoutes = do
       NotFound -> pure $ notFound env
       _ -> pure $ home env
 
-mkBackground :: forall a. Component a
-mkBackground =
-  component "Background"
-    $ \_ -> React.do
-        bg /\ setBg <- useState Nothing
-        scroller <- useScroller
-        ref <- useRef null
-        useEffectOnce
-          $ readRefMaybe ref
-          >>= maybe (pure mempty) \node -> do
-              x <- Background.mkCanvas
-              setBg $ const $ Just x
-              void $ Node.appendChild (Canvas.toNode x) node
-              pure
-                $ do
-                    setBg $ const Nothing
-                    Canvas.destroy x
-        useEffect scroller
-          $ maybe (mempty) (flip Background.setScroller $ scroller) bg
-          *> pure mempty
-        pure $ DOM.div { ref, id: "background" }
-
 mkApp :: forall a. Component a
 mkApp = do
   menu <- mkMenu
@@ -84,7 +60,7 @@ mkApp = do
                 fetchProvider
                   >:> ((/\) ref >>> scrollProvider)
                   >>> pure
-                  $ [ mempty -- menu env
+                  $ [ menu env
                     , bg {}
                     , DOM.main { ref, children: [ routes env ] }
                     ]

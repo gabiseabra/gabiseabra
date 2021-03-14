@@ -39,14 +39,16 @@ exports.mkCanvas = (links) => () => {
 
   const canvas = mkCanvas3D('menu-scene', {renderer, camera, scene})
 
-  const render = () => requestAnimationFrame(canvas.render)
+  const onUpdate = () => {
+    scene.needsUpdate = true
+  }
 
-  watchSize(canvas, getSize, render)
+  watchSize(canvas, getSize, onUpdate)
 
   mkOrbitControl(canvas, {
     azimuthAngle: THREE.MathUtils.degToRad(2),
     polarAngle: THREE.MathUtils.degToRad(4),
-    onChange: render
+    onChange: onUpdate
   })
 
   const rayCaster = mkRayCaster(canvas)
@@ -58,7 +60,7 @@ exports.mkCanvas = (links) => () => {
     link.onClick()
   })
 
-  canvas.render()
+  animate(canvas)
 
   return canvas
 }
@@ -66,9 +68,5 @@ exports.mkCanvas = (links) => () => {
 // exports.setActive = (canvas) => (id) => () => {
 // why??
 exports.setActive = (canvas) => (id) => {
-  canvas.scene.nav.setActive(id)
-  animate(canvas)
-  if (canvas.rafTimeout) clearTimeout(canvas.rafTimeout)
-  canvas.rafTimeout = setTimeout(() => pause(canvas), 300)
-  requestAnimationFrame(canvas.render)
+  canvas.scene.nav.activeId = id
 }

@@ -2,8 +2,6 @@ import * as THREE from 'three'
 import {Navbar} from '../../../lib/3d/objects/Navbar'
 
 export class Scene extends THREE.Scene {
-  refs = {}
-
   constructor(links) {
     super()
 
@@ -13,6 +11,21 @@ export class Scene extends THREE.Scene {
     this.add(nav)
 
     this.nav = nav
+  }
+
+  get animating() {
+    return (
+      this.needsUpdate ||
+      this.nav.children.some((link) => link.tween.isActive())
+    )
+  }
+
+  onBeforeRender() {
+    this.needsUpdate = false
+  }
+
+  setActive(id) {
+    this.nav.activeId = id
   }
 }
 

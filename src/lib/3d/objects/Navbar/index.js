@@ -3,6 +3,8 @@ import {BufferGeometryUtils} from 'three/examples/jsm/utils/BufferGeometryUtils'
 import SourceCodePro from '../../fonts/SourceCodePro'
 import {Link} from './Link'
 
+const ACTIVE_ID = Symbol('ACTIVE_ID')
+
 /* curve modifier options */
 const CHAR_WIDTH = 3.5 // 8.45
 const SPACING = 2.5 // num of spaces between links
@@ -47,14 +49,14 @@ export class Navbar extends THREE.Object3D {
     this.translateX(-((spaces + 1) * SPACING * CHAR_WIDTH) / 2)
   }
 
-  setActive(id) {
-    if (this.activeId) {
-      this.refs[this.activeId].setActive(false)
-      this.activeId = null
+  set activeId(id) {
+    if (this[ACTIVE_ID]) {
+      this.refs[this[ACTIVE_ID]].active = false
+      this[ACTIVE_ID] = null
     }
     if (this.refs[id]) {
-      this.refs[id].setActive(true)
-      this.activeId = id
+      this.refs[id].active = true
+      this[ACTIVE_ID] = id
     }
   }
 }

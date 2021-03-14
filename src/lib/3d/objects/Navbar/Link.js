@@ -1,6 +1,8 @@
 import * as THREE from 'three'
 import {gsap} from 'gsap'
 
+const ACTIVE = Symbol('ACTIVE')
+
 /* link looks & feel */
 const DURATION = 0.25
 const COLOR = new THREE.Color(0x73b6fa)
@@ -18,10 +20,14 @@ export class Link extends THREE.Mesh {
       .pause(0)
   }
 
-  setActive(active) {
-    if (this.active == active) return
+  get active() {
+    return this[ACTIVE]
+  }
+
+  set active(active) {
+    if (this[ACTIVE] == active) return
     if (active) this.tween.play()
     else this.tween.reverse()
-    this.active = active
+    this[ACTIVE] = active
   }
 }

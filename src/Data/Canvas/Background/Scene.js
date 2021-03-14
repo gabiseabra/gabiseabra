@@ -22,6 +22,8 @@ const mkSun = (config) => {
 }
 
 export class Scene extends THREE.Scene {
+  animating = true
+
   constructor(ctx) {
     super(ctx)
 

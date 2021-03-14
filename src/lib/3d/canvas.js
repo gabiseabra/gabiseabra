@@ -60,7 +60,7 @@ export const animate = (canvas, fn) => {
   function go() {
     stats.begin()
     if (fn) fn()
-    render(canvas)
+    if (canvas.scene.animating) render(canvas)
     stats.end()
     canvas.animationFrame = requestAnimationFrame(go)
   }
