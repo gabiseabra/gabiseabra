@@ -10,13 +10,31 @@ export class Scene extends THREE.Scene {
     const nav = new Navbar(links)
     this.add(nav)
 
+    const lightPivot = new THREE.Object3D()
+    this.add(lightPivot)
+
+    const light = new THREE.RectAreaLight(0xff00ff, 15, 200, 5)
+    light.position.set(0, 0, 50)
+    lightPivot.add(light)
+
     this.nav = nav
+    this.lightPivot = lightPivot
+    this.progress = 0
   }
 
   get animating() {
     return (
       this.needsUpdate ||
       this.nav.children.some((link) => link.tween.isActive())
+    )
+  }
+
+  set progress(p) {
+    this.needsUpdate = true
+    this.lightPivot.rotation.x = THREE.MathUtils.lerp(
+      Math.PI / 3,
+      -Math.PI / 3,
+      p
     )
   }
 

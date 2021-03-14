@@ -66,8 +66,20 @@ exports.mkCanvas = (links) => () => {
 }
 
 exports.setScroller = (canvas) => (scroller) => () => {
-  scroller.addEventListener('scrolltrigger', ({id}) => {
-    canvas.scene.nav.activeId = id
+  let prevProgress
+
+  pause(canvas)
+
+  animate(canvas, () => {
+    const progress = scroller.progress
+    if (!isNaN(progress) && progress !== prevProgress) {
+      canvas.scene.progress = progress
+    }
   })
-  canvas.scene.nav.activeId = scroller.trigger.current
+
+  canvas.scene.setActive(scroller.triggers.current)
+
+  scroller.addEventListener('scrolltrigger', ({id}) => {
+    canvas.scene.setActive(id)
+  })
 }

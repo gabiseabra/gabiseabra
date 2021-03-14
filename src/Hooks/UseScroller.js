@@ -3,6 +3,7 @@
 const {Scroller} = require('../lib/scroller')
 
 exports.nullScroller = {
+  triggers: [],
   destroy() {},
   addTrigger() {
     return () => null
