@@ -1,4 +1,4 @@
-let stats = {begin() {}, enf() {}}
+let stats = {begin() {}, end() {}}
 
 if (process.env.NODE_ENV == 'development') {
   const Stats = require('stats.js')
