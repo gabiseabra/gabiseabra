@@ -13,6 +13,10 @@ const config = require('./config')
 const NARROW_FOV = 90
 const WIDE_FOV = 45
 
+const IS_MOBILE = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+  navigator.userAgent
+)
+
 const getSize = () => {
   const width = window.innerWidth
   const height = window.innerHeight
@@ -40,7 +44,9 @@ exports.mkCanvas = () => {
 
   const scene = new Scene({camera, config, loader})
 
-  const composer = new Effects({scene, camera, renderer, width, height})
+  const composer = IS_MOBILE
+    ? null
+    : new Effects({scene, camera, renderer, width, height})
 
   const canvas = mkCanvas3D('background-scene', {
     renderer,
@@ -67,7 +73,7 @@ exports.setScroller = (canvas) => (scroller) => () => {
     if (!isNaN(progress) && progress != prevProgress) {
       prevProgress = progress
       canvas.scene.progress = progress
-      canvas.composer.progress = progress
+      if (canvas.composer) canvas.composer.progress = progress
     }
   })
 }
