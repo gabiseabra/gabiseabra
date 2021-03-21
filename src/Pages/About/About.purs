@@ -30,6 +30,6 @@ mkAboutPage = do
             Just { data: res } -> pure [ stats res.viewer ]
     pure
       $ DOM.section
-          { style: DOM.css { height: "75vh" }
+          { className: styles.page
           , children
           }

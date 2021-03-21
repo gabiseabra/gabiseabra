@@ -99,8 +99,10 @@ infoHead ic label value =
   DOM.header
     { className: styles.infoHead
     , children:
-        [ icon ic
-        , Typo.mark [ Typo.span_ [ DOM.text (label <> ":") ] ]
+        [ DOM.div_
+          [ icon ic
+          , Typo.mark [ Typo.span_ [ DOM.text (label <> ":") ] ]
+          ]
         , Typo.span
             $ Typo.spanProps
                 { bold = true

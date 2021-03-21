@@ -5,12 +5,17 @@
 
 .container {
   box-sizing: border-box;
-  height: 75vh;
+  height: 100%;
   margin: 0 auto;
   padding-top: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
+
+  @include breakpoint.down('tablet') {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
 }
 
 .body {
@@ -20,6 +25,11 @@
   align-items: center;
   justify-content: space-between;
   flex: 1;
+  height: 100%;
+  box-sizing: border-box;
+  @include breakpoint.down('phone') {
+    flex-direction: column;
+  }
 }
 
 .info {
@@ -27,10 +37,20 @@
   position: relative;
   flex: 1;
   max-width: 320px;
-  padding-right: 30px;
+  padding: 0 30px 0 0;
 
   article { margin-bottom: 25px; }
   article:last-child { margin-bottom: 0 !important; }
+
+  @include breakpoint.down('phone') {
+    padding: 0 0 30px 0;
+    max-width: unset;
+    width: 100%;
+    flex: unset;
+
+    article, header { width: 100%; }
+    header { justify-content: space-between; }
+  }
 }
 
 .infoHead {
@@ -71,7 +91,6 @@
   margin-top: 10px;
   margin-left: 32px;
   height: 0.85em;
-  background-color: wheat;
   display: flex;
   font-size: 1.1rem;
   & > *:nth-child(1) {
@@ -96,9 +115,3 @@
   }
 }
 
-@include breakpoint.down('tablet') {
-  .container {
-    padding-left: 40px;
-    padding-right: 40px;
-  }
-}

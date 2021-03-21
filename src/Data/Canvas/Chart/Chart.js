@@ -2,7 +2,7 @@ const {mkCanvas2D, watchSize} = require('../../../lib/2d/canvas')
 const Chart = require('../../../lib/2d/objects/chart')
 
 const getSize = () => {
-  const size = Math.min(window.innerWidth - 70, window.innerHeight * 0.5)
+  const size = Math.min(window.innerWidth - 50, window.innerHeight * 0.45)
   return {width: size, height: size}
 }
 

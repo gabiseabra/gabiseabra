@@ -1,4 +1,8 @@
+@use '~styles/breakpoint';
+
 .page {
   height: 75vh;
-  background: red;
+  @include breakpoint.down('phone') {
+    height: 100vh;
+  }
 }
