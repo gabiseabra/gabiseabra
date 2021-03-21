@@ -19,16 +19,9 @@
     filter: drop-shadow(1.5px 1.5px 0 $content-highlight);
     margin: 0 10px;
     display: inline-block;
-    &:global(.clock) {
-      height: 18px !important;
-    }
-    &:global(.github) {
-      height: 24px !important;
-    }
-    &:global(.externalLink) {
-      height: 18px !important;
-      margin-bottom: 4px;
-    }
+    height: 18px !important;
+    &:global(.github) { transform: scale(1.25); }
+    &:global(.externalLink) { transform: scale(0.9); }
   }
 }
 
@@ -135,6 +128,14 @@
   display: flex;
   flex-direction: row;
 
+  & > span {
+    & > *:first-child { margin-right: .75em }
+
+    @include breakpoint.down('phone') {
+      & > *:first-child { display: none; }
+    }
+  }
+
   @include breakpoint.up('tablet') {
     position: absolute;
     right: 25px;
@@ -143,13 +144,11 @@
 }
 
 .links {
+  height: 18px !important;
+
   @include breakpoint.down('tablet') {
     bottom: 15px;
     position: absolute;
     right: 15px;
-  }
-
-  :global(.icon) {
-    height: 24px;
   }
 }

@@ -59,7 +59,10 @@ pubDate { createdAt } =
         , Typo.span
             Typo.spanProps
               { fontSize = Small
-              , children = pure $ DOM.text $ "Published on " <> FDT.format format (unwrap createdAt)
+              , children =
+                [ DOM.span_ $ pure $ DOM.text "Published on"
+                , DOM.span_ $ pure $ DOM.text $ FDT.format format (unwrap createdAt)
+                ]
               }
         ]
     }
