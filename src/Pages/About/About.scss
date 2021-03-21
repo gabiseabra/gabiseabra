@@ -2,6 +2,7 @@
 
 .page {
   height: 75vh;
+  box-sizing: border-box;
   @include breakpoint.down('phone') {
     height: 100vh;
   }

@@ -11,11 +11,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
-  @include breakpoint.down('tablet') {
-    padding-left: 40px;
-    padding-right: 40px;
-  }
 }
 
 .body {
@@ -28,7 +23,9 @@
   height: 100%;
   box-sizing: border-box;
   @include breakpoint.down('phone') {
+    padding: 0 30px;
     flex-direction: column;
+    justify-content: center;
   }
 }
 
@@ -43,7 +40,8 @@
   article:last-child { margin-bottom: 0 !important; }
 
   @include breakpoint.down('phone') {
-    padding: 0 0 30px 0;
+    padding: 0 30px 30px;
+    margin-top: -30px;
     max-width: unset;
     width: 100%;
     flex: unset;
