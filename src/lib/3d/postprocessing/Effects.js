@@ -22,8 +22,6 @@ export class Effects extends EffectComposer {
     })
 
     this.addPass(new RenderPass(scene, camera))
-    // const normal = new NormalPass(scene, camera)
-    // this.addPass(normal)
     const bokeh = new RealisticBokehEffect({
       blendFunction: BlendFunction.NORMAL,
       focus: 0.13,
@@ -33,9 +31,9 @@ export class Effects extends EffectComposer {
       fStop: 0,
       bias: 0,
       fringe: 1.4,
-      maxBlur: 4.0,
+      maxBlur: 6.0,
       rings: 4,
-      samples: 6,
+      samples: 3,
       manualDoF: true,
       showFocus: false
     })
