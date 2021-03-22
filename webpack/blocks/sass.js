@@ -12,6 +12,7 @@ module.exports = () => (_, {addLoader}) =>
         loader: 'css-loader',
         options: {importLoaders: 1, modules: true}
       },
+      'postcss-loader',
       {
         loader: 'sass-loader',
         options: {
