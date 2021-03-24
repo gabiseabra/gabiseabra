@@ -23,6 +23,10 @@
     &:global(.github) { transform: scale(1.25); }
     &:global(.externalLink) { transform: scale(0.9); }
   }
+
+  @include breakpoint.down('phone') {
+    transform: scale(0.9);
+  }
 }
 
 .repo {
