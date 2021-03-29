@@ -46,7 +46,7 @@ exports.mkCanvas = (links) => () => {
   watchSize(canvas, getSize, onUpdate)
 
   mkOrbitControl(canvas, {
-    azimuthAngle: THREE.MathUtils.degToRad(2),
+    azimuthAngle: THREE.MathUtils.degToRad(4),
     polarAngle: THREE.MathUtils.degToRad(4),
     onChange: onUpdate
   })
