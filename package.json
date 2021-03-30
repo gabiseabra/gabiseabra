@@ -4,6 +4,11 @@
   "main": "index.js",
   "author": "Gabriela Seabra <gabriela.lima.se@gmail.com>",
   "license": "MIT",
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ],
   "scripts": {
     "repl": "spago repl",
     "clean": "rm -rf output public/build node_modules/.cache",

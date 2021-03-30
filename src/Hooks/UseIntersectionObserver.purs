@@ -58,8 +58,7 @@ foreign import isIntersectionObserverEntry :: Foreign -> Boolean
 coerceIntersectionObserverEntry :: Foreign -> Maybe IntersectionObserverEntry
 coerceIntersectionObserverEntry a = if isIntersectionObserverEntry a then pure $ unsafeCoerce a else Nothing
 
--- | Custom event which gets triggered on an intersection observer entry when it
--- | reaches a threshold.
+-- | Custom event that gets triggered when an intersection observer entry reaches a threshold
 intersectionChangeEvent = EventType "intersectionchange" :: EventType
 
 notifyIntersectionChange :: IntersectionObserverEntry -> Effect Unit
