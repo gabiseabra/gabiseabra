@@ -197,7 +197,7 @@ autoLink text =
   regex :: Either String Regex
   regex =
     let
-      url = "https?\\:\\/\\/.*(?:\\.\\w+)+"
+      url = "https?\\:\\/\\/[\\w\\d-]+(?:\\.[\\w\\d-]+)+(?:[\\/?#][^\\s]*[^\\s.,!?;:)])?"
 
       gh = "[\\w\\d-_]+\\/[\\w\\d-_]+"
     in
